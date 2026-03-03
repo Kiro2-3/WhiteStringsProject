@@ -39,15 +39,15 @@ export default function Dashboard({ auth, transactions, summary, chartData }) {
                 
                 {/* 1. Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                    <div className="bg-white p-6 rounded shadow border-l-4 border-green-500">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow border-l-4 border-green-500">
                         <p className="text-gray-500">Total Income</p>
                         <p className="text-2xl font-bold text-green-600">${summary.income}</p>
                     </div>
-                    <div className="bg-white p-6 rounded shadow border-l-4 border-red-500">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow border-l-4 border-red-500">
                         <p className="text-gray-500">Total Expenses</p>
                         <p className="text-2xl font-bold text-red-600">${summary.expense}</p>
                     </div>
-                    <div className="bg-white p-6 rounded shadow border-l-4 border-blue-500">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow border-l-4 border-blue-500">
                         <p className="text-gray-500">Balance</p>
                         <p className="text-2xl font-bold">${summary.balance}</p>
                     </div>
@@ -55,41 +55,41 @@ export default function Dashboard({ auth, transactions, summary, chartData }) {
 
                 <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     {/* 2. Add Transaction Form */}
-                    <div className="bg-white p-6 rounded shadow">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow">
                         <h3 className="font-bold mb-4 text-lg">Add Transaction</h3>
                         <form onSubmit={submit} className="space-y-4">
-                            <input type="text" placeholder="Description" className="w-full border-gray-300 rounded" 
+                            <input type="text" placeholder="Description" className="w-full border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
                                 value={data.description} onChange={e => setData('description', e.target.value)} />
                             {errors.description && <div className="text-red-500 text-sm">{errors.description}</div>}
 
                             <div className="flex gap-4">
-                                <input type="number" placeholder="Amount" className="w-full border-gray-300 rounded" 
+                                <input type="number" placeholder="Amount" className="w-full border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
                                     value={data.amount} onChange={e => setData('amount', e.target.value)} />
-                                <select className="border-gray-300 rounded" value={data.type} onChange={e => setData('type', e.target.value)}>
+                                <select className="border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" value={data.type} onChange={e => setData('type', e.target.value)}>
                                     <option value="income">Income</option>
                                     <option value="expense">Expense</option>
                                 </select>
                             </div>
 
                             <div className="flex gap-4">
-                                <select className="w-full border-gray-300 rounded" value={data.category} onChange={e => setData('category', e.target.value)}>
+                                <select className="w-full border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" value={data.category} onChange={e => setData('category', e.target.value)}>
                                     <option value="Food">Food</option>
                                     <option value="Salary">Salary</option>
                                     <option value="Rent">Rent</option>
                                     <option value="Leisure">Leisure</option>
                                 </select>
-                                <input type="date" className="border-gray-300 rounded" 
+                                <input type="date" className="border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" 
                                     value={data.entry_date} onChange={e => setData('entry_date', e.target.value)} />
                             </div>
 
-                            <button type="submit" disabled={processing} className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">
+                            <button type="submit" disabled={processing} className="w-full bg-blue-600 dark:bg-blue-500 text-white py-2 rounded hover:bg-blue-700 dark:hover:bg-blue-600">
                                 Save Transaction
                             </button>
                         </form>
                     </div>
 
                     {/* 3. The Pie Chart */}
-                    <div className="bg-white p-6 rounded shadow flex flex-col items-center">
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded shadow flex flex-col items-center">
                         <h3 className="font-bold mb-4 text-lg">Expense Breakdown</h3>
                         {chartData.length > 0 ? (
                             <div className="w-full max-w-xs"><Pie data={pieData} /></div>
@@ -99,12 +99,12 @@ export default function Dashboard({ auth, transactions, summary, chartData }) {
                     </div>
                 </div>
    {/* 4. Transaction History Table */}
-<div className="bg-white p-6 rounded shadow overflow-x-auto">
+<div className="bg-white dark:bg-gray-800 p-6 rounded shadow overflow-x-auto">
     <h3 className="font-bold mb-4 text-lg">Recent Transactions</h3>
     <table className="w-full text-left border-collapse">
         <thead>
-            <tr className="border-b bg-gray-50">
-                <th className="p-3 text-sm font-semibold text-gray-700">Date</th>
+            <tr className="border-b bg-gray-50 dark:bg-gray-700">
+                <th className="p-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Date</th>
                 <th className="p-3 text-sm font-semibold text-gray-700">Description</th>
                 <th className="p-3 text-sm font-semibold text-gray-700">Category</th>
                 <th className="p-3 text-sm font-semibold text-gray-700 text-right">Amount</th>
@@ -114,14 +114,14 @@ export default function Dashboard({ auth, transactions, summary, chartData }) {
         </thead>
         <tbody>
             {transactions.length > 0 ? transactions.map((t) => (
-                <tr key={t.id} className="border-b hover:bg-gray-50 transition-colors">
-                    <td className="p-3 text-sm text-gray-600">{t.entry_date}</td>
+                <tr key={t.id} className="border-b hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                    <td className="p-3 text-sm text-gray-600 dark:text-gray-300">{t.entry_date}</td>
                     <td className="p-3">
-                        <div className="font-medium text-gray-900">{t.description}</div>
+                        <div className="font-medium text-gray-900 dark:text-gray-100">{t.description}</div>
                         <div className="text-xs text-gray-400 uppercase">{t.type}</div>
                     </td>
-                    <td className="p-3 text-sm text-gray-600">
-                        <span className="bg-gray-100 px-2 py-1 rounded-full text-xs">
+                    <td className="p-3 text-sm text-gray-600 dark:text-gray-300">
+                        <span className="bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded-full text-xs">
                             {t.category}
                         </span>
                     </td>
@@ -139,7 +139,7 @@ export default function Dashboard({ auth, transactions, summary, chartData }) {
                                     router.delete(route('transactions.destroy', t.id))
                                 }
                             }}
-                            className="bg-red-50 text-red-500 hover:bg-red-500 hover:text-white p-2 rounded-lg transition-all"
+                            className="bg-red-50 dark:bg-red-900 text-red-500 hover:bg-red-500 dark:hover:bg-red-700 hover:text-white p-2 rounded-lg transition-all"
                             title="Delete Transaction"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -150,7 +150,7 @@ export default function Dashboard({ auth, transactions, summary, chartData }) {
                 </tr>
             )) : (
                 <tr>
-                    <td colSpan="5" className="p-10 text-center text-gray-400">
+                    <td colSpan="5" className="p-10 text-center text-gray-400 dark:text-gray-500">
                         No transactions found yet.
                     </td>
                 </tr>
