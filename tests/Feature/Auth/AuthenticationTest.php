@@ -2,12 +2,14 @@
 
 use App\Models\User;
 
+// Make sure the login page loads without errors
 test('login screen can be rendered', function () {
     $response = $this->get('/login');
 
     $response->assertStatus(200);
 });
 
+// Verify that a user can log in with correct credentials
 test('users can authenticate using the login screen', function () {
     $user = User::factory()->create();
 
@@ -20,6 +22,7 @@ test('users can authenticate using the login screen', function () {
     $response->assertRedirect(route('dashboard', absolute: false));
 });
 
+// Logging in with the wrong password should fail and keep the user a guest
 test('users can not authenticate with invalid password', function () {
     $user = User::factory()->create();
 
@@ -31,6 +34,7 @@ test('users can not authenticate with invalid password', function () {
     $this->assertGuest();
 });
 
+// Ensure logout works
 test('users can logout', function () {
     $user = User::factory()->create();
 
@@ -38,4 +42,21 @@ test('users can logout', function () {
 
     $this->assertGuest();
     $response->assertRedirect('/');
+});
+
+// New: make sure registration creates a user and logs them in
+test('users can register', function () {
+    $response = $this->post('/register', [
+        'name' => 'Jane Doe',
+        'email' => 'jane@example.com',
+        'password' => 'password',
+        'password_confirmation' => 'password',
+    ]);
+
+    // after registration we expect the user to be authenticated
+    $this->assertAuthenticated();
+    $response->assertRedirect(route('dashboard', absolute: false));
+
+    // and the database should contain the new record
+    $this->assertDatabaseHas('users', ['email' => 'jane@example.com']);
 });

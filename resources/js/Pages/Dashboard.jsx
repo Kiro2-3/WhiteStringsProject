@@ -40,15 +40,15 @@ export default function Dashboard({ auth, transactions, summary, chartData }) {
                 {/* 1. Summary Cards */}
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                     <div className="bg-white dark:bg-gray-800 p-6 rounded shadow border-l-4 border-green-500">
-                        <p className="text-gray-500">Total Income</p>
+                        <p className="text-gray-500 dark:text-gray-400">Total Income</p>
                         <p className="text-2xl font-bold text-green-600">${summary.income}</p>
                     </div>
                     <div className="bg-white dark:bg-gray-800 p-6 rounded shadow border-l-4 border-red-500">
-                        <p className="text-gray-500">Total Expenses</p>
+                        <p className="text-gray-500 dark:text-gray-400">Total Expenses</p>
                         <p className="text-2xl font-bold text-red-600">${summary.expense}</p>
                     </div>
                     <div className="bg-white dark:bg-gray-800 p-6 rounded shadow border-l-4 border-blue-500">
-                        <p className="text-gray-500">Balance</p>
+                        <p className="text-gray-500 dark:text-gray-400">Balance</p>
                         <p className="text-2xl font-bold">${summary.balance}</p>
                     </div>
                 </div>
@@ -105,11 +105,11 @@ export default function Dashboard({ auth, transactions, summary, chartData }) {
         <thead>
             <tr className="border-b bg-gray-50 dark:bg-gray-700">
                 <th className="p-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Date</th>
-                <th className="p-3 text-sm font-semibold text-gray-700">Description</th>
-                <th className="p-3 text-sm font-semibold text-gray-700">Category</th>
-                <th className="p-3 text-sm font-semibold text-gray-700 text-right">Amount</th>
+                <th className="p-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Description</th>
+                <th className="p-3 text-sm font-semibold text-gray-700 dark:text-gray-300">Category</th>
+                <th className="p-3 text-sm font-semibold text-gray-700 dark:text-gray-300 text-right">Amount</th>
                 {/* Action Column Header */}
-                <th className="p-3 text-sm font-semibold text-gray-700 text-center">Action</th>
+                <th className="p-3 text-sm font-semibold text-gray-700 dark:text-gray-300 text-center">Action</th>
             </tr>
         </thead>
         <tbody>

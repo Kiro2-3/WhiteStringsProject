@@ -11,30 +11,44 @@ use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
+// Routes that should only be reachable when the user is a guest
+// (not authenticated).  These include registration, login, and
+// the password reset flows.
 Route::middleware('guest')->group(function () {
+    // Show registration form
     Route::get('register', [RegisteredUserController::class, 'create'])
         ->name('register');
 
+    // Handle registration submission
     Route::post('register', [RegisteredUserController::class, 'store']);
 
+    // Show login form
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
+    // Process login submission
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
+    // Password reset request form
     Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
         ->name('password.request');
 
+    // Send the reset link email
     Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
         ->name('password.email');
 
+    // Show the form to set a new password (clicked from email)
     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
         ->name('password.reset');
 
+    // Update the password in the database
     Route::post('reset-password', [NewPasswordController::class, 'store'])
         ->name('password.store');
 });
 
+// Routes available only to authenticated users.  These deal with
+// email verification, confirming the current password when taking
+// sensitive actions, updating the password, and logging out.
 Route::middleware('auth')->group(function () {
     Route::get('verify-email', EmailVerificationPromptController::class)
         ->name('verification.notice');
