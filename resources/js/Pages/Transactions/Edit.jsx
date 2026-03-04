@@ -1,5 +1,9 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import { Head, useForm, Link } from '@inertiajs/react';
+import InputLabel from '@/Components/InputLabel';
+import TextInput from '@/Components/TextInput';
+import InputError from '@/Components/InputError';
+import PrimaryButton from '@/Components/PrimaryButton';
 
 // Edit transaction page - allows users to modify existing income or expense entries
 export default function Edit({ auth, transaction }) {
@@ -26,7 +30,7 @@ export default function Edit({ auth, transaction }) {
                 {/* Page Header */}
                 <div className="mb-8">
                     <h1 className="text-3xl font-bold">Edit Transaction</h1>
-                    <p className="mt-2 text-gray-600">Modify the transaction details below</p>
+                    <p className="mt-2 text-gray-700 dark:text-gray-400">Modify the transaction details below</p>
                 </div>
 
                 {/* Edit form card */}
