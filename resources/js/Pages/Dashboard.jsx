@@ -76,9 +76,9 @@ export default function Dashboard({ auth, transactions, summary, categories, exp
                     </div>
                 </div>
 
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     {/* 2. Add Transaction Form */}
-                    <div className="card bg-base-100 shadow">
+                    <div className="card bg-base-100 shadow lg:col-span-1">
                         <div className="card-body">
                             <h3 className="font-bold mb-4 text-lg">Add Transaction</h3>
                             <form onSubmit={submit} className="space-y-4">
@@ -142,6 +142,7 @@ export default function Dashboard({ auth, transactions, summary, categories, exp
                                             <option value="Salary">Salary</option>
                                             <option value="Rent">Rent</option>
                                             <option value="Leisure">Leisure</option>
+                                            <option value="Bills">Bills</option>
                                         </select>
                                         {errors.category && (
                                             <InputError message={errors.category} />
@@ -174,26 +175,24 @@ export default function Dashboard({ auth, transactions, summary, categories, exp
                     </div>
 
                     {/* 3. Category Breakdown Chart */}
-                    <div className="card bg-base-100 shadow flex flex-col items-center">
-                        <div className="card-body">
-                            <h3 className="font-bold mb-4 text-lg">Category Breakdown</h3>
-                            {(categories && categories.length > 0) ? (
-                                <div className="w-full h-60">
-                                    <ResponsiveContainer width="100%" height="100%">
-                                        <BarChart data={barChartData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
-                                            <XAxis dataKey="category" tick={{ fill: '#374151' }} />
-                                            <YAxis tick={{ fill: '#374151' }} />
-                                            <ReTooltip />
-                                            <ReLegend verticalAlign="bottom" />
-                                            <Bar dataKey="income" name="Income" fill={incomeColor} />
-                                            <Bar dataKey="expense" name="Expense" fill={expenseColor} />
-                                        </BarChart>
-                                    </ResponsiveContainer>
-                                </div>
-                            ) : (
-                                <p className="text-gray-400 mt-10">Add transactions to see the chart</p>
-                            )}
-                        </div>
+                    <div className="card bg-base-100 shadow lg:col-span-2 h-96 p-6">
+                        <h3 className="font-bold mb-4 text-lg text-center">Category Breakdown</h3>
+                        {(categories && categories.length > 0) ? (
+                            <div className="w-full h-full">
+                                <ResponsiveContainer width="100%" height="100%">
+                                    <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 20, bottom: 20 }}>
+                                        <XAxis dataKey="category" tick={{ fill: '#374151' }} />
+                                        <YAxis tick={{ fill: '#374151' }} />
+                                        <ReTooltip />
+                                        <ReLegend verticalAlign="bottom" />
+                                        <Bar dataKey="income" name="Income" fill={incomeColor} barSize={50} />
+                                        <Bar dataKey="expense" name="Expense" fill={expenseColor} barSize={50} />
+                                    </BarChart>
+                                </ResponsiveContainer>
+                            </div>
+                        ) : (
+                            <p className="text-gray-400 mt-10">Add transactions to see the chart</p>
+                        )}
                     </div>
                 </div>
 
@@ -217,16 +216,14 @@ export default function Dashboard({ auth, transactions, summary, categories, exp
                                         <td>{t.entry_date}</td>
                                         <td>
                                             <div className="font-medium">{t.description}</div>
-                                            <div className="text-xs uppercase text-gray-700 dark:text-gray-500">{t.type}</div>
+                                            <div className="text-xs uppercase" style={{color: '#374151'}}>{t.type}</div>
                                         </td>
                                         <td>
                                             <span className="badge badge-outline">
                                                 {t.category}
                                             </span>
                                         </td>
-                                        <td className={`text-right font-bold ${
-                                            t.type === 'income' ? 'text-green-600' : 'text-red-600'
-                                        }`}>
+                                        <td className="text-right font-bold" style={{color: t.type === 'income' ? '#16a34a' : '#dc2626'}}>
                                             {t.type === 'income' ? '+' : '-'}${t.amount}
                                         </td>
                                         <td className="text-center">

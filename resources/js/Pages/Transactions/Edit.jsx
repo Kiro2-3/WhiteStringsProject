@@ -98,6 +98,7 @@ export default function Edit({ auth, transaction }) {
                                         <option value="Salary">Salary</option>
                                         <option value="Rent">Rent</option>
                                         <option value="Leisure">Leisure</option>
+                                        <option value="Bills">Bills</option>
                                         <option value="Transportation">Transportation</option>
                                         <option value="Utilities">Utilities</option>
                                         <option value="Other">Other</option>
