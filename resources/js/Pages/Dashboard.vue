@@ -3,65 +3,68 @@
   
   <AuthenticatedLayout :user="auth.user">
     <Head title="Stracker" />
-    <div class="min-h-screen w-full flex bg-gray-50 text-gray-900">
+    <div class="min-h-screen w-full flex flex-col md:flex-row bg-gray-50 text-gray-900">
       <!-- Sidebar menu -->
-      <div class="w-56 flex flex-col gap-4 items-stretch min-h-[32rem] justify-start bg-white border-r border-gray-200 p-4">
+      <aside class="w-full md:w-56 flex md:flex-col flex-row gap-2 md:gap-4 items-stretch min-h-[4rem] md:min-h-[32rem] justify-start bg-white border-b md:border-b-0 md:border-r border-gray-200 p-2 md:p-4 sticky top-0 z-20">
         <button
-          :class="['btn btn-block', tab === 'dashboard' ? 'btn-primary' : 'btn-ghost']"
+          :class="['btn btn-outline', tab === 'dashboard' ? 'btn-primary text-white' : '']"
           @click="tab = 'dashboard'"
         >
           Dashboard
         </button>
         <button
-          :class="['btn btn-block', tab === 'transactions' ? 'btn-primary' : 'btn-ghost']"
+          :class="['btn btn-outline', tab === 'transactions' ? 'btn-primary text-white' : '']"
           @click="tab = 'transactions'"
         >
           Recent Transactions
         </button>
-        <Link :href="route('transactions.add')" class="btn btn-block btn-accent">
+        <button
+          class="btn btn-accent text-white"
+          @click="showAddTransaction = true"
+        >
           Add Transaction
-        </Link>
-        <form method="POST" :action="route('logout')" class="mt-auto">
+        </button>
+        <form method="POST" :action="route('logout')" class="md:mt-auto">
           <button
             type="submit"
-            class="btn btn-block btn-error font-bold text-white hover:bg-red-700 transition-colors duration-150"
+            class="btn btn-error text-white font-bold hover:bg-red-700 transition-colors duration-150"
           >
             Logout
           </button>
         </form>
-      </div>
+      </aside>
       <!-- Main content -->
-      <div class="flex-1 space-y-8 px-8 py-8">
+      <main class="flex-1 space-y-8 px-2 sm:px-4 md:px-8 py-4 md:py-8 w-full">
         <template v-if="tab === 'dashboard'">
           <!-- 1. Summary Cards -->
-          <div class="stats shadow w-full bg-white">
-            <div class="stat">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 w-full">
+            <div class="stat bg-white shadow rounded-xl p-6 flex flex-col items-center">
               <div class="stat-title text-gray-700">Total Income</div>
-              <div class="stat-value text-green-600">₱{{ summary.income }}</div>
+              <div class="stat-value text-green-600 text-3xl font-bold">₱{{ summary.income }}</div>
             </div>
-            <div class="stat">
+            <div class="stat bg-white shadow rounded-xl p-6 flex flex-col items-center">
               <div class="stat-title text-gray-700">Total Expenses</div>
-              <div class="stat-value text-red-600">₱{{ summary.expense }}</div>
+              <div class="stat-value text-red-600 text-3xl font-bold">₱{{ summary.expense }}</div>
             </div>
-            <div class="stat">
+            <div class="stat bg-white shadow rounded-xl p-6 flex flex-col items-center">
               <div class="stat-title text-gray-700">Total Revenue</div>
-              <div class="stat-value text-blue-600">₱{{ summary.balance }}</div>
+              <div class="stat-value text-blue-600 text-3xl font-bold">₱{{ summary.balance }}</div>
             </div>
           </div>
           <!-- Line chart for total income vs total expense -->
-          <div class="card bg-white shadow mb-6 w-full">
-            <div class="card-body">
+          <div class="card bg-white shadow rounded-xl mb-6 w-full">
+            <div class="card-body p-4 md:p-6">
               <h3 class="font-bold mb-4 text-lg text-blue-600">Income vs Expense Over Time</h3>
-              <div style="width: 100%; height: 300px;">
+              <div class="w-full" style="min-height: 220px; height: 30vw; max-height: 340px;">
                 <LineChart :data="lineData" />
               </div>
             </div>
           </div>
-          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-8 w-full">
+          <div class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 w-full">
             <!-- 3. Category Breakdown Diagram (Pie Chart) -->
-            <div class="card bg-white shadow md:col-span-2 h-96 p-6 flex flex-col items-center justify-center w-full">
+            <div class="card bg-white shadow rounded-xl md:col-span-2 h-96 p-4 md:p-6 flex flex-col items-center justify-center w-full">
               <h3 class="font-bold mb-4 text-lg text-center text-purple-600">Category Breakdown</h3>
-              <div v-if="pieChartData.length > 0" style="width: 100%; height: 320px;">
+              <div v-if="pieChartData.length > 0" class="w-full" style="min-height: 220px; height: 30vw; max-height: 340px;">
                 <PieChart :data="pieChartData" />
               </div>
               <p v-else class="text-gray-500 mt-10">Add transactions to see the diagram</p>
@@ -69,13 +72,13 @@
           </div>
         </template>
         <template v-else-if="tab === 'transactions'">
-          <div class="card bg-white shadow overflow-x-auto w-full">
-            <div class="card-body">
+          <div class="card bg-white shadow rounded-xl overflow-x-auto w-full">
+            <div class="card-body p-4 md:p-6">
               <h3 class="font-bold mb-4 text-lg text-indigo-600">Recent Transactions</h3>
               <!-- Filter Form -->
-              <div class="mb-4 p-4 bg-gray-100 rounded-lg">
+              <div class="mb-4 p-2 md:p-4 bg-gray-100 rounded-lg">
                 <h4 class="font-semibold mb-2 text-gray-700">Filter Transactions</h4>
-                <form class="grid grid-cols-1 md:grid-cols-4 gap-4" @submit.prevent="applyFilters">
+                <form class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-2 md:gap-4" @submit.prevent="applyFilters">
                   <div class="form-control">
                     <InputLabel value="Category" htmlFor="category_filter" />
                     <select
@@ -128,7 +131,7 @@
                       v-model="filters.date_to"
                     />
                   </div>
-                  <div class="form-control md:col-span-4 flex gap-2">
+                  <div class="form-control sm:col-span-2 md:col-span-4 flex gap-2 flex-wrap">
                     <PrimaryButton type="submit" class="btn-sm">
                       Apply Filters
                     </PrimaryButton>
@@ -142,7 +145,8 @@
                   </div>
                 </form>
               </div>
-              <table class="table table-zebra w-full">
+              <div class="overflow-x-auto">
+                <table class="table table-zebra w-full min-w-[600px]">
                 <thead>
                   <tr>
                     <th class="text-gray-700 font-bold">Date</th>
@@ -153,7 +157,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="t in transactions.data" :key="t.id">
+                  <tr v-for="t in transactions.data" :key="t.id" class="hover:bg-gray-50 transition-colors">
                     <td class="text-gray-800">{{ t.entry_date }}</td>
                     <td>
                       <div class="font-medium text-gray-800">{{ t.description }}</div>
@@ -199,13 +203,18 @@
               </table>
             </div>
           </div>
+        </div>
         </template>
-      </div>
-    </div>
+    </main>
+  </div>
   </AuthenticatedLayout>
 </template>
 
 <script setup>
+import { ref, computed } from 'vue';
+import AddTransaction from './AddTransaction.vue';
+const showAddTransaction = ref(false);
+  <AddTransaction v-if="showAddTransaction" :categories="categories" @close="showAddTransaction = false" />
 import { ref, computed } from 'vue';
 import { Head, Link, useForm, router } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
@@ -279,5 +288,19 @@ function deleteTransaction(id) {
 </script>
 
 <style scoped>
-/* Add any scoped styles if needed */
+/* Responsive tweaks for dashboard */
+.stat-title {
+  font-size: 1rem;
+}
+.stat-value {
+  font-size: 2rem;
+}
+@media (max-width: 640px) {
+  .stat-value {
+    font-size: 1.25rem;
+  }
+  .stat-title {
+    font-size: 0.9rem;
+  }
+}
 </style>

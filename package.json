@@ -26,8 +26,10 @@
     "dependencies": {
         "22": "^0.0.0",
         "@inertiajs/vue3": "^2.3.17",
+        "chart.js": "^4.5.1",
         "daisyui": "^2.52.0",
         "recharts": "^2.15.4",
+        "vue-chartjs": "^5.3.3",
         "ziggy-js": "^2.6.2"
     }
 }
