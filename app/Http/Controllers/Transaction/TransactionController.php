@@ -40,7 +40,7 @@ class TransactionController extends Controller
             $query->where('entry_date', '<=', $request->date_to);
         }
         
-        $transactions = $query->orderBy('entry_date', 'desc')->get();
+        $transactions = $query->orderBy('entry_date', 'desc')->paginate(10);
         
         // For summary, we might want to show filtered or total summary
         // Let's show total summary always, but filtered transactions

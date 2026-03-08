@@ -1,0 +1,42 @@
+
+<template>
+  <Link
+    v-bind="{...$attrs, ...$props}"
+    :href="href"
+    :method="method"
+    :as="as"
+    class="dropdown-link"
+  >
+    <slot />
+  </Link>
+</template>
+
+<script setup>
+import { Link } from '@inertiajs/vue3';
+const props = defineProps({
+  href: String,
+  method: {
+    type: String,
+    default: 'get',
+  },
+  as: {
+    type: String,
+    default: 'a',
+  },
+});
+if (import.meta.env.DEV) {
+  console.log('DropdownLink href:', props.href);
+}
+</script>
+
+<style scoped>
+.dropdown-link {
+  display: block;
+  width: 100%;
+  padding: 0.5rem 1rem;
+  text-align: left;
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+</style>
