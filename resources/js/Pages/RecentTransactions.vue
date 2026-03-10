@@ -11,30 +11,42 @@
         </div>
 
         <button
-          :class="['bg-white text-gray-700 hover:bg-gray-100', 'rounded-lg px-4 py-2 font-medium transition']"
+          :class="['bg-white text-gray-700 hover:bg-gray-100', 'rounded-lg px-4 py-2 font-medium transition flex items-center gap-2 justify-start']"
           @click="goToDashboard"
         >
-          Dashboard
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3.75 4.5h7.5v7.5h-7.5zM12.75 4.5h7.5v7.5h-7.5zM12.75 13.5h7.5v7.5h-7.5zM3.75 13.5h7.5v7.5h-7.5z" />
+          </svg>
+          <span>Dashboard</span>
         </button>
 
         <button
-          :class="['bg-gray-900 text-white shadow', 'rounded-lg px-4 py-2 font-medium transition']"
+          :class="['bg-gray-900 text-white shadow', 'rounded-lg px-4 py-2 font-medium transition flex items-center gap-2 justify-start']"
         >
-          Recent Transactions
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
+          </svg>
+          <span>Recent Transactions</span>
         </button>
 
         <button
-          class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-medium transition shadow"
+          class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-medium transition shadow flex items-center gap-2 justify-start"
           @click="goToAddTransaction"
         >
-          Add Transaction
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 4.5v15m7.5-7.5h-15" />
+          </svg>
+          <span>Add Transaction</span>
         </button>
 
         <button
           @click="logout"
-          class="bg-red-50 text-red-600 hover:bg-red-100 rounded-lg px-4 py-2 font-semibold transition mt-auto border border-red-100"
+          class="bg-red-50 text-red-600 hover:bg-red-100 rounded-lg px-4 py-2 font-semibold transition mt-auto border border-red-100 flex items-center gap-2 justify-start"
         >
-          Logout
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.75 6.75L21 12m0 0-5.25 5.25M21 12H9m3.75 7.5H6.75A2.25 2.25 0 014.5 17.25v-10.5A2.25 2.25 0 016.75 4.5h6" />
+          </svg>
+          <span>Logout</span>
         </button>
       </aside>
 
