@@ -45,7 +45,7 @@
             <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8 w-full">
               <div class="bg-white rounded-2xl shadow p-8 flex flex-col items-center border border-gray-100">
                 <div class="text-gray-500 text-base font-medium mb-2">Total Income</div>
-                <div class="text-green-600 text-3xl font-bold tracking-tight">₱{{ summary.income }}</div>
+                <div class="text-blue-600 text-3xl font-bold tracking-tight">₱{{ summary.income }}</div>
               </div>
               <div class="bg-white rounded-2xl shadow p-8 flex flex-col items-center border border-gray-100">
                 <div class="text-gray-500 text-base font-medium mb-2">Total Expenses</div>
@@ -53,7 +53,7 @@
               </div>
               <div class="bg-white rounded-2xl shadow p-8 flex flex-col items-center border border-gray-100">
                 <div class="text-gray-500 text-base font-medium mb-2">Total Revenue</div>
-                <div class="text-blue-600 text-3xl font-bold tracking-tight">₱{{ summary.balance }}</div>
+                <div class="text-green-600 text-3xl font-bold tracking-tight">₱{{ summary.balance }}</div>
               </div>
             </div>
 
@@ -108,7 +108,7 @@
                 <div class="bg-white rounded-2xl shadow border border-gray-100 h-96 p-8 flex flex-col items-center justify-center w-full">
                   <h3 class="font-semibold mb-4 text-lg text-center text-gray-800">Category Breakdown</h3>
                   <div v-if="filteredPieChartData.length > 0" class="w-full flex items-center justify-center" style="width: 380px; height: 380px; min-width: 280px; min-height: 280px; max-width: 280px; max-height: 280px;">
-                    <PieChart :data="filteredPieChartData" />
+                    <PieChart :data="filteredPieChartData" :colors="pieChartColors" />
                   </div>
                   <p v-else class="text-gray-400 mt-10">Add transactions to see the diagram</p>
                 </div>
@@ -275,6 +275,16 @@ const filteredPieChartData = computed(() => {
   return data;
 });
 
+
+const pieChartColors = computed(() => {
+  // Map each label to its color, in the same order as filteredPieChartData
+  const colorMap = {
+    'Total Income': '#2563eb', // blue-600
+    'Total Expense': '#dc2626', // red-600
+    'Total Revenue': '#16a34a', // green-600
+  };
+  return filteredPieChartData.value.map(d => colorMap[d.label] || '#a3a3a3');
+});
 
 // Debounce utility
 function debounce(fn, delay) {

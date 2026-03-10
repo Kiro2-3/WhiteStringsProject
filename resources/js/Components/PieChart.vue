@@ -14,11 +14,15 @@ import {
 } from 'chart.js';
 
 Chart.register(ArcElement, Tooltip, Legend);
-
 const props = defineProps({
   data: {
     type: Array,
     required: true
+  },
+  colors: {
+    type: Array,
+    required: false,
+    default: () => []
   }
 });
 
@@ -27,7 +31,7 @@ const chartData = computed(() => ({
   datasets: [
     {
       data: props.data.map(item => item.value),
-      backgroundColor: [
+      backgroundColor: props.colors.length ? props.colors : [
         '#6366f1', '#a21caf', '#f59e42', '#22c55e', '#ef4444', '#0ea5e9', '#fbbf24', '#eab308', '#f472b6', '#818cf8'
       ],
       borderWidth: 1
