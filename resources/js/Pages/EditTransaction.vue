@@ -1,13 +1,30 @@
 <template>
   <Modal :show="true" maxWidth="md" :onClose="closeModal">
-    <div class="w-full max-w-lg p-8 bg-white dark:bg-gray-900 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-800 transition-colors">
-      <div class="mb-8 flex items-center justify-between">
-        <h2 class="font-semibold text-2xl text-gray-800 dark:text-gray-100 tracking-tight">Edit Transaction</h2>
-        <button type="button" class="rounded-full p-2 hover:bg-gray-100 dark:hover:bg-gray-800 transition" @click="closeModal" aria-label="Close">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 text-gray-400 hover:text-gray-700 dark:text-gray-500 dark:hover:text-gray-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg>
-        </button>
-      </div>
-      <form @submit.prevent="submit" class="space-y-6">
+    <div class="card w-full max-w-lg bg-base-100 shadow-2xl border border-base-200">
+      <div class="card-body p-8 bg-gradient-to-br from-base-100 to-base-200">
+        <div class="mb-4 flex items-center justify-between">
+          <div class="flex items-center gap-3">
+            <div class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M16.862 4.487l1.687-1.687a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M19.5 7.125L16.875 4.5" />
+              </svg>
+            </div>
+            <div>
+              <h2 class="font-semibold text-2xl text-base-content tracking-tight">Edit Transaction</h2>
+              <p class="text-sm text-base-content/60">Update the details of this record.</p>
+            </div>
+          </div>
+          <button
+            type="button"
+            class="btn btn-ghost btn-sm btn-circle text-base-content/60 hover:text-base-content"
+            @click="closeModal"
+            aria-label="Close"
+          >
+            ✕
+          </button>
+        </div>
+        <form @submit.prevent="submit" class="space-y-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div class="form-control">
             <InputLabel value="Description" htmlFor="description" />
@@ -81,7 +98,8 @@
             Update Transaction
           </PrimaryButton>
         </div>
-      </form>
+        </form>
+      </div>
     </div>
   </Modal>
 </template>

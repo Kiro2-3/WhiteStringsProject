@@ -366,6 +366,7 @@ const props = defineProps({
   categories: Array,
   expenseTotals: Array,
   incomeTotals: Array,
+  chartTransactions: Array,
   filters: Object,
 });
 
@@ -428,7 +429,7 @@ function clearChartFilters() {
 
 // Filtered transactions for dashboard charts
 const filteredChartTransactions = computed(() => {
-  return (props.transactions.data || []).filter(t => {
+  return (props.chartTransactions || []).filter((t) => {
     if (chartFilters.value.type && t.type !== chartFilters.value.type) return false;
     if (chartFilters.value.category && t.category !== chartFilters.value.category) return false;
     if (chartFilters.value.date_from && t.entry_date < chartFilters.value.date_from) return false;

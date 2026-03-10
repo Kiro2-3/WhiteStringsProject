@@ -108,6 +108,15 @@
               />
             </div>
             <div class="flex flex-col gap-1 w-full md:w-auto">
+              <label class="invisible mb-1">Search</label>
+              <button
+                @click="applyFilters"
+                class="rounded-lg px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
+              >
+                Search
+              </button>
+            </div>
+            <div class="flex flex-col gap-1 w-full md:w-auto">
               <label class="invisible mb-1">Clear</label>
               <button
                 @click="clearFilters"
@@ -276,17 +285,13 @@ function clearFilters() {
   });
 }
 
-watch(
-  filters,
-  (newFilters) => {
-    router.get(route('transactions.recent'), newFilters, {
-      preserveState: true,
-      preserveScroll: true,
-      replace: true,
-    });
-  },
-  { deep: true }
-);
+function applyFilters() {
+  router.get(route('transactions.recent'), filters.value, {
+    preserveState: true,
+    preserveScroll: true,
+    replace: true,
+  });
+}
 
 function deleteTransaction(id) {
   if (confirm('Are you sure you want to delete this transaction?')) {

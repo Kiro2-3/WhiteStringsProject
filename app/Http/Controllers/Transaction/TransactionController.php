@@ -88,8 +88,13 @@ class TransactionController extends Controller
             ->pluck('total', 'category');
 
         $categories = $expenseData->keys()->merge($incomeData->keys())->unique()->values();
-        $expenseTotals = $categories->map(fn($c) => $expenseData->get($c, 0));
-        $incomeTotals = $categories->map(fn($c) => $incomeData->get($c, 0));
+        $expenseTotals = $categories->map(fn ($c) => $expenseData->get($c, 0));
+        $incomeTotals = $categories->map(fn ($c) => $incomeData->get($c, 0));
+
+        // 3. Transactions used for the "Income vs Expense Over Time" line chart
+        $chartTransactions = $chartQuery
+            ->orderBy('entry_date')
+            ->get(['entry_date', 'type', 'amount', 'category']);
 
         return Inertia::render('Dashboard', [
             'auth' => ['user' => $user],
@@ -102,6 +107,7 @@ class TransactionController extends Controller
             'categories' => $categories,
             'expenseTotals' => $expenseTotals,
             'incomeTotals' => $incomeTotals,
+            'chartTransactions' => $chartTransactions,
             'filters' => $request->only(['category', 'type', 'date_from', 'date_to']),
             'chartFilters' => $chartFilters,
         ]);

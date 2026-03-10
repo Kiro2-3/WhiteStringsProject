@@ -1,30 +1,31 @@
 <template>
-  <div class="w-full h-full">
-    <Line :data="chartData" :options="chartOptions" />
+  <div class="w-full h-full flex items-center justify-center">
+    <div v-if="!hasData" class="text-sm text-gray-400">Add transactions to see the chart</div>
+    <Line v-else :data="chartData" :options="chartOptions" />
   </div>
 </template>
 <script setup>
 import { Line } from 'vue-chartjs';
 import { computed } from 'vue';
-import {
-  Chart,
-  LineElement,
-  PointElement,
-  LinearScale,
-  Title,
-  CategoryScale,
-  Tooltip,
-  Legend,
-  Filler
-} from 'chart.js';
-
-Chart.register(LineElement, PointElement, LinearScale, Title, CategoryScale, Tooltip, Legend, Filler);
+import 'chart.js/auto';
 
 const props = defineProps({
   data: {
     type: Array,
     required: true
   }
+});
+
+const hasData = computed(() => {
+  if (!props.data || props.data.length === 0) {
+    return false;
+  }
+
+  return props.data.some(item => {
+    const income = Number(item.income || 0);
+    const expense = Number(item.expense || 0);
+    return income !== 0 || expense !== 0;
+  });
 });
 
 const chartData = computed(() => ({
