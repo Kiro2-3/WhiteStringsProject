@@ -56,7 +56,7 @@
             >
               <option v-if="form.type === 'income'" value="Salary">Salary</option>
               <template v-else>
-                <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+                <option v-for="cat in expenseCategories" :key="cat" :value="cat">{{ cat }}</option>
               </template>
             </select>
             <InputError v-if="errors.category" :message="errors.category" />
@@ -87,7 +87,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue';
+import { ref, watch, computed } from 'vue';
 import { useForm, router } from '@inertiajs/vue3';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -114,6 +114,9 @@ const form = ref({
 const errors = ref({});
 const processing = ref(false);
 
+// Categories to use when type is expense (exclude 'Salary' if present)
+const expenseCategories = computed(() => props.categories.filter(cat => cat !== 'Salary'));
+
 watch(() => form.value.type, (newType) => {
   if (newType === 'income') {
     form.value.category = 'Salary';
@@ -136,6 +139,7 @@ function submit() {
       errors.value = {};
       processing.value = false;
       emit('close');
+      router.visit(route('dashboard'));
     },
     onError: (e) => {
       errors.value = e;

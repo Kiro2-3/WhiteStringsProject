@@ -14,10 +14,11 @@ import {
   Title,
   CategoryScale,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
 
-Chart.register(LineElement, PointElement, LinearScale, Title, CategoryScale, Tooltip, Legend);
+Chart.register(LineElement, PointElement, LinearScale, Title, CategoryScale, Tooltip, Legend, Filler);
 
 const props = defineProps({
   data: {

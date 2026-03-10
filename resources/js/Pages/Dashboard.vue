@@ -76,9 +76,25 @@
                 </div>
                 <div class="flex flex-col gap-1 w-full sm:w-auto">
                   <label class="font-semibold text-gray-700 mb-1" for="chart-category">Category</label>
-                  <select id="chart-category" v-model="chartFilters.category" class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-800 focus:border-blue-400 focus:ring-blue-400 text-sm">
+                  <select
+                    id="chart-category"
+                    v-model="chartFilters.category"
+                    :disabled="chartFilters.type === 'income'"
+                    :class="[
+                      'rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-400 focus:ring-blue-400',
+                      chartFilters.type === 'income'
+                        ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                        : 'bg-gray-50 text-gray-800'
+                    ]"
+                  >
                     <option value="">All</option>
-                    <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
+                    <option
+                      v-for="cat in chartCategoryOptions"
+                      :key="cat"
+                      :value="cat"
+                    >
+                      {{ cat }}
+                    </option>
                   </select>
                 </div>
                 <div class="flex flex-col gap-1 w-full sm:w-auto">
@@ -133,6 +149,52 @@
 
         <template v-else-if="tab === 'transactions'">
           <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+            <!-- Filters -->
+            <div class="p-4 border-b flex flex-col md:flex-row gap-4 items-stretch md:items-end">
+              <div class="flex flex-col gap-1 w-full md:w-40">
+                <label class="font-semibold text-gray-700 mb-1" for="filter-type">Type</label>
+                <select id="filter-type" v-model="filters.type" class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-800 focus:border-blue-400 focus:ring-blue-400 text-sm">
+                  <option value="">All</option>
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+                </select>
+              </div>
+              <div class="flex flex-col gap-1 w-full md:w-40">
+                <label class="font-semibold text-gray-700 mb-1" for="filter-category">Category</label>
+                <select
+                  id="filter-category"
+                  v-model="filters.category"
+                  :disabled="filters.type === 'income'"
+                  :class="[
+                    'rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-400 focus:ring-blue-400',
+                    filters.type === 'income'
+                      ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
+                      : 'bg-gray-50 text-gray-800'
+                  ]"
+                >
+                  <option value="">All</option>
+                  <option
+                    v-for="cat in (filters.type === 'expense' ? expenseFilterCategories : categories)"
+                    :key="cat"
+                    :value="cat"
+                  >
+                    {{ cat }}
+                  </option>
+                </select>
+              </div>
+              <div class="flex flex-col gap-1 w-full md:w-40">
+                <label class="font-semibold text-gray-700 mb-1" for="filter-date-from">From</label>
+                <input id="filter-date-from" type="date" v-model="filters.date_from" class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-800 focus:border-blue-400 focus:ring-blue-400 text-sm" />
+              </div>
+              <div class="flex flex-col gap-1 w-full md:w-40">
+                <label class="font-semibold text-gray-700 mb-1" for="filter-date-to">To</label>
+                <input id="filter-date-to" type="date" v-model="filters.date_to" class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-800 focus:border-blue-400 focus:ring-blue-400 text-sm" />
+              </div>
+              <div class="flex flex-col gap-1 w-full md:w-auto">
+                <label class="invisible mb-1">Clear</label>
+                <button @click="clearFilters" class="rounded-lg px-4 py-2 bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition">Clear</button>
+              </div>
+            </div>
             <div class="overflow-x-auto">
               <table class="w-full text-left">
                 <thead class="bg-gray-50 border-b">
@@ -183,7 +245,8 @@
 
 <script setup>
 import { ref, computed, defineProps, watch } from 'vue';
-import { router } from '@inertiajs/vue3';
+import { router, Head } from '@inertiajs/vue3';
+import AuthenticatedLayout from '../Layouts/AuthenticatedLayout.vue';
 import EditTransaction from './EditTransaction.vue';
 import AddTransaction from './AddTransaction.vue';
 import LineChart from '../Components/LineChart.vue';
@@ -217,7 +280,6 @@ const props = defineProps({
 const tab = ref('dashboard');
 const filters = ref({ ...props.filters });
 
-
 // Dashboard chart filters (independent from transactions filter)
 const chartFilters = ref({
   type: '',
@@ -226,8 +288,22 @@ const chartFilters = ref({
   date_to: ''
 });
 
+// Category lists without 'Salary' for expense-related filters
+const expenseFilterCategories = computed(() => props.categories.filter(cat => cat !== 'Salary'));
+
+// When chart type is income, clear category so it doesn't filter by a stale value
+watch(
+  () => chartFilters.value.type,
+  (newType) => {
+    if (newType === 'income') {
+      chartFilters.value.category = '';
+    }
+  }
+);
+
 function clearChartFilters() {
   chartFilters.value = { type: '', category: '', date_from: '', date_to: '' };
+  router.get(route('dashboard'));
 }
 
 // Filtered transactions for dashboard charts
@@ -299,14 +375,14 @@ const applyFilters = debounce(() => {
   const cleaned = Object.fromEntries(
     Object.entries(filters.value).filter(([_, v]) => v !== undefined && v !== null && v !== '')
   );
-  router.get(route('dashboard'), cleaned);
+  router.get(route('transactions.recent'), cleaned);
 }, 400);
 
 // Watch for real-time filter changes
 watch(filters, applyFilters, { deep: true });
 function clearFilters() {
   filters.value = {};
-  router.get(route('dashboard'));
+  router.get(route('transactions.recent'));
 }
 function deleteTransaction(id) {
   if (confirm('Are you sure you want to delete this transaction?')) {

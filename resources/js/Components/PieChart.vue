@@ -10,10 +10,11 @@ import {
   Chart,
   ArcElement,
   Tooltip,
-  Legend
+  Legend,
+  Filler
 } from 'chart.js';
 
-Chart.register(ArcElement, Tooltip, Legend);
+Chart.register(ArcElement, Tooltip, Legend, Filler);
 const props = defineProps({
   data: {
     type: Array,
