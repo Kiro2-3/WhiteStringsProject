@@ -16,15 +16,21 @@
           <img :src="logoUrl" alt="sTracker preview" class="login-hero-logo rounded-xl shadow-md" />
           <span class="login-hero-brand font-bold text-lg">sTracker</span>
         </div>
- 
+        <div class="login-hero-nav-actions">
+          <button
+            type="button"
+            class="login-hero-link login-hero-link-muted btn btn-ghost btn-sm normal-case"
+            @click="openLoginModal"
+          >
+            Log in
+          </button>
+          <Link :href="route('register')" class="login-hero-cta btn btn-outline btn-sm normal-case">Get Started</Link>
+        </div>
       </header>
 
       <main class="login-hero-main">
         <section class="login-hero-grid">
           <div class="login-hero-copy">
-            <div class="login-hero-badge">
-
-            </div>
             <h1 class="login-hero-title"> 
               <span class="login-hero-title-highlight">Strike your Goals!</span>
             </h1>
@@ -38,9 +44,62 @@
             </div>
           </div>
 
-          <div class="login-hero-card-wrapper">
-            <div class="login-inspiration-card card bg-base-100 shadow-xl border border-base-200">
-              <div class="card-body w-full">
+          <div class="login-hero-card-wrapper flex flex-col gap-6">
+            <div class="login-hero-preview">
+              <div class="login-hero-preview-inner">
+                <div class="login-inspiration-dashboard-frame">
+                  <img
+                    :src="previewUrl"
+                    alt="sTracker preview"
+                    class="login-inspiration-preview-img"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="mt-10 px-3">
+          <div class="grid gap-4 md:grid-cols-3">
+            <div class="card bg-base-100 shadow-sm border border-base-200">
+              <div class="card-body py-4 px-5">
+                <h3 class="card-title text-sm font-semibold mb-1 text-base-content">Secure & private</h3>
+                <p class="text-xs text-base-content/90">Your data is encrypted in transit and stored safely so only you can see your numbers.</p>
+              </div>
+            </div>
+            <div class="card bg-base-100 shadow-sm border border-base-200">
+              <div class="card-body py-4 px-5">
+                <h3 class="card-title text-sm font-semibold mb-1 text-base-content">Works across devices</h3>
+                <p class="text-xs text-base-content/90">Log in from desktop or mobile and pick up exactly where you left off.</p>
+              </div>
+            </div>
+            <div class="card bg-base-100 shadow-sm border border-base-200">
+              <div class="card-body py-4 px-5">
+                <h3 class="card-title text-sm font-semibold mb-1 text-base-content">Export when you need</h3>
+                <p class="text-xs text-base-content/90">Download your transactions for sharing with your accountant or for backup.</p>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </main>
+
+      <div
+        v-if="showLoginModal"
+        class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4"
+        @click.self="closeLoginModal"
+      >
+        <div class="relative w-full max-w-md">
+          <button
+            type="button"
+            class="btn btn-circle btn-sm btn-ghost absolute -right-2 -top-2 bg-base-100 shadow"
+            @click="closeLoginModal"
+            aria-label="Close login"
+          >
+            ✕
+          </button>
+          <div class="login-inspiration-card card bg-base-100 shadow-xl border border-base-200">
+            <div class="card-body w-full">
               <form @submit.prevent="submit" class="login-inspiration-form-fields space-y-6">
                 <div class="login-inspiration-inputs">
                   <div>
@@ -73,7 +132,7 @@
                     <InputError :message="form.errors.password" class="mt-1" />
                   </div>
                 </div>
-                  <div class="login-inspiration-actions">
+                <div class="login-inspiration-actions">
                   <div class="login-checkbox-row login-inspiration-checkbox-row flex items-center justify-between gap-2">
                     <Checkbox
                       id="remember"
@@ -84,53 +143,24 @@
                     <label for="remember" class="login-checkbox-label">
                       Keep me logged in
                     </label>
-                    <Link v-if="canResetPassword" :href="route('password.request')" class="login-inspiration-forgot">Forgot password?</Link>
+                    <Link
+                      v-if="canResetPassword"
+                      :href="route('password.request')"
+                      class="login-inspiration-forgot"
+                    >Forgot password?</Link>
                   </div>
-                  <PrimaryButton class="login-btn login-inspiration-btn btn btn-primary btn-lg w-full" :disabled="form.processing">
+                  <PrimaryButton
+                    class="login-btn login-inspiration-btn btn btn-primary btn-lg w-full"
+                    :disabled="form.processing"
+                  >
                     {{ form.processing ? 'Signing in...' : 'Log In' }}
                   </PrimaryButton>
                 </div>
               </form>
-              </div>
             </div>
           </div>
-        </section>
-
-        <section class="mt-10 px-3">
-          <div class="grid gap-4 md:grid-cols-3">
-            <div class="card bg-base-100 shadow-sm border border-base-200">
-              <div class="card-body py-4 px-5">
-                <h3 class="card-title text-sm font-semibold mb-1 text-base-content">Secure & private</h3>
-                <p class="text-xs text-base-content/90">Your data is encrypted in transit and stored safely so only you can see your numbers.</p>
-              </div>
-            </div>
-            <div class="card bg-base-100 shadow-sm border border-base-200">
-              <div class="card-body py-4 px-5">
-                <h3 class="card-title text-sm font-semibold mb-1 text-base-content">Works across devices</h3>
-                <p class="text-xs text-base-content/90">Log in from desktop or mobile and pick up exactly where you left off.</p>
-              </div>
-            </div>
-            <div class="card bg-base-100 shadow-sm border border-base-200">
-              <div class="card-body py-4 px-5">
-                <h3 class="card-title text-sm font-semibold mb-1 text-base-content">Export when you need</h3>
-                <p class="text-xs text-base-content/90">Download your transactions for sharing with your accountant or for backup.</p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        <section class="login-hero-preview">
-          <div class="login-hero-preview-inner">
-            <div class="login-inspiration-dashboard-frame">
-              <img
-                :src="previewUrl"
-                alt="sTracker preview"
-                class="login-inspiration-preview-img"
-              />
-            </div>
-          </div>
-        </section>
-      </main>
+        </div>
+      </div>
 
       <footer class="mt-12 bg-transparent text-black">
         <div class="max-w-6xl mx-auto px-6 py-10 md:py-12">
@@ -188,6 +218,7 @@
 </template>
 
 <script setup>
+import { ref } from 'vue';
 import logoUrl from '@/../../public/images/stracker-logo.png';
 import previewUrl from '@/../../public/images/preview.png';
 import Checkbox from '@/Components/Checkbox.vue';
@@ -207,6 +238,16 @@ const form = useForm({
   password: '',
   remember: false
 });
+
+const showLoginModal = ref(true);
+
+function openLoginModal() {
+  showLoginModal.value = true;
+}
+
+function closeLoginModal() {
+  showLoginModal.value = false;
+}
 
 function submit() {
   form.post('/login', {

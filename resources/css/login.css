@@ -234,7 +234,7 @@
   align-items: center;
   justify-content: center;
   position: relative;
-  min-width: 340px;
+  min-width: 550px;
   padding: 0 2rem;
 }
 .login-inspiration-image-showcase {
@@ -313,12 +313,12 @@
 }
 .login-inspiration-dashboard-frame {
   position: relative;
-  padding: 0.85rem;
-  border-radius: 1.5rem;
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  backdrop-filter: blur(18px);
-  box-shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
+  padding: 0;
+  border-radius: 0;
+  background: transparent;
+  border: none;
+  backdrop-filter: none;
+  box-shadow: none;
 }
 .login-inspiration-feature-grid {
   margin-top: 1.25rem;
@@ -329,7 +329,6 @@
 }
 .login-inspiration-feature-card {
   padding: 1rem;
-  border-radius: 1rem;
   background: rgba(255, 255, 255, 0.12);
   border: 1px solid rgba(255, 255, 255, 0.18);
   backdrop-filter: blur(14px);
@@ -369,9 +368,11 @@
 }
 .login-inspiration-preview-img {
   width: 100%;
+  max-width: 100%; /* allow the image to fill its container */
   display: block;
-  border-radius: 1rem;
-  box-shadow: 0 20px 48px rgba(15, 23, 42, 0.28);
+  margin: 0 auto; /* centers the image inside its container */
+  border-radius: 0;
+  box-shadow: none;
 }
 /* Flex container for left-right layout */
 .login-flex-container {
@@ -830,7 +831,8 @@
 
 .login-hero-grid {
   display: grid;
-  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  /* Give the preview column more space so the image appears larger */
+  grid-template-columns: minmax(0, 1.1fr) minmax(0, 1.4fr);
   gap: 3rem;
   align-items: center;
   margin-bottom: 3.5rem;
@@ -928,11 +930,11 @@
 
 .login-hero-preview-inner {
   width: 100%;
-  max-width: 900px;
-  border-radius: 2rem;
-  background: #0b0b13;
-  padding: 1.2rem 1.3rem 1.6rem;
-  box-shadow: 0 32px 90px rgba(15, 23, 42, 0.55);
+  max-width: 1200px;
+  border-radius: 0;
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
 }
 
 .login-hero-footer {
