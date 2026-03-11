@@ -1,6 +1,6 @@
 <template>
   <AuthenticatedLayout :user="auth.user">
-    <Head title="Recent Transactions" />
+    <Head title="Transactions" />
     <div class="min-h-screen w-full flex flex-col md:flex-row bg-gray-100 text-gray-900">
       <aside
         class="w-full md:w-60 flex md:flex-col flex-row gap-2 md:gap-6 items-stretch min-h-[4rem] md:min-h-[32rem] justify-start bg-white border-b md:border-b-0 md:border-r border-gray-200 p-4 sticky top-0 z-20 shadow-sm"
@@ -26,7 +26,7 @@
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
           </svg>
-          <span>Recent Transactions</span>
+          <span>Transactions</span>
         </button>
 
         <button

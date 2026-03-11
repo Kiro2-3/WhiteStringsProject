@@ -84,7 +84,7 @@
           <input
             id="entry_date"
             type="date"
-            class="input input-bordered w-full text-gray-800 bg-gray-50 border border-gray-300 focus:border-blue-400 focus:ring-blue-400 dark:bg-gray-800 dark:text-white dark:border-gray-700"
+            class="input input-bordered w-full bg-base-100 text-base-content"
             v-model="form.entry_date"
           />
           <InputError v-if="errors.entry_date" :message="errors.entry_date" />
@@ -92,7 +92,7 @@
         <div class="flex justify-end mt-8">
           <PrimaryButton
             type="submit"
-            class="w-full md:w-1/3 text-base bg-blue-600 hover:bg-blue-700 text-white font-semibold rounded-lg shadow-sm border-none transition dark:bg-blue-500 dark:hover:bg-blue-600"
+            class="w-full md:w-1/3 text-base font-semibold shadow"
             :disabled="processing"
           >
             Update Transaction

@@ -3,7 +3,7 @@
     <Dialog
       as="div"
       id="modal"
-      class="fixed inset-0 z-50 flex min-h-screen items-center justify-center overflow-y-auto px-4 py-6 transition-all sm:px-0"
+      class="modal modal-open z-50"
       @close="close"
     >
       <TransitionChild
@@ -14,7 +14,7 @@
         leave-from="opacity-100"
         leave-to="opacity-0"
       >
-        <div class="absolute inset-0 bg-gray-500/75" />
+        <div class="fixed inset-0 bg-base-300/70 backdrop-blur-sm" />
       </TransitionChild>
       <TransitionChild
         enter="ease-out duration-300"
@@ -24,7 +24,7 @@
         leave-from="opacity-100 translate-y-0 sm:scale-100"
         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
       >
-        <DialogPanel :class="['mb-6 transform overflow-hidden rounded-lg bg-base-100 shadow-xl transition-all sm:mx-auto sm:w-full', maxWidthClass]">
+        <DialogPanel :class="['modal-box bg-base-100 shadow-xl sm:mx-auto w-full', maxWidthClass]">
           <slot />
         </DialogPanel>
       </TransitionChild>

@@ -1,6 +1,6 @@
 <template>
   <Modal :show="true" maxWidth="md" :onClose="closeModal">
-    <div class="card w-full max-w-lg bg-base-100 shadow-2xl border border-base-200">
+    <div class="card w-full max-w-lg bg-base-100 border border-base-200">
       <div class="card-body p-8 bg-gradient-to-br from-base-100 to-base-200">
         <div class="mb-4 flex items-center justify-between">
           <div class="flex items-center gap-3">
@@ -53,7 +53,7 @@
             <InputLabel value="Type" htmlFor="type" />
             <select
               id="type"
-              class="select select-bordered w-full text-gray-800 bg-gray-50 border border-gray-300 focus:border-blue-400 focus:ring-blue-400 dark:bg-gray-800 dark:text-white dark:border-gray-700"
+              class="select select-bordered w-full bg-base-100 text-base-content"
               v-model="form.type"
             >
               <option value="income">Income</option>
@@ -65,8 +65,8 @@
             <InputLabel value="Category" htmlFor="category" />
             <select
               id="category"
-              class="select select-bordered w-full text-gray-800 bg-gray-50 border border-gray-300 focus:border-blue-400 focus:ring-blue-400 dark:bg-gray-800 dark:text-white dark:border-gray-700"
-              :class="form.type === 'income' ? 'opacity-50 cursor-not-allowed' : ''"
+              class="select select-bordered w-full bg-base-100 text-base-content"
+              :class="form.type === 'income' ? 'select-disabled opacity-60' : ''"
               v-model="form.category"
               :disabled="form.type === 'income'"
             >
@@ -83,7 +83,7 @@
           <input
             id="entry_date"
             type="date"
-            class="input input-bordered w-full text-gray-800 bg-gray-50 border border-gray-300 focus:border-blue-400 focus:ring-blue-400 dark:bg-gray-800 dark:text-white dark:border-gray-700"
+            class="input input-bordered w-full bg-base-100 text-base-content"
             v-model="form.entry_date"
           />
           <InputError v-if="errors.entry_date" :message="errors.entry_date" />
@@ -91,10 +91,10 @@
         <div class="flex justify-end mt-8">
           <PrimaryButton
             type="submit"
-            class="w-full md:w-1/3 text-base bg-[#ff5a5f] hover:bg-[#e04850] text-white font-semibold rounded-lg shadow-sm border-none transition dark:bg-blue-500 dark:hover:bg-blue-600"
+            class="w-full md:w-1/3 text-base font-semibold shadow"
             :disabled="processing"
           >
-            Save Transaction
+            Save 
           </PrimaryButton>
         </div>
       </form>

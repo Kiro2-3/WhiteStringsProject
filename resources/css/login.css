@@ -752,3 +752,223 @@
   background: rgba(24,24,27,0.95);
   box-shadow: 0 2px 8px rgba(59,130,246,0.10);
 }
+
+/* --- New hero-style login layout inspired by marketing page --- */
+
+.login-hero-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+}
+
+.login-hero-nav {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+  padding-inline: 0.75rem;
+  margin-bottom: 3rem;
+}
+
+.login-hero-nav-left {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.login-hero-logo {
+  width: 34px;
+  height: 34px;
+  border-radius: 999px;
+}
+
+.login-hero-brand {
+  font-weight: 800;
+  font-size: 1.25rem;
+  letter-spacing: 0.03em;
+  color: #0f172a;
+}
+
+.login-hero-nav-links {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  font-size: 0.95rem;
+  color: #6b7280;
+}
+
+.login-hero-link {
+  cursor: default;
+}
+
+.login-hero-link-muted {
+  color: #9ca3af;
+}
+
+.login-hero-nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.login-hero-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.55rem 1.35rem;
+  border-radius: 999px;
+  background: #8b5cf6;
+  color: #f9fafb;
+  font-weight: 600;
+  font-size: 0.95rem;
+  text-decoration: none;
+  box-shadow: 0 14px 28px rgba(139, 92, 246, 0.35);
+}
+
+.login-hero-main {
+  padding-inline: 0.75rem;
+}
+
+.login-hero-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr);
+  gap: 3rem;
+  align-items: center;
+  margin-bottom: 3.5rem;
+}
+
+.login-hero-copy {
+  max-width: 560px;
+}
+
+.login-hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.35rem 0.9rem;
+  border-radius: 999px;
+  background: #f4f4ff;
+  color: #4b5563;
+  font-size: 0.82rem;
+  font-weight: 600;
+  margin-bottom: 1.25rem;
+}
+
+.login-hero-badge-dot {
+  width: 0.55rem;
+  height: 0.55rem;
+  border-radius: 999px;
+  background: #a855f7;
+  box-shadow: 0 0 0 4px rgba(168, 85, 247, 0.25);
+}
+
+.login-hero-title {
+  font-size: clamp(2.4rem, 3.4vw + 1.8rem, 3.6rem);
+  line-height: 1.1;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  margin: 0 0 1rem 0;
+}
+
+.login-hero-title-highlight {
+  display: block;
+  color: #8b5cf6;
+}
+
+.login-hero-subcopy {
+  margin: 0 0 1.8rem 0;
+  max-width: 520px;
+  color: #6b7280;
+  font-size: 0.98rem;
+  line-height: 1.7;
+}
+
+.login-hero-cta-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.login-hero-primary-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.85rem 1.8rem;
+  border-radius: 999px;
+  background: #8b5cf6;
+  color: #f9fafb;
+  font-weight: 700;
+  font-size: 0.98rem;
+  text-decoration: none;
+  box-shadow: 0 20px 45px rgba(139, 92, 246, 0.4);
+}
+
+.login-hero-secondary-cta {
+  padding: 0.85rem 1.5rem;
+  border-radius: 999px;
+  border: 1px solid #e5e7eb;
+  background: #ffffff;
+  color: #4b5563;
+  font-weight: 600;
+  font-size: 0.95rem;
+}
+
+.login-hero-card-wrapper {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.login-hero-card-wrapper .login-inspiration-card {
+  box-shadow: 0 20px 65px rgba(148, 163, 184, 0.55);
+}
+
+.login-hero-preview {
+  display: flex;
+  justify-content: center;
+}
+
+.login-hero-preview-inner {
+  width: 100%;
+  max-width: 900px;
+  border-radius: 2rem;
+  background: #0b0b13;
+  padding: 1.2rem 1.3rem 1.6rem;
+  box-shadow: 0 32px 90px rgba(15, 23, 42, 0.55);
+}
+
+.login-hero-footer {
+  margin-top: 2.8rem;
+  font-size: 0.9rem;
+  color: #9ca3af;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .login-hero-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .login-hero-card-wrapper {
+    justify-content: flex-start;
+  }
+}
+
+@media (max-width: 640px) {
+  .login-hero-nav {
+    flex-direction: row;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .login-hero-nav-links {
+    display: none;
+  }
+
+  .login-hero-grid {
+    gap: 2.25rem;
+  }
+
+  .login-hero-cta-row {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
