@@ -10,7 +10,8 @@
       </div>
     </div>
 
-    <div class="login-hero-shell">
+    <div class="login-hero-shell" style="position: relative; overflow: hidden;">
+      <span class="hero-sliding-text">sTrike your Finance!</span>
       <header class="login-hero-nav">
         <div class="login-hero-nav-left">
           <img :src="logoUrl" alt="sTracker preview" class="login-hero-logo shadow-md" />
@@ -24,7 +25,7 @@
           >
             Log in
           </button>
-          <Link :href="route('register')" class="login-hero-cta btn btn-outline btn-sm normal-case">Get Started</Link>
+        
         </div>
       </header>
 
@@ -60,24 +61,128 @@
       <div></div>
         <div></div>
         <div></div>
-        <section class="mt-10 px-3">
+        <section class="mt-32 px-3 pb-10">
+          <!-- Feature cards -->
           <div class="grid gap-4 md:grid-cols-3">
-            <div class="card bg-base-100 shadow-sm border border-base-1600 bg-gray-300">
+            <div class="card bg-gray-100 shadow-sm border border-base-200">
               <div class="card-body py-4 px-5">
-                <h3 class="card-title text-sm font-semibold mb-1 text-base-content ">Secure & private</h3>
-                <p class="text-xs text-base-content/90">Your data is encrypted in transit and stored safely so only you can see your numbers.</p>
+                <h3 class="card-title text-sm font-semibold mb-1 text-black">🔒 Secure & private</h3>
+                <p class="text-xs text-base-content/80">Your data is encrypted in transit and stored safely so only you can see your numbers.</p>
               </div>
             </div>
-        <div class="card bg-base-100 shadow-sm border border-base-1600 bg-gray-300">
+            <div class="card bg-gray-100 shadow-sm border border-base-200">
               <div class="card-body py-4 px-5">
-                <h3 class="card-title text-sm font-semibold mb-1 text-base-content">Works across devices</h3>
-                <p class="text-xs text-base-content/90">Log in from desktop or mobile and pick up exactly where you left off.</p>
+                <h3 class="card-title text-sm font-semibold mb-1 text-black">📱 Works across devices</h3>
+                <p class="text-xs text-base-content/80">Log in from desktop or mobile and pick up exactly where you left off.</p>
               </div>
             </div>
-        <div class="card bg-base-100 shadow-sm border border-base-1600 bg-gray-300">
+            <div class="card bg-gray-100 shadow-sm border border-base-200">
               <div class="card-body py-4 px-5">
-                <h3 class="card-title text-sm font-semibold mb-1 text-base-content">Export when you need</h3>
-                <p class="text-xs text-base-content/90">Download your transactions for sharing with your accountant or for backup.</p>
+                <h3 class="card-title text-sm font-semibold mb-1 text-black">📤 Export when you need</h3>
+                <p class="text-xs text-base-content/80">Download your transactions for sharing with your accountant or for backup.</p>
+              </div>
+            </div>
+            <div class="card bg-gray-100 shadow-sm border border-base-200">
+              <div class="card-body py-4 px-5">
+                <h3 class="card-title text-sm font-semibold mb-1 text-black">📊 Visual insights</h3>
+                <p class="text-xs text-base-content/80">See where your money goes with clear charts and category breakdowns every month.</p>
+              </div>
+            </div>
+            <div class="card bg-gray-100 shadow-sm border border-base-200">
+              <div class="card-body py-4 px-5">
+                <h3 class="card-title text-sm font-semibold mb-1 text-black">⚡ Real-time tracking</h3>
+                <p class="text-xs text-base-content/80">Add income or expenses in seconds and watch your balance update instantly.</p>
+              </div>
+            </div>
+            <div class="card bg-gray-100 shadow-sm border border-base-200">
+              <div class="card-body py-4 px-5">
+                <h3 class="card-title text-sm font-semibold mb-1 text-black">🎯 Goal-oriented</h3>
+                <p class="text-xs text-base-content/80">Set spending limits per category and get a clear picture of how well you're sticking to them.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Stats row -->
+          <div class="mt-12 grid grid-cols-2 md:grid-cols-4 gap-4 text-center">
+            <div class="bg-base-100 rounded-2xl py-6 px-4 shadow-sm border border-base-200">
+              <p class="text-3xl font-extrabold text-primary">5k+</p>
+              <p class="text-xs text-base-content/60 mt-1">Active users</p>
+            </div>
+            <div class="bg-base-100 rounded-2xl py-6 px-4 shadow-sm border border-base-200">
+              <p class="text-3xl font-extrabold text-primary">₱2M+</p>
+              <p class="text-xs text-base-content/60 mt-1">Transactions tracked</p>
+            </div>
+            <div class="bg-base-100 rounded-2xl py-6 px-4 shadow-sm border border-base-200">
+              <p class="text-3xl font-extrabold text-primary">98%</p>
+              <p class="text-xs text-base-content/60 mt-1">Uptime reliability</p>
+            </div>
+            <div class="bg-base-100 rounded-2xl py-6 px-4 shadow-sm border border-base-200">
+              <p class="text-3xl font-extrabold text-primary">4.9 ★</p>
+              <p class="text-xs text-base-content/60 mt-1">Average user rating</p>
+            </div>
+          </div>
+
+          <!-- How it works -->
+          <div class="mt-14">
+            <h2 class="text-xl font-bold text-base-content mb-6 text-center">How it works</h2>
+            <div class="grid gap-6 md:grid-cols-3">
+              <div class="flex flex-col items-center text-center gap-3">
+                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center">1</div>
+                <h4 class="font-semibold text-base-content">Create your account</h4>
+                <p class="text-xs text-base-content/60">Sign up for free in under a minute — no credit card required.</p>
+              </div>
+              <div class="flex flex-col items-center text-center gap-3">
+                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center">2</div>
+                <h4 class="font-semibold text-base-content">Log your transactions</h4>
+                <p class="text-xs text-base-content/60">Add income and expenses with categories, dates, and descriptions.</p>
+              </div>
+              <div class="flex flex-col items-center text-center gap-3">
+                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center">3</div>
+                <h4 class="font-semibold text-base-content">Track & improve</h4>
+                <p class="text-xs text-base-content/60">View charts, spot patterns, and make smarter financial decisions.</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Testimonials -->
+          <div class="mt-14">
+            <h2 class="text-xl font-bold text-base-content mb-6 text-center">What users say</h2>
+            <div class="grid gap-4 md:grid-cols-3">
+              <div class="card bg-base-100 border border-base-200 shadow-sm">
+                <div class="card-body py-5 px-5 gap-3">
+                  <p class="text-xs text-base-content/80 italic">"sTracker completely changed how I manage my monthly budget. I finally know where my money goes!"</p>
+                  <div class="flex items-center gap-2 mt-1">
+                    <div class="avatar placeholder"><div class="bg-primary text-primary-content rounded-full w-7 text-xs font-bold flex items-center justify-center">J</div></div>
+                    <div>
+                      <p class="text-xs font-semibold text-base-content">Justine Norie.</p>
+                      <p class="text-[10px] text-base-content/50">Software developer</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card bg-base-100 border border-base-200 shadow-sm">
+                <div class="card-body py-5 px-5 gap-3">
+                  <p class="text-xs text-base-content/80 italic">"Simple, clean, and fast. I track all my side-hustle income here. The CSV export is super handy."</p>
+                  <div class="flex items-center gap-2 mt-1">
+                    <div class="avatar placeholder"><div class="bg-secondary text-secondary-content rounded-full w-7 text-xs font-bold flex items-center justify-center">J</div></div>
+                    <div>
+                      <p class="text-xs font-semibold text-base-content">John Brian Arce</p>
+                      <p class="text-[10px] text-base-content/50">Software developer</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="card bg-base-100 border border-base-200 shadow-sm">
+                <div class="card-body py-5 px-5 gap-3">
+                  <p class="text-xs text-base-content/80 italic">"I love the charts. Seeing my expenses broken down by category motivates me to spend less."</p>
+                  <div class="flex items-center gap-2 mt-1">
+                    <div class="avatar placeholder"><div class="bg-accent text-accent-content rounded-full w-7 text-xs font-bold flex items-center justify-center">J</div></div>
+                    <div>
+                      <p class="text-xs font-semibold text-base-content">Jorie Visaya</p>
+                      <p class="text-[10px] text-base-content/50">Software developer</p>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -87,32 +192,30 @@
 
       <div
         v-if="showLoginModal"
-        class="fixed inset-0 z-50 flex items-center justify-center bg-black/30 backdrop-blur-sm px-4"
+        class="modal modal-open"
         @click.self="closeLoginModal"
       >
-        <div class="relative w-full max-w-md">
-          <div class="bg-white rounded-3xl shadow-2xl px-10 py-10 relative">
-            <button
-              type="button"
-              class="btn btn-circle btn-sm btn-error text-white absolute -right-3 -top-3 shadow-lg"
-              @click="closeLoginModal"
-              aria-label="Close login"
-            >
-              ✕
-            </button>
+        <div class="modal-box w-full max-w-md relative rounded-3xl shadow-2xl">
+          <button
+            type="button"
+            class="btn btn-sm btn-circle btn-error absolute right-3 top-3"
+            @click="closeLoginModal"
+            aria-label="Close login"
+          >✕</button>
 
-            <!-- Brand -->
-            <div class="flex items-center gap-2 mb-8">
-              <img :src="logoUrl" alt="sTracker Logo" class="h-6 w-6 rounded-md" />
-              <span class="text-sm font-semibold text-gray-700">sTracker</span>
-            </div>
+          <!-- Brand -->
+          <div class="flex items-center gap-2 mb-6">
+            <img :src="logoUrl" alt="sTracker Logo" class="h-7 w-7 rounded-lg" />
+            <span class="font-bold text-base-content">sTracker</span>
+          </div>
 
-            <!-- Heading -->
-            <h2 class="text-4xl font-extrabold text-gray-900 leading-tight mb-1">Holla,<br />Welcome Back</h2>
-            <p class="text-sm text-gray-400 mb-8">Hey, welcome back to your special place</p>
+          <!-- Heading -->
+          <h2 class="text-4xl font-extrabold text-base-content leading-tight mb-1">Holla,<br />Welcome Back</h2>
+          <p class="text-sm text-base-content/50 mb-7">Hey, welcome back to your special place</p>
 
-            <form @submit.prevent="submit" class="space-y-4">
-              <!-- Email -->
+          <form @submit.prevent="submit" class="flex flex-col gap-4">
+            <!-- Email -->
+            <div class="form-control w-full">
               <TextInput
                 id="email"
                 type="email"
@@ -121,12 +224,14 @@
                 autocomplete="username"
                 :isFocused="true"
                 placeholder="Email address"
-                class="input input-bordered w-full bg-gray-50 border-gray-200 text-gray-800 placeholder-gray-400 focus:border-primaryPurple focus:ring-0"
+                class="input input-bordered w-full"
                 required
               />
-              <InputError :message="form.errors.email" class="-mt-2" />
+              <InputError :message="form.errors.email" class="mt-1 text-error text-xs" />
+            </div>
 
-              <!-- Password -->
+            <!-- Password -->
+            <div class="form-control w-full">
               <TextInput
                 id="password"
                 type="password"
@@ -134,42 +239,44 @@
                 v-model="form.password"
                 autocomplete="current-password"
                 placeholder="Password"
-                class="input input-bordered w-full bg-gray-50 border-gray-200 text-gray-800 placeholder-gray-400 focus:border-primaryPurple focus:ring-0"
+                class="input input-bordered w-full"
                 required
               />
-              <InputError :message="form.errors.password" class="-mt-2" />
+              <InputError :message="form.errors.password" class="mt-1 text-error text-xs" />
+            </div>
 
-              <!-- Remember + Forgot -->
-              <div class="flex items-center justify-between pt-1">
-                <label class="flex items-center gap-2 cursor-pointer">
-                  <Checkbox id="remember" name="remember" v-model="form.remember" class="checkbox checkbox-primary checkbox-sm" />
-                  <span class="text-sm text-gray-600">Remember me</span>
-                </label>
-                <Link
-                  v-if="canResetPassword"
-                  :href="route('password.request')"
-                  class="text-sm text-primaryPurple hover:underline font-medium"
-                >Forgot Password?</Link>
-              </div>
+            <!-- Remember + Forgot -->
+            <div class="flex items-center justify-between">
+              <label class="label cursor-pointer gap-2 p-0">
+                <Checkbox id="remember" name="remember" v-model="form.remember" class="checkbox checkbox-primary checkbox-sm" />
+                <span class="label-text">Remember me</span>
+              </label>
+              <Link
+                v-if="canResetPassword"
+                :href="route('password.request')"
+                class="link link-primary text-sm font-medium"
+              >Forgot Password?</Link>
+            </div>
 
-              <!-- Submit -->
-              <button
-                type="submit"
-                class="w-full mt-2 py-3 rounded-xl font-bold text-white text-base tracking-wide transition-all"
-                style="background: #7c3aed;"
-                :disabled="form.processing"
-              >
-                {{ form.processing ? 'Signing in...' : 'Sign In' }}
-              </button>
-            </form>
+            <!-- Submit -->
+            <button
+              type="submit"
+              class="btn btn-primary btn-block mt-1 rounded-xl"
+              :disabled="form.processing"
+            >
+              <span v-if="form.processing" class="loading loading-spinner loading-sm"></span>
+              {{ form.processing ? 'Signing in...' : 'Sign In' }}
+            </button>
+          </form>
 
-            <!-- Sign up link -->
-            <p class="mt-8 text-sm text-gray-400 text-center">
-              Don't have an account?
-              <Link :href="route('register')" class="text-primaryPurple font-semibold hover:underline">Sign Up</Link>
-            </p>
-          </div>
+          <!-- Divider + Sign up -->
+          <div class="divider text-base-content/40 text-xs mt-6">OR</div>
+          <p class="text-sm text-base-content/50 text-center">
+            Don't have an account?
+            <Link :href="route('register')" class="link link-primary font-semibold">Sign Up</Link>
+          </p>
         </div>
+        <div class="modal-backdrop bg-black/30 backdrop-blur-sm" @click="closeLoginModal"></div>
       </div>
       <div></div>
         <div></div>
@@ -202,13 +309,7 @@
 
 
             <div class="space-y-4">
-              <div>
-                <h3 class="text-xs font-semibold tracking-[0.2em] uppercase text-black mb-2">Services</h3>
-                <ul class="space-y-1 text-xs text-black/80">
-                  <li>Web Development</li>
-                  <li>Project Management</li>
-                </ul>
-              </div>
+
 
               <div>
                 <h3 class="text-xs font-semibold tracking-[0.2em] uppercase text-black mb-2">Follow</h3>
@@ -269,4 +370,44 @@ function submit() {
 
 <style scoped>
 @import '../../../css/login.css';
+
+
+@keyframes slideVertical {
+  0% {
+    transform: translate(0%, -15%) rotate(-30deg);
+    opacity: 0;
+  }
+  25% {
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate(-80%, 500%) rotate(-30deg);
+    opacity: 0;
+  }
+}
+
+.hero-sliding-text {
+  position: absolute;
+  top: 0;
+  right: 15%;
+  font-size: 5rem;
+  font-weight: bold;
+  background: linear-gradient(135deg, #a855f7 0%, #fbbf24 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  white-space: nowrap;
+  animation: slideVertical 5s linear infinite;
+  z-index: 0;
+  pointer-events: none;
+}
+
+@media (max-width: 768px) {
+  .hero-sliding-text {
+    font-size: 2rem;
+  }
+}
 </style>

@@ -158,7 +158,7 @@ class TransactionController extends Controller
             'name' => $validated['category'],
         ]);
 
-        return redirect()->route('transactions.recent')->with('success', 'Successfully added transaction');
+        return redirect()->back()->with('success', 'Successfully added transaction');
     }
 
     // 3. Update a Transaction

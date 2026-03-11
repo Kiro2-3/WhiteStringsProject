@@ -21,15 +21,6 @@
         </button>
 
         <button
-          class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-neutral text-base-100"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
-          </svg>
-          <span>Transactions</span>
-        </button>
-
-        <button
           class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-ghost text-base-content"
           @click="router.get(route('categories.index'))"
         >
@@ -38,6 +29,15 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 6h.008v.008H6V6z" />
           </svg>
           <span>Categories</span>
+        </button>
+
+        <button
+          class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-neutral text-base-100"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
+          </svg>
+          <span>Transactions</span>
         </button>
 
         <button
@@ -95,15 +95,11 @@
                 <select
                   id="filter-category"
                   v-model="filters.category"
-                  :disabled="filters.type === 'income'"
-                  :class="[
-                    'select select-bordered w-full bg-base-100 text-base-content',
-                    filters.type === 'income' ? 'select-disabled opacity-60' : ''
-                  ]"
+                  class="select select-bordered w-full bg-base-100 text-base-content"
                 >
                   <option value="">All</option>
                   <option
-                    v-for="cat in (filters.type === 'expense' ? expenseFilterCategories : categories)"
+                    v-for="cat in categories"
                     :key="cat"
                     :value="cat"
                   >
@@ -175,7 +171,7 @@
                     class="font-semibold whitespace-nowrap"
                     :class="t.type === 'income' ? 'text-green-600' : 'text-error'"
                   >
-                    ₱{{ t.amount }}
+                    ₱{{ Number(t.amount).toFixed(2) }}
                   </td>
                   <td class="uppercase text-xs font-bold tracking-wide">
                     <span
@@ -277,7 +273,7 @@
 </template>
 
 <script setup>
-import { ref, defineProps, watch, computed } from 'vue';
+import { ref, defineProps, watch } from 'vue';
 import { router, Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '../Layouts/AuthenticatedLayout.vue';
 import EditTransaction from './EditTransaction.vue';
@@ -307,10 +303,8 @@ watch(() => props.filters, (newFilters) => {
     date_to: newFilters?.date_to || '',
   };
 }, { immediate: true });
-const editTransaction = ref(null);
 
-// Categories to use when filtering expenses (exclude 'Salary' if present)
-const expenseFilterCategories = computed(() => props.categories.filter(cat => cat !== 'Salary'));
+const editTransaction = ref(null);
 
 function openEditTransaction(transaction) {
   editTransaction.value = { ...transaction };

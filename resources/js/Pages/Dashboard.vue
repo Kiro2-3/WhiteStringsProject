@@ -25,19 +25,6 @@
         <button
           :class="[
             'btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case',
-            tab === 'transactions' ? 'btn-neutral text-base-100' : 'btn-ghost text-base-content'
-          ]"
-          @click="selectTab('transactions')"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
-          </svg>
-          <span>Transactions</span>
-        </button>
-        
-        <button
-          :class="[
-            'btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case',
             'btn-ghost text-base-content'
           ]"
           @click="router.get(route('categories.index'))"
@@ -47,6 +34,19 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 6h.008v.008H6V6z" />
           </svg>
           <span>Categories</span>
+        </button>
+        
+        <button
+          :class="[
+            'btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case',
+            tab === 'transactions' ? 'btn-neutral text-base-100' : 'btn-ghost text-base-content'
+          ]"
+          @click="selectTab('transactions')"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
+          </svg>
+          <span>Transactions</span>
         </button>
 
         <button
@@ -310,129 +310,71 @@
         </template>
 
         <template v-else-if="tab === 'transactions'">
-          <!-- Loading skeleton using daisyUI card and table styles -->
-          <div v-if="tabLoading.transactions" class="card bg-base-100 border border-base-200 shadow-xl animate-pulse">
-            <div class="card-body p-4 border-b border-base-200 flex flex-col gap-4 md:flex-row md:items-end">
-              <div class="h-9 w-full rounded-xl bg-base-200 md:w-40"></div>
-              <div class="h-9 w-full rounded-xl bg-base-200 md:w-40"></div>
-              <div class="h-9 w-full rounded-xl bg-base-200 md:w-40"></div>
-              <div class="h-9 w-full rounded-xl bg-base-200 md:w-40"></div>
-              <div class="h-9 w-full rounded-xl bg-base-200 md:w-24"></div>
+          <div class="card bg-base-100 border border-base-200 shadow-xl overflow-hidden">
+            <!-- Header -->
+            <div class="p-6 border-b border-base-200 flex items-center justify-between">
+              <div>
+                <h1 class="text-xl font-bold text-base-content">Transactions</h1>
+                <p class="text-sm text-base-content/60 mt-0.5">Browse and manage all your recorded transactions.</p>
+              </div>
             </div>
-            <div class="overflow-x-auto">
-              <table class="table table-zebra w-full">
-                <thead>
-                  <tr>
-                    <th>Date</th>
-                    <th>Description</th>
-                    <th>Category</th>
-                    <th>Amount</th>
-                    <th>Type</th>
-                    <th class="text-right">Actions</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr v-for="n in 5" :key="n">
-                    <td><div class="h-4 w-24 rounded-xl bg-base-200"></div></td>
-                    <td><div class="h-4 w-40 rounded-xl bg-base-200"></div></td>
-                    <td><div class="h-4 w-32 rounded-xl bg-base-200"></div></td>
-                    <td><div class="h-4 w-24 rounded-xl bg-base-200"></div></td>
-                    <td><div class="h-4 w-16 rounded-xl bg-base-200"></div></td>
-                    <td class="text-right"><div class="ml-auto h-4 w-16 rounded-xl bg-base-180"></div></td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
 
-          <!-- Transactions table using daisyUI components -->
-          <div v-else class="card bg-base-70 border border-base-200 shadow-xl">
             <!-- Filters -->
-            <div class="card-body gap-4 border-b border-base-200">
+            <div class="p-6 border-b border-base-200">
               <div class="flex flex-col gap-4 md:flex-row md:items-end">
-                <label class="form-control w-full md:flex-1 gap-2">
-                  <span class="label-text font-semibold text-base-content">Search</span>
+                <label class="form-control w-full md:flex-1 gap-1">
+                  <span class="label-text font-semibold text-base-content text-sm">Search</span>
                   <input
-                    id="tab-filter-search"
                     type="text"
                     v-model="filters.search"
-                    placeholder="Search description or category"
-                    class="input input-bordered w-full bg-base-100 text-base-content"
+                    placeholder="Search description or category…"
+                    class="input input-bordered input-sm w-full bg-base-100 text-base-content"
                   />
                 </label>
 
-                <label class="form-control w-full md:w-40 gap-2">
-                  <span class="label-text font-semibold text-base-content">Type</span>
-                  <select
-                    id="filter-type"
-                    v-model="filters.type"
-                    class="select select-bordered w-full bg-base-100 text-base-content"
-                  >
+                <label class="form-control w-full md:w-36 gap-1">
+                  <span class="label-text font-semibold text-base-content text-sm">Type</span>
+                  <select v-model="filters.type" class="select select-bordered select-sm w-full bg-base-100 text-base-content">
                     <option value="">All</option>
                     <option value="income">Income</option>
                     <option value="expense">Expense</option>
                   </select>
                 </label>
 
-                <label class="form-control w-full md:w-40 gap-2">
-                  <span class="label-text font-semibold text-base-content">Category</span>
+                <label class="form-control w-full md:w-36 gap-1">
+                  <span class="label-text font-semibold text-base-content text-sm">Category</span>
                   <select
-                    id="filter-category"
                     v-model="filters.category"
                     :disabled="filters.type === 'income'"
-                    :class="[
-                      'select select-bordered w-full bg-base-100 text-base-content',
-                      filters.type === 'income' ? 'select-disabled opacity-60' : ''
-                    ]"
+                    class="select select-bordered select-sm w-full bg-base-100 text-base-content"
+                    :class="filters.type === 'income' ? 'opacity-50' : ''"
                   >
                     <option value="">All</option>
-                    <option
-                      v-for="cat in categories"
-                      :key="cat"
-                      :value="cat"
-                    >
-                      {{ cat }}
-                    </option>
+                    <option v-for="cat in categories" :key="cat" :value="cat">{{ cat }}</option>
                   </select>
                 </label>
 
-                <label class="form-control w-full md:w-40 gap-2">
-                  <span class="label-text font-semibold text-base-content">From</span>
-                  <input
-                    id="filter-date-from"
-                    type="date"
-                    v-model="filters.date_from"
-                    class="input input-bordered w-full bg-base-100 text-base-content"
-                  />
+                <label class="form-control w-full md:w-36 gap-1">
+                  <span class="label-text font-semibold text-base-content text-sm">From</span>
+                  <input type="date" v-model="filters.date_from" class="input input-bordered input-sm w-full bg-base-100 text-base-content" />
                 </label>
 
-                <label class="form-control w-full md:w-40 gap-2">
-                  <span class="label-text font-semibold text-base-content">To</span>
-                  <input
-                    id="filter-date-to"
-                    type="date"
-                    v-model="filters.date_to"
-                    class="input input-bordered w-full bg-base-100 text-base-content"
-                  />
+                <label class="form-control w-full md:w-36 gap-1">
+                  <span class="label-text font-semibold text-base-content text-sm">To</span>
+                  <input type="date" v-model="filters.date_to" class="input input-bordered input-sm w-full bg-base-100 text-base-content" />
                 </label>
 
-                <div class="flex w-full flex-col gap-1 md:w-auto">
-                  <span class="invisible mb-1">Clear</span>
-                  <button
-                    type="button"
-                    @click="clearFilters"
-                    class="btn btn-ghost btn-sm md:btn-md"
-                  >
-                    Clear
-                  </button>
+                <div class="flex items-end">
+                  <button type="button" @click="clearFilters" class="btn btn-ghost btn-sm">Clear</button>
                 </div>
               </div>
             </div>
 
-            <div class="overflow-x-auto max-h-[28rem] overflow-y-auto">
+            <!-- Table -->
+            <div class="overflow-x-auto">
               <table class="table table-zebra w-full">
                 <thead>
-                  <tr>
+                  <tr class="bg-base-200 text-base-content/70 text-xs uppercase tracking-wider">
                     <th>Date</th>
                     <th>Description</th>
                     <th>Category</th>
@@ -442,72 +384,39 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr v-for="t in transactions.data" :key="t.id">
-                    <td class="whitespace-nowrap">{{ t.entry_date }}</td>
-                    <td>{{ t.description }}</td>
-                    <td class="whitespace-nowrap">{{ t.category }}</td>
-                    <td
-                      class="font-semibold whitespace-nowrap"
-                      :class="t.type === 'income' ? 'text-success' : 'text-error'"
-                    >
+                  <tr v-for="t in filteredTransactions" :key="t.id" class="hover">
+                    <td class="whitespace-nowrap text-sm text-base-content/70">{{ t.entry_date }}</td>
+                    <td class="text-sm text-base-content font-medium">{{ t.description }}</td>
+                    <td class="whitespace-nowrap text-sm text-base-content/70">{{ t.category }}</td>
+                    <td class="font-semibold whitespace-nowrap text-sm" :class="t.type === 'income' ? 'text-success' : 'text-error'">
                       ₱{{ t.amount }}
                     </td>
-                    <td class="uppercase text-xs font-bold tracking-wide">
+                    <td>
                       <span
-                        class="badge border-none px-3 py-2 text-xs font-semibold"
+                        class="badge badge-sm border-none font-semibold"
                         :class="t.type === 'income' ? 'badge-success' : 'badge-error'"
                       >
                         {{ t.type }}
                       </span>
                     </td>
                     <td class="text-right">
-                      <div class="flex justify-end gap-2">
-                        <button
-                          type="button"
-                          @click="openEditTransaction(t)"
-                          class="btn btn-ghost btn-xs text-primary px-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                            />
+                      <div class="flex justify-end gap-1">
+                        <button type="button" @click="openEditTransaction(t)" class="btn btn-ghost btn-xs text-primary">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z" />
                           </svg>
                         </button>
-                        <button
-                          type="button"
-                          @click="deleteTransaction(t.id)"
-                          class="btn btn-ghost btn-xs text-error px-2"
-                        >
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            class="h-4 w-4"
-                            fill="none"
-                            viewBox="0 0 24 24"
-                            stroke="currentColor"
-                          >
-                            <path
-                              stroke-linecap="round"
-                              stroke-linejoin="round"
-                              stroke-width="2"
-                              d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-                            />
+                        <button type="button" @click="deleteTransaction(t.id)" class="btn btn-ghost btn-xs text-error">
+                          <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                           </svg>
                         </button>
                       </div>
                     </td>
                   </tr>
-                  <tr v-if="!transactions.data || transactions.data.length === 0">
-                    <td colspan="6" class="p-10 text-center text-base-content/50">
-                      No transactions found yet.
+                  <tr v-if="filteredTransactions.length === 0">
+                    <td colspan="6" class="py-16 text-center text-base-content/40 text-sm">
+                      No transactions found.
                     </td>
                   </tr>
                 </tbody>
@@ -558,10 +467,13 @@ const props = defineProps({
   filters: Object,
 });
 
-const tab = ref('dashboard');
+const validTabs = ['dashboard', 'transactions'];
+const initialTab = validTabs.includes(window.location.hash.slice(1)) ? window.location.hash.slice(1) : 'dashboard';
+
+const tab = ref(initialTab);
 const tabLoading = ref({
-  dashboard: true,
-  transactions: false,
+  dashboard: initialTab === 'dashboard',
+  transactions: initialTab === 'transactions',
 });
 
 function selectTab(target) {
@@ -570,6 +482,7 @@ function selectTab(target) {
   }
 
   tab.value = target;
+  window.location.hash = target;
   tabLoading.value[target] = true;
 
   setTimeout(() => {
@@ -720,27 +633,24 @@ const pieChartColors = computed(() => {
   return filteredPieChartData.value.map(d => colorMap[d.label] || '#a3a3a3');
 });
 
-// Debounce utility
-function debounce(fn, delay) {
-  let timeout;
-  return (...args) => {
-    clearTimeout(timeout);
-    timeout = setTimeout(() => fn(...args), delay);
-  };
-}
+// Client-side filtered transactions for the Transactions tab
+const filteredTransactions = computed(() => {
+  const data = props.transactions?.data || [];
+  return data.filter((t) => {
+    if (filters.value.search) {
+      const q = filters.value.search.toLowerCase();
+      if (!t.description?.toLowerCase().includes(q) && !t.category?.toLowerCase().includes(q)) return false;
+    }
+    if (filters.value.type && t.type !== filters.value.type) return false;
+    if (filters.value.category && t.category !== filters.value.category) return false;
+    if (filters.value.date_from && t.entry_date < filters.value.date_from) return false;
+    if (filters.value.date_to && t.entry_date > filters.value.date_to) return false;
+    return true;
+  });
+});
 
-const applyFilters = debounce(() => {
-  const cleaned = Object.fromEntries(
-    Object.entries(filters.value).filter(([_, v]) => v !== undefined && v !== null && v !== '')
-  );
-  router.get(route('transactions.recent'), cleaned);
-}, 400);
-
-// Watch for real-time filter changes
-watch(filters, applyFilters, { deep: true });
 function clearFilters() {
   filters.value = { search: '', type: '', category: '', date_from: '', date_to: '' };
-  router.get(route('transactions.recent'));
 }
 function deleteTransaction(id) {
   if (confirm('Are you sure you want to delete this transaction?')) {
@@ -750,7 +660,7 @@ function deleteTransaction(id) {
 
 onMounted(() => {
   setTimeout(() => {
-    tabLoading.value.dashboard = false;
+    tabLoading.value[tab.value] = false;
   }, 1500);
 });
 </script>

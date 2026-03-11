@@ -59,9 +59,9 @@ const showFlash = ref(false);
 let flashTimeout = null;
 
 watch(
-  () => page.props.flash,
-  (newFlash) => {
-    if (newFlash && newFlash.success) {
+  () => page.props.flash?.success,
+  (newSuccess) => {
+    if (newSuccess) {
       showFlash.value = true;
 
       if (flashTimeout) {
@@ -72,8 +72,7 @@ watch(
         showFlash.value = false;
       }, 3000);
     }
-  },
-  { deep: false }
+  }
 );
 </script>
 

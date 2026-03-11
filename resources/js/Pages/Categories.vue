@@ -23,16 +23,6 @@
         </button>
 
         <button
-          class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-ghost text-base-content"
-          @click="router.get(route('transactions.recent'))"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
-          </svg>
-          <span>Transactions</span>
-        </button>
-
-        <button
           class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-neutral text-base-100"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
@@ -40,6 +30,16 @@
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 6h.008v.008H6V6z" />
           </svg>
           <span>Categories</span>
+        </button>
+
+        <button
+          class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-ghost text-base-content"
+          @click="router.get(route('transactions.recent'))"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
+          </svg>
+          <span>Transactions</span>
         </button>
 
         <button
