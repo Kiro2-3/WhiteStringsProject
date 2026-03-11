@@ -1,17 +1,17 @@
 <template>
   <AuthenticatedLayout :user="auth.user">
     <Head title="Transactions" />
-    <div class="min-h-screen w-full flex flex-col md:flex-row bg-gray-100 text-gray-900">
+    <div class="min-h-screen w-full flex flex-col md:flex-row bg-base-200 text-base-content">
       <aside
-        class="w-full md:w-60 flex md:flex-col flex-row gap-2 md:gap-6 items-stretch min-h-[4rem] md:min-h-[32rem] justify-start bg-white border-b md:border-b-0 md:border-r border-gray-200 p-4 sticky top-0 z-20 shadow-sm"
+        class="w-full md:w-60 flex md:flex-col flex-row gap-2 md:gap-6 items-stretch min-h-[4rem] md:min-h-[32rem] justify-start bg-base-100 border-b md:border-b-0 md:border-r border-base-200 p-4 sticky top-0 z-20 shadow-sm"
       >
         <div class="flex items-center md:mb-8 mb-2">
-          <img src="/public/images/stracker-logo.png" alt="Stracker Logo" class="h-10 w-auto mr-3" />
-          <span class="font-bold text-2xl text-gray-800 tracking-tight">Stracker</span>
+         <img src="/public/images/stracker-logo.png" alt="Stracker Logo" class="h-25 w-auto mr-6" />
+
         </div>
 
         <button
-          :class="['bg-white text-gray-700 hover:bg-gray-100', 'rounded-lg px-4 py-2 font-medium transition flex items-center gap-2 justify-start']"
+          class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-ghost text-base-content"
           @click="goToDashboard"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
@@ -21,7 +21,7 @@
         </button>
 
         <button
-          :class="['bg-gray-900 text-white shadow', 'rounded-lg px-4 py-2 font-medium transition flex items-center gap-2 justify-start']"
+          class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-neutral text-base-100"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 6v6h4.5M4.5 12a7.5 7.5 0 1115 0 7.5 7.5 0 01-15 0z" />
@@ -30,7 +30,18 @@
         </button>
 
         <button
-          class="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-2 font-medium transition shadow flex items-center gap-2 justify-start"
+          class="btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case btn-ghost text-base-content"
+          @click="router.get(route('categories.index'))"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 6h.008v.008H6V6z" />
+          </svg>
+          <span>Categories</span>
+        </button>
+
+        <button
+          class="btn btn-primary btn-sm md:btn-md justify-start gap-2 font-semibold shadow"
           @click="goToAddTransaction"
         >
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
@@ -39,138 +50,151 @@
           <span>Add Transaction</span>
         </button>
 
-        <button
-          @click="logout"
-          class="bg-red-50 text-red-600 hover:bg-red-100 rounded-lg px-4 py-2 font-semibold transition mt-auto border border-red-100 flex items-center gap-2 justify-start"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.75 6.75L21 12m0 0-5.25 5.25M21 12H9m3.75 7.5H6.75A2.25 2.25 0 014.5 17.25v-10.5A2.25 2.25 0 016.75 4.5h6" />
-          </svg>
-          <span>Logout</span>
-        </button>
+        <div class="mt-auto flex flex-col gap-2">
+          <button
+            class="btn btn-ghost btn-sm md:btn-md justify-start gap-2 font-medium normal-case text-base-content"
+            @click="router.get(route('profile.edit'))"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            <span>Profile Settings</span>
+          </button>
+        </div>
       </aside>
 
       <main class="flex-1 space-y-10 px-4 md:px-12 py-8 w-full">
-        <div class="bg-white rounded-xl shadow-sm overflow-hidden">
+        <div class="card bg-base-100 border border-base-200 shadow-xl overflow-hidden">
           <!-- Filters -->
-          <div class="p-4 border-b flex flex-col md:flex-row gap-4 items-stretch md:items-end">
-            <div class="flex flex-col gap-1 w-full md:flex-1">
-              <label class="font-semibold text-gray-700 mb-1" for="filter-search">Search</label>
-              <input
-                id="filter-search"
-                type="text"
-                v-model="filters.search"
-                placeholder="Search description or category"
-                class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-800 focus:border-blue-400 focus:ring-blue-400 text-sm"
-              />
-            </div>
-            <div class="flex flex-col gap-1 w-full md:w-40">
-              <label class="font-semibold text-gray-700 mb-1" for="filter-type">Type</label>
-              <select
-                id="filter-type"
-                v-model="filters.type"
-                class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-800 focus:border-blue-400 focus:ring-blue-400 text-sm"
-              >
-                <option value="">All</option>
-                <option value="income">Income</option>
-                <option value="expense">Expense</option>
-              </select>
-            </div>
-            <div class="flex flex-col gap-1 w-full md:w-40">
-              <label class="font-semibold text-gray-700 mb-1" for="filter-category">Category</label>
-              <select
-                id="filter-category"
-                v-model="filters.category"
-                :disabled="filters.type === 'income'"
-                :class="[
-                  'rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-400 focus:ring-blue-400',
-                  filters.type === 'income'
-                    ? 'bg-gray-200 text-gray-400 cursor-not-allowed'
-                    : 'bg-gray-50 text-gray-800'
-                ]"
-              >
-                <option value="">All</option>
-                <option
-                  v-for="cat in (filters.type === 'expense' ? expenseFilterCategories : categories)"
-                  :key="cat"
-                  :value="cat"
+          <div class="card-body gap-4 border-b border-base-200">
+            <div class="flex flex-col gap-4 md:flex-row md:items-end">
+              <label class="form-control w-full md:flex-1 gap-2">
+                <span class="label-text font-semibold text-base-content">Search</span>
+                <input
+                  id="filter-search"
+                  type="text"
+                  v-model="filters.search"
+                  placeholder="Search description or category"
+                  class="input input-bordered w-full bg-base-100 text-base-content"
+                />
+              </label>
+              <label class="form-control w-full md:w-40 gap-2">
+                <span class="label-text font-semibold text-base-content">Type</span>
+                <select
+                  id="filter-type"
+                  v-model="filters.type"
+                  class="select select-bordered w-full bg-base-100 text-base-content"
                 >
-                  {{ cat }}
-                </option>
-              </select>
-            </div>
-            <div class="flex flex-col gap-1 w-full md:w-40">
-              <label class="font-semibold text-gray-700 mb-1" for="filter-date-from">From</label>
-              <input
-                id="filter-date-from"
-                type="date"
-                v-model="filters.date_from"
-                class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-800 focus:border-blue-400 focus:ring-blue-400 text-sm"
-              />
-            </div>
-            <div class="flex flex-col gap-1 w-full md:w-40">
-              <label class="font-semibold text-gray-700 mb-1" for="filter-date-to">To</label>
-              <input
-                id="filter-date-to"
-                type="date"
-                v-model="filters.date_to"
-                class="rounded-lg border border-gray-300 bg-gray-50 px-3 py-2 text-gray-800 focus:border-blue-400 focus:ring-blue-400 text-sm"
-              />
-            </div>
-            <div class="flex flex-col gap-1 w-full md:w-auto">
-              <label class="invisible mb-1">Search</label>
-              <button
-                @click="applyFilters"
-                class="rounded-lg px-4 py-2 bg-blue-600 text-white font-medium hover:bg-blue-700 transition"
-              >
-                Search
-              </button>
-            </div>
-            <div class="flex flex-col gap-1 w-full md:w-auto">
-              <label class="invisible mb-1">Clear</label>
-              <button
-                @click="clearFilters"
-                class="rounded-lg px-4 py-2 bg-gray-200 text-gray-700 font-medium hover:bg-gray-300 transition"
-              >
-                Clear
-              </button>
+                  <option value="">All</option>
+                  <option value="income">Income</option>
+                  <option value="expense">Expense</option>
+                </select>
+              </label>
+              <label class="form-control w-full md:w-40 gap-2">
+                <span class="label-text font-semibold text-base-content">Category</span>
+                <select
+                  id="filter-category"
+                  v-model="filters.category"
+                  :disabled="filters.type === 'income'"
+                  :class="[
+                    'select select-bordered w-full bg-base-100 text-base-content',
+                    filters.type === 'income' ? 'select-disabled opacity-60' : ''
+                  ]"
+                >
+                  <option value="">All</option>
+                  <option
+                    v-for="cat in (filters.type === 'expense' ? expenseFilterCategories : categories)"
+                    :key="cat"
+                    :value="cat"
+                  >
+                    {{ cat }}
+                  </option>
+                </select>
+              </label>
+              <label class="form-control w-full md:w-40 gap-2">
+                <span class="label-text font-semibold text-base-content">From</span>
+                <input
+                  id="filter-date-from"
+                  type="date"
+                  v-model="filters.date_from"
+                  class="input input-bordered w-full bg-base-100 text-base-content"
+                />
+              </label>
+              <label class="form-control w-full md:w-40 gap-2">
+                <span class="label-text font-semibold text-base-content">To</span>
+                <input
+                  id="filter-date-to"
+                  type="date"
+                  v-model="filters.date_to"
+                  class="input input-bordered w-full bg-base-100 text-base-content"
+                />
+              </label>
+              <div class="flex w-full flex-col gap-1 md:w-auto">
+                <span class="invisible label-text">a</span>
+                <button type="button" @click="applyFilters" class="btn btn-primary">
+                  Search
+                </button>
+              </div>
+              <div class="flex w-full flex-col gap-1 md:w-auto">
+                <span class="invisible label-text">a</span>
+                <button type="button" @click="clearFilters" class="btn btn-ghost">
+                  Clear
+                </button>
+              </div>
+              <div class="flex w-full flex-col gap-1 md:w-auto">
+                <span class="invisible label-text">a</span>
+                <button type="button" @click="exportCsv" class="btn btn-outline btn-success gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                  </svg>
+                  Export CSV
+                </button>
+              </div>
             </div>
           </div>
 
           <!-- Table -->
-          <div class="overflow-x-auto max-h-[28rem] overflow-y-auto">
-            <table class="w-full text-left">
-              <thead class="bg-gray-50 border-b">
+          <div class="overflow-x-auto max-h-[60rem] overflow-y-auto">
+            <table class="table table-zebra w-full">
+              <thead>
                 <tr>
-                  <th class="p-4">Date</th>
-                  <th class="p-4">Description</th>
-                  <th class="p-4">Category</th>
-                  <th class="p-4">Amount</th>
-                  <th class="p-4">Type</th>
-                  <th class="p-4 text-right">Actions</th>
+                  <th>Date</th>
+                  <th>Description</th>
+                  <th>Category</th>
+                  <th>Amount</th>
+                  <th>Type</th>
+                  <th class="text-right">Actions</th>
                 </tr>
               </thead>
               <tbody>
-                <tr v-for="t in transactions.data" :key="t.id" class="border-b hover:bg-gray-50">
-                  <td class="p-4">{{ t.entry_date }}</td>
-                  <td class="p-4">{{ t.description }}</td>
-                  <td class="p-4">{{ t.category }}</td>
+                <tr v-for="t in transactions.data" :key="t.id">
+                  <td class="whitespace-nowrap">{{ t.entry_date }}</td>
+                  <td>{{ t.description }}</td>
+                  <td class="whitespace-nowrap">{{ t.category }}</td>
                   <td
-                    class="p-4 font-semibold"
-                    :class="t.type === 'income' ? 'text-green-600' : 'text-red-600'"
+                    class="font-semibold whitespace-nowrap"
+                    :class="t.type === 'income' ? 'text-green-600' : 'text-error'"
                   >
-                    ${{ t.amount }}
+                    ₱{{ t.amount }}
                   </td>
-                  <td class="p-4 uppercase text-xs font-bold">{{ t.type }}</td>
-                  <td class="p-4 text-right">
+                  <td class="uppercase text-xs font-bold tracking-wide">
+                    <span
+                      class="badge border-none px-3 py-2 text-xs font-semibold"
+                      :class="t.type === 'income' ? 'badge-success' : 'badge-error'"
+                    >
+                      {{ t.type }}
+                    </span>
+                  </td>
+                  <td class="text-right">
                     <div class="flex justify-end gap-2">
                       <button
+                        type="button"
                         @click="openEditTransaction(t)"
-                        class="p-2 hover:bg-blue-50 text-blue-500 rounded-full"
+                        class="btn btn-ghost btn-xs text-primary px-2"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5"
+                          class="h-4 w-4"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -184,12 +208,13 @@
                         </svg>
                       </button>
                       <button
+                        type="button"
                         @click="deleteTransaction(t.id)"
-                        class="p-2 hover:bg-red-50 text-red-400 rounded-full"
+                        class="btn btn-ghost btn-xs text-error px-2"
                       >
                         <svg
                           xmlns="http://www.w3.org/2000/svg"
-                          class="h-5 w-5"
+                          class="h-4 w-4"
                           fill="none"
                           viewBox="0 0 24 24"
                           stroke="currentColor"
@@ -206,7 +231,7 @@
                   </td>
                 </tr>
                 <tr v-if="!transactions.data || transactions.data.length === 0">
-                  <td colspan="5" class="p-10 text-center text-gray-400">No transactions found yet.</td>
+                  <td colspan="6" class="p-10 text-center text-base-content/50">No transactions found yet.</td>
                 </tr>
               </tbody>
             </table>
@@ -214,20 +239,29 @@
 
           <!-- Pagination -->
           <div
-            v-if="transactions.meta && transactions.meta.links && transactions.meta.links.length > 1"
-            class="flex justify-center mt-6"
+            v-if="transactions.meta && transactions.meta.last_page > 1"
+            class="flex items-center justify-between px-4 py-3 border-t border-base-200"
           >
-            <nav class="inline-flex rounded-md shadow-sm" aria-label="Pagination">
+            <span class="text-sm text-base-content/60">
+              Page {{ transactions.meta.current_page }} of {{ transactions.meta.last_page }}
+              &nbsp;·&nbsp; {{ transactions.meta.total }} total
+            </span>
+            <div class="flex gap-2">
               <button
-                v-for="link in transactions.meta.links"
-                :key="link.label"
-                :disabled="!link.url"
-                @click="link.url && router.get(link.url)"
-                v-html="link.label"
-                class="px-4 py-2 border border-gray-200 bg-white text-gray-700 hover:bg-gray-50 text-sm font-medium first:rounded-l-md last:rounded-r-md disabled:opacity-50 disabled:cursor-not-allowed"
-                :class="{ 'bg-gray-200 text-gray-900 font-bold': link.active }"
-              />
-            </nav>
+                class="btn btn-sm btn-outline"
+                :disabled="!transactions.links.prev"
+                @click="transactions.links.prev && router.get(transactions.links.prev)"
+              >
+                ← Prev
+              </button>
+              <button
+                class="btn btn-sm btn-primary"
+                :disabled="!transactions.links.next"
+                @click="transactions.links.next && router.get(transactions.links.next)"
+              >
+                Next →
+              </button>
+            </div>
           </div>
         </div>
 
@@ -256,12 +290,23 @@ const props = defineProps({
 });
 
 const filters = ref({
-  search: props.filters?.search ?? '',
-  type: props.filters?.type ?? '',
-  category: props.filters?.category ?? '',
-  date_from: props.filters?.date_from ?? '',
-  date_to: props.filters?.date_to ?? '',
+  search: props.filters?.search || '',
+  type: props.filters?.type || '',
+  category: props.filters?.category || '',
+  date_from: props.filters?.date_from || '',
+  date_to: props.filters?.date_to || '',
 });
+
+// Re-sync local filter state whenever Inertia delivers fresh props (including on initial render)
+watch(() => props.filters, (newFilters) => {
+  filters.value = {
+    search: newFilters?.search || '',
+    type: newFilters?.type || '',
+    category: newFilters?.category || '',
+    date_from: newFilters?.date_from || '',
+    date_to: newFilters?.date_to || '',
+  };
+}, { immediate: true });
 const editTransaction = ref(null);
 
 // Categories to use when filtering expenses (exclude 'Salary' if present)
@@ -314,6 +359,18 @@ function deleteTransaction(id) {
   if (confirm('Are you sure you want to delete this transaction?')) {
     router.delete(route('transactions.destroy', id));
   }
+}
+
+function exportCsv() {
+  const params = new URLSearchParams();
+  if (filters.value.search) { params.set('search', filters.value.search); }
+  if (filters.value.type) { params.set('type', filters.value.type); }
+  if (filters.value.category) { params.set('category', filters.value.category); }
+  if (filters.value.date_from) { params.set('date_from', filters.value.date_from); }
+  if (filters.value.date_to) { params.set('date_to', filters.value.date_to); }
+
+  const query = params.toString();
+  window.location.href = route('transactions.export-csv') + (query ? '?' + query : '');
 }
 </script>
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Transaction;
 
 use App\Http\Controllers\Controller;
+use App\Models\Category;
 use App\Models\Transaction;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
@@ -45,8 +46,12 @@ class TransactionController extends Controller
 
         $transactions = $query->paginate(10)->withQueryString();
 
-        // Get all categories for filter dropdown
-        $categories = $user->transactions()->select('category')->distinct()->pluck('category');
+        // Get all categories for filter dropdown (prefer categories table, fallback to distinct transaction categories)
+        $categories = $user->categories()->orderBy('name')->pluck('name');
+
+        if ($categories->isEmpty()) {
+            $categories = $user->transactions()->select('category')->distinct()->pluck('category');
+        }
 
         return Inertia::render('RecentTransactions', [
             'auth' => ['user' => $user],
@@ -109,6 +114,13 @@ class TransactionController extends Controller
             ->orderBy('entry_date')
             ->get(['entry_date', 'type', 'amount', 'category']);
 
+        // 4. User's full category list (from categories table, used for filters and modals)
+        $allCategories = $user->categories()->orderBy('name')->pluck('name');
+
+        if ($allCategories->isEmpty()) {
+            $allCategories = $user->transactions()->select('category')->distinct()->orderBy('category')->pluck('category');
+        }
+
         return Inertia::render('Dashboard', [
             'auth' => ['user' => $user],
             'transactions' => $transactions,
@@ -117,7 +129,7 @@ class TransactionController extends Controller
                 'expense' => number_format($totalExpense, 2, '.', ''),
                 'balance' => number_format($totalIncome - $totalExpense, 2, '.', '')
             ],
-            'categories' => $categories,
+            'categories' => $allCategories,
             'expenseTotals' => $expenseTotals,
             'incomeTotals' => $incomeTotals,
             'chartTransactions' => $chartTransactions,
@@ -137,9 +149,16 @@ class TransactionController extends Controller
             'entry_date' => 'required|date',
         ]);
 
-        Auth::user()->transactions()->create($validated);
+        $user = Auth::user();
 
-        return redirect()->route('dashboard')->with('success', 'Successfully added transaction');
+        $user->transactions()->create($validated);
+
+        Category::firstOrCreate([
+            'user_id' => $user->id,
+            'name' => $validated['category'],
+        ]);
+
+        return redirect()->route('transactions.recent')->with('success', 'Successfully added transaction');
     }
 
     // 3. Update a Transaction
@@ -159,6 +178,11 @@ class TransactionController extends Controller
 
         $transaction->update($validated);
 
+        Category::firstOrCreate([
+            'user_id' => $transaction->user_id,
+            'name' => $validated['category'],
+        ]);
+
         return redirect()->back()->with('success', 'Transaction updated successfully');
     }
 
@@ -172,5 +196,62 @@ class TransactionController extends Controller
         $transaction->delete();
 
         return redirect()->back()->with('success', 'Successfully deleted transaction');
+    }
+
+    // 6. Export transactions as CSV (respects same filters as recent())
+    public function exportCsv(Request $request)
+    {
+        $user = Auth::user();
+        $query = $user->transactions()->orderBy('entry_date', 'desc');
+
+        if ($request->filled('type')) {
+            $query->where('type', $request->input('type'));
+        }
+        if ($request->filled('category')) {
+            $query->where('category', $request->input('category'));
+        }
+        if ($request->filled('date_from')) {
+            $query->where('entry_date', '>=', $request->input('date_from'));
+        }
+        if ($request->filled('date_to')) {
+            $query->where('entry_date', '<=', $request->input('date_to'));
+        }
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where(function ($q) use ($search) {
+                $q->where('description', 'like', "%{$search}%")
+                    ->orWhere('category', 'like', "%{$search}%");
+
+                if (is_numeric($search)) {
+                    $q->orWhere('amount', (float) $search);
+                }
+            });
+        }
+
+        $transactions = $query->get(['entry_date', 'description', 'category', 'amount', 'type']);
+
+        $filename = 'transactions_' . now()->format('Y-m-d') . '.csv';
+
+        $headers = [
+            'Content-Type' => 'text/csv',
+            'Content-Disposition' => "attachment; filename=\"{$filename}\"",
+        ];
+
+        $callback = function () use ($transactions) {
+            $handle = fopen('php://output', 'w');
+            fputcsv($handle, ['Date', 'Description', 'Category', 'Amount', 'Type']);
+            foreach ($transactions as $t) {
+                fputcsv($handle, [
+                    $t->entry_date,
+                    $t->description,
+                    $t->category,
+                    $t->amount,
+                    $t->type,
+                ]);
+            }
+            fclose($handle);
+        };
+
+        return response()->stream($callback, 200, $headers);
     }
 }

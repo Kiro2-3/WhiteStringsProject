@@ -1,7 +1,6 @@
 <template>
   <Modal :show="true" maxWidth="md" :onClose="closeModal">
     <div class="card w-full max-w-lg bg-base-100 border border-base-200">
-      <div class="card-body p-8 bg-gradient-to-br from-base-100 to-base-200">
         <div class="mb-4 flex items-center justify-between">
           <div class="flex items-center gap-3">
             <div class="inline-flex h-9 w-9 items-center justify-center rounded-xl bg-primary/10 text-primary">
@@ -76,6 +75,7 @@
               </template>
             </select>
             <InputError v-if="errors.category" :message="errors.category" />
+
           </div>
         </div>
         <div class="form-control">
@@ -98,13 +98,66 @@
           </PrimaryButton>
         </div>
       </form>
-      </div>
+
     </div>
+    <Modal :show="showCategoryModal" maxWidth="sm" :onClose="closeCategoryModal">
+      <div class="card w-full max-w-sm bg-base-100 border border-base-200">
+        <div class="card-body p-6">
+          <div class="flex items-center justify-between mb-4">
+            <h3 class="font-semibold text-base text-base-content">Add Category</h3>
+            <button
+              type="button"
+              class="btn btn-ghost btn-xs btn-circle text-base-content/60 hover:text-base-content"
+              @click="closeCategoryModal"
+              aria-label="Close category modal"
+            >
+              ✕
+            </button>
+          </div>
+          <div class="form-control mb-4">
+            <InputLabel value="Category name" htmlFor="new-category" />
+            <TextInput
+              id="new-category"
+              type="text"
+              v-model="newCategory"
+              placeholder="e.g. Groceries"
+            />
+            <InputError v-if="categoryError" :message="categoryError" />
+          </div>
+          <div v-if="categories.length" class="mt-2 max-h-40 overflow-y-auto text-xs text-base-content/80">
+            <p class="mb-1 font-semibold">Existing categories</p>
+            <ul class="space-y-1">
+              <li
+                v-for="cat in categories"
+                :key="cat"
+                class="flex items-center justify-between gap-2"
+              >
+                <span>{{ cat }}</span>
+                <button
+                  v-if="cat !== 'Salary'"
+                  type="button"
+                  class="btn btn-ghost btn-xs text-error"
+                  @click="deleteCategory(cat)"
+                >
+                  Delete
+                </button>
+                <span v-else class="text-[10px] text-base-content/50">Default</span>
+              </li>
+            </ul>
+          </div>
+          <div class="flex justify-end gap-2 mt-2">
+            <button type="button" class="btn btn-ghost btn-sm" @click="closeCategoryModal">Cancel</button>
+            <button type="button" class="btn btn-primary btn-sm" @click="saveCategory">Save</button>
+          </div>
+        </div>
+      </div>
+    </Modal>
   </Modal>
 </template>
 
 <script setup>
 import { ref, watch, computed } from 'vue';
+import axios from 'axios';
 import { useForm, router } from '@inertiajs/vue3';
 import InputLabel from '@/Components/InputLabel.vue';
 import TextInput from '@/Components/TextInput.vue';
@@ -115,11 +168,17 @@ import Modal from '@/Components/Modal.vue';
 const props = defineProps({
   categories: {
     type: Array,
-    default: () => ["Food", "Rent", "Leisure", "Bills"]
-  }
+    default: () => ['Food', 'Rent', 'Leisure', 'Bills'],
+  },
+  standalone: {
+    type: Boolean,
+    default: false,
+  },
 });
 
 const emit = defineEmits(['close']);
+
+const categories = ref([...props.categories]);
 
 const form = ref({
   description: '',
@@ -131,8 +190,12 @@ const form = ref({
 const errors = ref({});
 const processing = ref(false);
 
+const showCategoryModal = ref(false);
+const newCategory = ref('');
+const categoryError = ref('');
+
 // Categories to use when type is expense (exclude 'Salary' if present)
-const expenseCategories = computed(() => props.categories.filter(cat => cat !== 'Salary'));
+const expenseCategories = computed(() => categories.value.filter(cat => cat !== 'Salary'));
 
 watch(() => form.value.type, (newType) => {
   if (newType === 'income') {
@@ -141,6 +204,62 @@ watch(() => form.value.type, (newType) => {
     form.value.category = 'Food';
   }
 });
+
+function openCategoryModal() {
+  newCategory.value = '';
+  categoryError.value = '';
+  showCategoryModal.value = true;
+}
+
+function closeCategoryModal() {
+  showCategoryModal.value = false;
+}
+
+function saveCategory() {
+  const name = newCategory.value.trim();
+  if (!name) {
+    categoryError.value = 'Category name is required.';
+    return;
+  }
+  if (categories.value.includes(name)) {
+    categoryError.value = 'This category already exists.';
+    return;
+  }
+  categoryError.value = '';
+
+  axios.post(route('categories.store'), { name })
+    .then((response) => {
+      const savedName = response.data.name ?? name;
+      if (!categories.value.includes(savedName)) {
+        categories.value.push(savedName);
+      }
+      form.value.category = savedName;
+      showCategoryModal.value = false;
+    })
+    .catch((error) => {
+      if (error.response && error.response.data && error.response.data.errors && error.response.data.errors.name) {
+        categoryError.value = error.response.data.errors.name[0];
+      } else {
+        categoryError.value = 'Unable to save category.';
+      }
+    });
+}
+
+function deleteCategory(name) {
+  if (name === 'Salary') {
+    categoryError.value = 'The Salary category cannot be deleted.';
+    return;
+  }
+
+  categories.value = categories.value.filter(cat => cat !== name);
+
+  if (form.value.category === name) {
+    const fallback = categories.value.find(cat => cat !== 'Salary') || 'Food';
+    form.value.category = fallback;
+  }
+
+  categoryError.value = '';
+}
 
 function submit() {
   processing.value = true;
@@ -166,6 +285,13 @@ function submit() {
 
 function closeModal() {
   emit('close');
+  if (props.standalone) {
+    if (window.history.length > 1) {
+      router.back();
+    } else {
+      router.get(route('dashboard'));
+    }
+  }
 }
 </script>
 

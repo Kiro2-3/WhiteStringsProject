@@ -5,8 +5,8 @@
     <div class="min-h-screen w-full flex flex-col md:flex-row bg-gray-100 text-gray-900">
       <aside class="w-full md:w-60 flex md:flex-col flex-row gap-2 md:gap-6 items-stretch min-h-[4rem] md:min-h-[32rem] justify-start bg-white border-b md:border-b-0 md:border-r border-gray-200 p-4 sticky top-0 z-20 shadow-sm">
         <div class="flex items-center md:mb-8 mb-2">
-          <img src="/public/images/stracker-logo.png" alt="Stracker Logo" class="h-10 w-auto mr-3" />
-          <span class="font-bold text-2xl text-gray-800 tracking-tight">Stracker</span>
+          <img src="/public/images/stracker-logo.png" alt="Stracker Logo" class="h-25 w-auto mr-3" />
+
         </div>
         
         <button
@@ -36,6 +36,20 @@
         </button>
         
         <button
+          :class="[
+            'btn btn-sm md:btn-md justify-start gap-2 font-medium normal-case',
+            'btn-ghost text-base-content'
+          ]"
+          @click="router.get(route('categories.index'))"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9.568 3H5.25A2.25 2.25 0 003 5.25v4.318c0 .597.237 1.17.659 1.591l9.581 9.581c.699.699 1.78.872 2.607.33a18.095 18.095 0 005.223-5.223c.542-.827.369-1.908-.33-2.607L11.16 3.66A2.25 2.25 0 009.568 3z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M6 6h.008v.008H6V6z" />
+          </svg>
+          <span>Categories</span>
+        </button>
+
+        <button
           class="btn btn-primary btn-sm md:btn-md justify-start gap-2 font-semibold shadow"
           @click="showAddTransaction = true"
         >
@@ -45,15 +59,17 @@
           <span>Add Transaction</span>
         </button>
         
-        <button
-          @click="logout"
-          class="btn btn-outline btn-error btn-sm md:btn-md mt-auto justify-start gap-2 font-semibold"
-        >
-          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.75 6.75L21 12m0 0-5.25 5.25M21 12H9m3.75 7.5H6.75A2.25 2.25 0 014.5 17.25v-10.5A2.25 2.25 0 016.75 4.5h6" />
-          </svg>
-          <span>Logout</span>
-        </button>
+        <div class="mt-auto flex flex-col gap-2">
+          <button
+            class="btn btn-ghost btn-sm md:btn-md justify-start gap-2 font-medium normal-case text-base-content"
+            @click="router.get(route('profile.edit'))"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15.75 6a3.75 3.75 0 11-7.5 0 3.75 3.75 0 017.5 0zM4.501 20.118a7.5 7.5 0 0114.998 0A17.933 17.933 0 0112 21.75c-2.676 0-5.216-.584-7.499-1.632z" />
+            </svg>
+            <span>Profile Settings</span>
+          </button>
+        </div>
       </aside>
 
       <main class="flex-1 space-y-10 px-4 md:px-12 py-8 w-full">
@@ -322,7 +338,7 @@
                     <td><div class="h-4 w-32 rounded-xl bg-base-200"></div></td>
                     <td><div class="h-4 w-24 rounded-xl bg-base-200"></div></td>
                     <td><div class="h-4 w-16 rounded-xl bg-base-200"></div></td>
-                    <td class="text-right"><div class="ml-auto h-4 w-16 rounded-xl bg-base-200"></div></td>
+                    <td class="text-right"><div class="ml-auto h-4 w-16 rounded-xl bg-base-180"></div></td>
                   </tr>
                 </tbody>
               </table>
@@ -330,7 +346,7 @@
           </div>
 
           <!-- Transactions table using daisyUI components -->
-          <div v-else class="card bg-base-100 border border-base-200 shadow-xl">
+          <div v-else class="card bg-base-70 border border-base-200 shadow-xl">
             <!-- Filters -->
             <div class="card-body gap-4 border-b border-base-200">
               <div class="flex flex-col gap-4 md:flex-row md:items-end">
@@ -371,7 +387,7 @@
                   >
                     <option value="">All</option>
                     <option
-                      v-for="cat in (filters.type === 'expense' ? expenseFilterCategories : categories)"
+                      v-for="cat in categories"
                       :key="cat"
                       :value="cat"
                     >
@@ -561,7 +577,13 @@ function selectTab(target) {
   }, 1500);
 }
 
-const filters = ref({ ...props.filters });
+const filters = ref({
+  search: props.filters?.search || '',
+  type: props.filters?.type || '',
+  category: props.filters?.category || '',
+  date_from: props.filters?.date_from || '',
+  date_to: props.filters?.date_to || '',
+});
 
 // Dashboard chart filters (independent from transactions filter)
 const chartFilters = ref({
@@ -575,18 +597,11 @@ const activeChartFilterCount = computed(() => {
   return Object.values(chartFilters.value).filter((value) => value !== '').length;
 });
 
-// Category lists without 'Salary' for expense-related filters
-const expenseFilterCategories = computed(() => props.categories.filter(cat => cat !== 'Salary'));
+// All user categories from the Categories table
+const expenseFilterCategories = computed(() => props.categories);
 
-// Chart category options: only show 'Salary' when type is income
-const chartCategoryOptions = computed(() => {
-  if (chartFilters.value.type === 'income') {
-    return props.categories.filter(cat => cat === 'Salary');
-  }
-
-  // For 'All' or 'expense', hide 'Salary'
-  return props.categories.filter(cat => cat !== 'Salary');
-});
+// Chart category options: show all user categories
+const chartCategoryOptions = computed(() => props.categories);
 
 // When chart type is income, clear category so it doesn't filter by a stale value
 watch(
@@ -724,7 +739,7 @@ const applyFilters = debounce(() => {
 // Watch for real-time filter changes
 watch(filters, applyFilters, { deep: true });
 function clearFilters() {
-  filters.value = {};
+  filters.value = { search: '', type: '', category: '', date_from: '', date_to: '' };
   router.get(route('transactions.recent'));
 }
 function deleteTransaction(id) {
