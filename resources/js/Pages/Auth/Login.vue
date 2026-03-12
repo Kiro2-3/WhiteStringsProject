@@ -14,7 +14,7 @@
       <span class="hero-sliding-text">sTrike your Finance!</span>
       <header class="login-hero-nav">
         <div class="login-hero-nav-left">
-          <img :src="logoUrl" alt="sTracker preview" class="login-hero-logo shadow-md" />
+            <img :src="logoUrl" alt="sTracker preview" class="login-hero-logo shadow-md transition-transform duration-200 hover:scale-110" />
           <span class="login-hero-brand font-bold text-lg">sTracker</span>
         </div>
         <div class="login-hero-nav-actions">
@@ -40,7 +40,7 @@
               can budget with confidence, avoid surprises, and stay on top of your goals.
             </p>
             <div class="login-hero-cta-row">
-              <Link :href="route('register')" class="login-hero-primary-cta btn btn-primary btn-lg normal-case">Start tracking for free</Link>
+              <Link :href="route('register')" class="login-hero-primary-cta btn btn-primary btn-lg normal-case transition-all duration-200 hover:scale-105 hover:shadow-lg">Start tracking for free</Link>
             </div>
           </div>
 
@@ -64,7 +64,7 @@
         <section class="mt-32 px-3 pb-10">
           <!-- Feature cards -->
           <div class="grid gap-4 md:grid-cols-3">
-            <div class="card bg-gray-100 shadow-sm border border-base-200">
+            <div class="card bg-gray-100 shadow-sm border border-base-200 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-primary/40 cursor-default">
               <div class="card-body py-4 px-5">
                 <h3 class="card-title text-sm font-semibold mb-1 text-black flex items-center gap-1.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" /></svg>
@@ -73,7 +73,7 @@
                 <p class="text-xs text-base-content/80">Your data is encrypted in transit and stored safely so only you can see your numbers.</p>
               </div>
             </div>
-            <div class="card bg-gray-100 shadow-sm border border-base-200">
+            <div class="card bg-gray-100 shadow-sm border border-base-200 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-primary/40 cursor-default">
               <div class="card-body py-4 px-5">
                 <h3 class="card-title text-sm font-semibold mb-1 text-black flex items-center gap-1.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z" /></svg>
@@ -82,7 +82,7 @@
                 <p class="text-xs text-base-content/80">Log in from desktop or mobile and pick up exactly where you left off.</p>
               </div>
             </div>
-            <div class="card bg-gray-100 shadow-sm border border-base-200">
+            <div class="card bg-gray-100 shadow-sm border border-base-200 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-primary/40 cursor-default">
               <div class="card-body py-4 px-5">
                 <h3 class="card-title text-sm font-semibold mb-1 text-black flex items-center gap-1.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12" /></svg>
@@ -91,7 +91,7 @@
                 <p class="text-xs text-base-content/80">Download your transactions for sharing with your accountant or for backup.</p>
               </div>
             </div>
-            <div class="card bg-gray-100 shadow-sm border border-base-200">
+            <div class="card bg-gray-100 shadow-sm border border-base-200 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-primary/40 cursor-default">
               <div class="card-body py-4 px-5">
                 <h3 class="card-title text-sm font-semibold mb-1 text-black flex items-center gap-1.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" /></svg>
@@ -100,7 +100,7 @@
                 <p class="text-xs text-base-content/80">See where your money goes with clear charts and category breakdowns every month.</p>
               </div>
             </div>
-            <div class="card bg-gray-100 shadow-sm border border-base-200">
+            <div class="card bg-gray-100 shadow-sm border border-base-200 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-primary/40 cursor-default">
               <div class="card-body py-4 px-5">
                 <h3 class="card-title text-sm font-semibold mb-1 text-black flex items-center gap-1.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
@@ -109,7 +109,7 @@
                 <p class="text-xs text-base-content/80">Add income or expenses in seconds and watch your balance update instantly.</p>
               </div>
             </div>
-            <div class="card bg-gray-100 shadow-sm border border-base-200">
+            <div class="card bg-gray-100 shadow-sm border border-base-200 transition-all duration-200 hover:shadow-lg hover:-translate-y-1 hover:border-primary/40 cursor-default">
               <div class="card-body py-4 px-5">
                 <h3 class="card-title text-sm font-semibold mb-1 text-black flex items-center gap-1.5">
                   <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-primary shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
@@ -123,18 +123,18 @@
           <div class="mt-14">
             <h2 class="text-xl font-bold text-base-content mb-6 text-center">How it works</h2>
             <div class="grid gap-6 md:grid-cols-3">
-              <div class="flex flex-col items-center text-center gap-3">
-                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center">1</div>
+              <div class="flex flex-col items-center text-center gap-3 transition-transform duration-200 hover:-translate-y-1 cursor-default">
+                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110">1</div>
                 <h4 class="font-semibold text-base-content">Create your account</h4>
                 <p class="text-xs text-base-content/60">Sign up for free in under a minute — no credit card required.</p>
               </div>
-              <div class="flex flex-col items-center text-center gap-3">
-                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center">2</div>
+              <div class="flex flex-col items-center text-center gap-3 transition-transform duration-200 hover:-translate-y-1 cursor-default">
+                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110">2</div>
                 <h4 class="font-semibold text-base-content">Log your transactions</h4>
                 <p class="text-xs text-base-content/60">Add income and expenses with categories, dates, and descriptions.</p>
               </div>
-              <div class="flex flex-col items-center text-center gap-3">
-                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center">3</div>
+              <div class="flex flex-col items-center text-center gap-3 transition-transform duration-200 hover:-translate-y-1 cursor-default">
+                <div class="badge badge-primary badge-lg text-lg font-bold w-12 h-12 rounded-full flex items-center justify-center transition-transform duration-200 hover:scale-110">3</div>
                 <h4 class="font-semibold text-base-content">Track & improve</h4>
                 <p class="text-xs text-base-content/60">View charts, spot patterns, and make smarter financial decisions.</p>
               </div>
@@ -145,7 +145,7 @@
           <div class="mt-14">
             <h2 class="text-xl font-bold text-base-content mb-6 text-center">What users say</h2>
             <div class="grid gap-4 md:grid-cols-3">
-              <div class="card bg-base-100 border border-base-200 shadow-sm">
+              <div class="card bg-base-100 border border-base-200 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-1 hover:border-primary/30 cursor-default">
                 <div class="card-body py-5 px-5 gap-3">
                   <p class="text-xs text-base-content/80 italic">"sTracker completely changed how I manage my monthly budget. I finally know where my money goes!"</p>
                   <div class="flex items-center gap-2 mt-1">
@@ -157,7 +157,7 @@
                   </div>
                 </div>
               </div>
-              <div class="card bg-base-100 border border-base-200 shadow-sm">
+              <div class="card bg-base-100 border border-base-200 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-1 hover:border-primary/30 cursor-default">
                 <div class="card-body py-5 px-5 gap-3">
                   <p class="text-xs text-base-content/80 italic">"Simple, clean, and fast. I track all my side-hustle income here. The CSV export is super handy."</p>
                   <div class="flex items-center gap-2 mt-1">
@@ -169,7 +169,7 @@
                   </div>
                 </div>
               </div>
-              <div class="card bg-base-100 border border-base-200 shadow-sm">
+              <div class="card bg-base-100 border border-base-200 shadow-sm transition-all duration-200 hover:shadow-md hover:-translate-y-1 hover:border-primary/30 cursor-default">
                 <div class="card-body py-5 px-5 gap-3">
                   <p class="text-xs text-base-content/80 italic">"I love the charts. Seeing my expenses broken down by category motivates me to spend less."</p>
                   <div class="flex items-center gap-2 mt-1">
