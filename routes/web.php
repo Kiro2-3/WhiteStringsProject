@@ -3,23 +3,16 @@
 use App\Http\Controllers\Profile\ProfileController;
 use App\Http\Controllers\Transaction\TransactionController;
 use App\Models\Category;
-use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use Inertia\Inertia;
 
 Route::get('/', function () {
-    // if the user is logged in send them directly to the dashboard
     if (Auth::check()) {
         return redirect()->route('dashboard');
     }
 
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
+    return redirect()->route('login');
 });
 
 // This route calls the "index" method in your TransactionController
