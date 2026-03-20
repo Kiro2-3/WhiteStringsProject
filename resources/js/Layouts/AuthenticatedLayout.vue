@@ -34,48 +34,46 @@
 </template>
 
 <script setup>
-import { ref, computed, watch, onUnmounted } from 'vue';
-import { Link, usePage, router } from '@inertiajs/vue3';
-import ApplicationLogo from '@/Components/ApplicationLogo.vue';
-import Dropdown from '@/Components/Dropdown.vue';
-import NavLink from '@/Components/NavLink.vue';
-import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue';
-import ThemeToggle from '@/Components/ThemeToggle.vue';
-import DropdownTrigger from '@/Components/Dropdown.vue';
-import DropdownContent from '@/Components/Dropdown.vue';
-import DropdownLink from '@/Components/DropdownLink.vue';
+import { computed, onUnmounted, ref, watch } from 'vue'
+import { Link, router, usePage } from '@inertiajs/vue3'
+import ApplicationLogo from '@/Components/ApplicationLogo.vue'
+import Dropdown from '@/Components/Dropdown.vue'
+import DropdownLink from '@/Components/DropdownLink.vue'
+import NavLink from '@/Components/NavLink.vue'
+import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
+import ThemeToggle from '@/Components/ThemeToggle.vue'
 
 const props = defineProps({
   header: String
-});
+})
 
-const page = usePage();
-const user = computed(() => page.props.auth.user);
-const flash = computed(() => page.props.flash || {});
-const showingNavigationDropdown = ref(false);
-const showFlash = ref(false);
-let flashTimeout = null;
+const page   = usePage()
+const user   = computed(() => page.props.auth.user)
+const flash  = computed(() => page.props.flash || {})
+const showingNavigationDropdown = ref(false)
+const showFlash                 = ref(false)
+let flashTimeout = null
 
 watch(
   () => page.props.flash,
   (flashObj) => {
     if (flashObj?.success) {
-      showFlash.value = false;
-      if (flashTimeout) clearTimeout(flashTimeout);
+      showFlash.value = false
+      if (flashTimeout) clearTimeout(flashTimeout)
       setTimeout(() => {
-        showFlash.value = true;
+        showFlash.value = true
         flashTimeout = setTimeout(() => {
-          showFlash.value = false;
-        }, 3000);
-      }, 10);
+          showFlash.value = false
+        }, 3000)
+      }, 10)
     }
   },
-  { immediate: true }
-);
+  { immediate: true },
+)
 
 onUnmounted(() => {
-  if (flashTimeout) clearTimeout(flashTimeout);
-});
+  if (flashTimeout) clearTimeout(flashTimeout)
+})
 </script>
 
 <style scoped>

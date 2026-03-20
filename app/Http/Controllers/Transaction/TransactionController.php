@@ -37,7 +37,7 @@ class TransactionController extends Controller
             'date_to'   => $request->input('chart_date_to'),
         ];
 
-        $chartQuery = $this->applyChartFilters($user->transactions(), $chartFilters);
+        $chartQuery = $this->applyChartFilters(Transaction::where('user_id', $user->id), $chartFilters);
 
         $totalIncome  = (clone $chartQuery)->where('type', 'income')->sum('amount');
         $totalExpense = (clone $chartQuery)->where('type', 'expense')->sum('amount');
@@ -129,7 +129,7 @@ class TransactionController extends Controller
     public function recent(Request $request): Response
     {
         $user  = Auth::user();
-        $query = $this->applyTransactionFilters($user->transactions()->orderBy('entry_date', 'desc'), $request);
+        $query = $this->applyTransactionFilters(Transaction::where('user_id', $user->id)->orderBy('entry_date', 'desc'), $request);
 
         $transactions = $query->paginate(10)->withQueryString();
 
@@ -219,7 +219,7 @@ class TransactionController extends Controller
     public function exportCsv(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse
     {
         $user  = Auth::user();
-        $query = $this->applyTransactionFilters($user->transactions()->orderBy('entry_date', 'desc'), $request);
+        $query = $this->applyTransactionFilters(Transaction::where('user_id', $user->id)->orderBy('entry_date', 'desc'), $request);
 
         $transactions = $query->get(['entry_date', 'description', 'category', 'amount', 'type']);
 

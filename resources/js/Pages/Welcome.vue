@@ -30,12 +30,13 @@
 </template>
 
 <script setup>
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link } from '@inertiajs/vue3'
+
 const props = defineProps({
-  auth: Object,
+  auth:          Object,
   laravelVersion: String,
-  phpVersion: String
-});
+  phpVersion:    String,
+})
 </script>
 
 <style scoped>

@@ -404,39 +404,39 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import logoUrl from '@/../../public/images/stracker-logo.png';
-import previewUrl from '@/../../public/images/frontview2.png';
-import Checkbox from '@/Components/Checkbox.vue';
-import InputError from '@/Components/InputError.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue'
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import logoUrl from '@/../../public/images/stracker-logo.png'
+import previewUrl from '@/../../public/images/frontview2.png'
+import Checkbox from '@/Components/Checkbox.vue'
+import InputError from '@/Components/InputError.vue'
+import TextInput from '@/Components/TextInput.vue'
 
 const props = defineProps({
-  status: String,
-  canResetPassword: Boolean
-});
+  status:           String,
+  canResetPassword: Boolean,
+})
 
 const form = useForm({
-  email: '',
+  email:    '',
   password: '',
-  remember: false
-});
+  remember: false,
+})
 
-const showLoginModal = ref(true);
+const showLoginModal = ref(true)
 
 function openLoginModal() {
-  showLoginModal.value = true;
+  showLoginModal.value = true
 }
 
 function closeLoginModal() {
-  showLoginModal.value = false;
+  showLoginModal.value = false
 }
 
 function submit() {
   form.post('/login', {
     onFinish: () => form.reset('password'),
-  });
+  })
 }
 </script>
 

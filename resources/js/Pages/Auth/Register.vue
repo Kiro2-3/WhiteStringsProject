@@ -172,26 +172,26 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
-import logoUrl from '@/../../public/images/stracker-logo.png';
-import previewUrl from '@/../../public/images/frontview2.png';
-import InputError from '@/Components/InputError.vue';
-import TextInput from '@/Components/TextInput.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { ref } from 'vue'
+import { Head, Link, useForm } from '@inertiajs/vue3'
+import logoUrl from '@/../../public/images/stracker-logo.png'
+import previewUrl from '@/../../public/images/frontview2.png'
+import InputError from '@/Components/InputError.vue'
+import TextInput from '@/Components/TextInput.vue'
 
-const showModal = ref(true);
+const showModal = ref(true)
 
 const form = useForm({
-  name: '',
-  email: '',
-  password: '',
+  name:                  '',
+  email:                 '',
+  password:              '',
   password_confirmation: '',
-});
+})
 
 function submit() {
   form.post('/register', {
     onFinish: () => form.reset('password', 'password_confirmation'),
-  });
+  })
 }
 </script>
 
