@@ -24,7 +24,7 @@
         leave-from="opacity-100 translate-y-0 sm:scale-100"
         leave-to="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
       >
-        <DialogPanel :class="['modal-box bg-base-100 shadow-xl sm:mx-auto w-full', maxWidthClass]">
+        <DialogPanel :class="['modal-box bg-base-100 text-base-content shadow-xl sm:mx-auto w-full', maxWidthClass]">
           <slot />
         </DialogPanel>
       </TransitionChild>

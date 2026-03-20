@@ -166,7 +166,7 @@
 
     <!-- Delete Account Modal -->
     <div v-if="showDeleteModal" class="modal modal-open">
-      <div class="modal-box">
+      <div class="modal-box text-base-content">
         <h3 class="font-bold text-lg text-error">Delete Account</h3>
         <p class="py-3 text-sm text-base-content/70">
           This action is permanent and cannot be undone. Please enter your password to confirm.

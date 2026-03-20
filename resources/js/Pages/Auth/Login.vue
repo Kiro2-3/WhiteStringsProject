@@ -261,7 +261,7 @@
         class="modal modal-open"
         @click.self="closeLoginModal"
       >
-        <div class="modal-box w-full max-w-md relative rounded-3xl shadow-2xl">
+        <div class="modal-box w-full max-w-md relative rounded-3xl shadow-2xl bg-base-100 text-base-content">
           <button
             type="button"
             class="btn btn-sm btn-circle btn-error absolute right-3 top-3"
