@@ -58,54 +58,119 @@
           <div v-else class="space-y-5">
             <!-- Summary Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full">
-              <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center border border-gray-100">
-                <div class="text-gray-500 text-sm font-medium mb-1">Total Income</div>
-                <div class="text-blue-600 text-3xl font-bold tracking-tight">₱{{ summaryForDisplay.income }}</div>
+              <div class="card border border-base-200 bg-base-100 shadow-sm flex flex-col items-center p-6">
+                <div class="text-base-content/60 text-sm font-medium mb-1">Total Income</div>
+                <div class="text-success text-3xl font-bold tracking-tight">₱{{ formatCurrency(summaryForDisplay.income) }}</div>
               </div>
-              <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center border border-gray-100">
-                <div class="text-gray-500 text-sm font-medium mb-1">Total Expenses</div>
-                <div class="text-red-600 text-3xl font-bold tracking-tight">₱{{ summaryForDisplay.expense }}</div>
+              <div class="card border border-base-200 bg-base-100 shadow-sm flex flex-col items-center p-6">
+                <div class="text-base-content/60 text-sm font-medium mb-1">Total Expenses</div>
+                <div class="text-error text-3xl font-bold tracking-tight">₱{{ formatCurrency(summaryForDisplay.expense) }}</div>
               </div>
-              <div class="bg-white rounded-xl shadow p-6 flex flex-col items-center border border-gray-100">
-                <div class="text-gray-500 text-sm font-medium mb-1">Total Revenue</div>
-                <div class="text-green-600 text-3xl font-bold tracking-tight">₱{{ summaryForDisplay.balance }}</div>
+              <div class="card border border-base-200 bg-base-100 shadow-sm flex flex-col items-center p-6">
+                <div class="text-base-content/60 text-sm font-medium mb-1">Total Revenue</div>
+                <div
+                  class="text-3xl font-bold tracking-tight"
+                  :class="Number(summaryForDisplay.balance) < 0 ? 'text-error' : 'text-success'"
+                >₱{{ formatCurrency(summaryForDisplay.balance) }}</div>
               </div>
             </div>
 
-            <!-- Top Expense Categories Card -->
-            <div class="card border border-base-200 bg-base-100 shadow-sm w-full">
-              <div class="card-body p-5 gap-4">
-                <div class="flex flex-wrap items-center gap-2">
-                  <h3 class="text-lg font-semibold text-base-content">Top Expense Categories</h3>
-                  <span class="badge badge-error badge-outline badge-sm">All Time</span>
-                </div>
+            <!-- Top Expense Categories + Recent Transactions row -->
+            <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 w-full">
+              <!-- Top Expense Categories Card -->
+              <div class="card border border-base-200 bg-base-100 shadow-sm">
+                <div class="card-body p-5 gap-4">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="text-lg font-semibold text-base-content">Top Expense Categories</h3>
+                    <span class="badge badge-error badge-outline badge-sm">All Time</span>
+                  </div>
 
-                <div v-if="topExpenseCategories.length > 0" class="space-y-3">
-                  <div
-                    v-for="(item, index) in topExpenseCategories"
-                    :key="item.category"
-                    class="flex items-center gap-3"
-                  >
-                    <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-error/10 text-xs font-bold text-error">
-                      {{ index + 1 }}
-                    </div>
-                    <div class="flex-1 min-w-0">
-                      <div class="flex items-center justify-between mb-1">
-                        <span class="text-sm font-medium text-base-content truncate">{{ item.category }}</span>
-                        <span class="ml-3 shrink-0 text-sm font-semibold text-error">₱{{ formatCurrency(item.total) }}</span>
+                  <div v-if="topExpenseCategories.length > 0" class="space-y-3">
+                    <div
+                      v-for="(item, index) in topExpenseCategories"
+                      :key="item.category"
+                      class="flex items-center gap-3"
+                    >
+                      <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-error/10 text-xs font-bold text-error">
+                        {{ index + 1 }}
                       </div>
-                      <div class="h-1.5 w-full rounded-full bg-base-200">
-                        <div
-                          class="h-1.5 rounded-full bg-error/70 transition-all duration-500"
-                          :style="{ width: (Number(item.total) / Number(topExpenseCategories[0].total) * 100).toFixed(1) + '%' }"
-                        ></div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-1">
+                          <span class="text-sm font-medium text-base-content truncate">{{ item.category }}</span>
+                          <span class="ml-3 shrink-0 text-sm font-semibold text-error">₱{{ formatCurrency(item.total) }}</span>
+                        </div>
+                        <div class="h-1.5 w-full rounded-full bg-base-200">
+                          <div
+                            class="h-1.5 rounded-full bg-error/70 transition-all duration-500"
+                            :style="{ width: (Number(item.total) / Number(topExpenseCategories[0].total) * 100).toFixed(1) + '%' }"
+                          ></div>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
 
-                <div v-else class="flex min-h-[80px] items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/40 text-center">
-                  <p class="text-sm text-base-content/60">No expense transactions yet.</p>
+                  <div v-else class="flex min-h-[80px] items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/40 text-center">
+                    <p class="text-sm text-base-content/60">No expense transactions yet.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Recent Transactions Card -->
+              <div class="card border border-base-200 bg-base-100 shadow-sm">
+                <div class="card-body p-5 gap-4">
+                  <div class="flex flex-wrap items-center justify-between gap-2">
+                    <div class="flex items-center gap-2">
+                      <h3 class="text-lg font-semibold text-base-content">Recent Transactions</h3>
+                      <span class="badge badge-primary badge-outline badge-sm">Last 5</span>
+                    </div>
+                    <button
+                      type="button"
+                      class="btn btn-ghost btn-xs text-primary"
+                      @click="router.get(route('transactions.recent'))"
+                    >View all →</button>
+                  </div>
+
+                  <div v-if="recentTransactions.length > 0" class="space-y-2">
+                    <div
+                      v-for="t in recentTransactions"
+                      :key="t.id"
+                      class="flex items-center gap-3 rounded-xl border border-base-200 bg-base-200/40 px-3 py-2.5"
+                    >
+                      <!-- type icon -->
+                      <div
+                        :class="[
+                          'shrink-0 flex h-8 w-8 items-center justify-center rounded-full text-sm font-bold',
+                          t.type === 'income' ? 'bg-success/10 text-success' : 'bg-error/10 text-error',
+                        ]"
+                      >
+                        <svg v-if="t.type === 'income'" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5m-7 7 7-7 7 7" />
+                        </svg>
+                        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m7-7-7 7-7-7" />
+                        </svg>
+                      </div>
+                      <!-- description + meta -->
+                      <div class="flex-1 min-w-0">
+                        <p class="text-sm font-medium text-base-content truncate">{{ t.description }}</p>
+                        <p class="text-xs text-base-content/50">
+                          <span :class="t.category === 'Salary' ? 'text-green-600 font-semibold' : ''">{{ t.category }}</span>
+                          · {{ t.entry_date }}
+                        </p>
+                      </div>
+                      <!-- amount -->
+                      <span
+                        class="shrink-0 text-sm font-semibold"
+                        :class="t.type === 'income' ? 'text-success' : 'text-error'"
+                      >
+                        {{ t.type === 'income' ? '+' : '-' }}₱{{ formatCurrency(t.amount) }}
+                      </span>
+                    </div>
+                  </div>
+
+                  <div v-else class="flex min-h-[80px] items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/40 text-center">
+                    <p class="text-sm text-base-content/60">No transactions yet.</p>
+                  </div>
                 </div>
               </div>
             </div>
@@ -268,6 +333,7 @@ const props = defineProps({
   incomeTotals:         Array,
   chartTransactions:    Array,            // full transaction list used for client-side chart filtering
   topExpenseCategories: { type: Array, default: () => [] },  // top 5 expense categories by total
+  recentTransactions:   { type: Array, default: () => [] },  // last 5 transactions (shared globally)
 })
 
 const showAddTransaction = ref(false)

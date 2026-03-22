@@ -99,19 +99,39 @@
             <table class="table table-zebra w-full">
               <thead>
                 <tr>
-                  <th>Date</th>
-                  <th>Description</th>
-                  <th>Category</th>
-                  <th>Amount</th>
-                  <th>Type</th>
-                  <th class="text-right">Actions</th>
+                  <th
+                    v-for="col in sortableColumns"
+                    :key="col.key"
+                    :class="['cursor-pointer select-none whitespace-nowrap', col.key === 'actions' ? 'text-right' : '']"
+                    @click="col.key !== 'actions' && sortBy(col.key)"
+                  >
+                    <span v-if="col.key !== 'actions'" class="inline-flex items-center gap-1">
+                      {{ col.label }}
+                      <!-- active sort indicator -->
+                      <span v-if="filters.sort_by === col.key" class="text-primary">
+                        <svg v-if="filters.sort_dir === 'asc'" xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M5 15l7-7 7 7" />
+                        </svg>
+                        <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </span>
+                      <!-- inactive double-arrow indicator -->
+                      <span v-else class="opacity-30">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l4-4 4 4M16 15l-4 4-4-4" />
+                        </svg>
+                      </span>
+                    </span>
+                    <span v-else>{{ col.label }}</span>
+                  </th>
                 </tr>
               </thead>
               <tbody>
                 <tr v-for="t in transactions.data" :key="t.id">
                   <td class="whitespace-nowrap">{{ t.entry_date }}</td>
                   <td>{{ t.description }}</td>
-                  <td class="whitespace-nowrap">{{ t.category }}</td>
+                  <td class="whitespace-nowrap" :class="t.category === 'Salary' ? 'text-green-600 font-semibold' : ''">{{ t.category }}</td>
                   <td
                     class="font-semibold whitespace-nowrap"
                     :class="t.type === 'income' ? 'text-green-600' : 'text-error'"
@@ -244,6 +264,8 @@ const filters = ref({
   category:  props.filters?.category  || '',
   date_from: props.filters?.date_from || '',
   date_to:   props.filters?.date_to   || '',
+  sort_by:   props.filters?.sort_by   || 'entry_date',
+  sort_dir:  props.filters?.sort_dir  || 'desc',
 })
 
 // Keep local filters in sync when Inertia navigates and the server sends updated props
@@ -256,6 +278,8 @@ watch(
       category:  newFilters?.category  || '',
       date_from: newFilters?.date_from || '',
       date_to:   newFilters?.date_to   || '',
+      sort_by:   newFilters?.sort_by   || 'entry_date',
+      sort_dir:  newFilters?.sort_dir  || 'desc',
     }
   },
   { immediate: true },
@@ -264,9 +288,33 @@ watch(
 const editTransaction    = ref(null)   // holds the transaction object being edited; null hides the modal
 const showAddTransaction = ref(false)
 
+const sortableColumns = [
+  { key: 'entry_date',  label: 'Date' },
+  { key: 'description', label: 'Description' },
+  { key: 'category',    label: 'Category' },
+  { key: 'amount',      label: 'Amount' },
+  { key: 'type',        label: 'Type' },
+  { key: 'actions',     label: 'Actions' },
+]
+
 // Spread into a new object so the form inside EditTransaction gets its own copy
 function openEditTransaction(transaction) {
   editTransaction.value = { ...transaction }
+}
+
+/**
+ * Sorts by the given column. Toggles direction if already sorted by that column,
+ * otherwise defaults to ascending. Immediately reloads the page.
+ */
+function sortBy(column) {
+  const newDir = filters.value.sort_by === column && filters.value.sort_dir === 'asc' ? 'desc' : 'asc'
+  filters.value.sort_by  = column
+  filters.value.sort_dir = newDir
+  router.get(route('transactions.recent'), filters.value, {
+    preserveState:  true,
+    preserveScroll: true,
+    replace:        true,
+  })
 }
 
 /**
@@ -280,6 +328,8 @@ function clearFilters() {
     category:  '',
     date_from: '',
     date_to:   '',
+    sort_by:   'entry_date',
+    sort_dir:  'desc',
   }
 
   router.get(route('transactions.recent'), {}, {

@@ -13,7 +13,7 @@
       <!-- Main content -->
       <main class="flex-1 min-w-0 px-4 md:px-12 py-8 space-y-6">
         <!-- Flash success -->
-        <div v-if="status === 'profile-updated'" class="alert alert-success shadow">
+        <div v-if="status === 'profile-updated' && showStatus" class="alert alert-success shadow">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
           </svg>
@@ -68,7 +68,7 @@
               <p class="text-sm text-base-content/60 mt-0.5">Ensure your account uses a strong password.</p>
             </div>
 
-            <div v-if="status === 'password-updated'" class="alert alert-success shadow">
+            <div v-if="status === 'password-updated' && showStatus" class="alert alert-success shadow">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
               </svg>
@@ -195,7 +195,7 @@
 </template>
 
 <script setup>
-import { ref } from 'vue';
+import { onUnmounted, ref, watch } from 'vue';
 import { router, useForm, Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout.vue';
 import AppSidebar from '@/Components/AppSidebar.vue';
@@ -206,6 +206,26 @@ const props = defineProps({
   mustVerifyEmail: Boolean,  // when true, shows an email-verification notice
   status: String,            // server feedback key: 'profile-updated' | 'password-updated'
 });
+
+// Auto-dismiss the inline status alert after 5 seconds so it never gets stuck
+const showStatus  = ref(false)
+let statusTimer   = null
+
+watch(
+  () => props.status,
+  (val) => {
+    if (val) {
+      showStatus.value = true
+      if (statusTimer) clearTimeout(statusTimer)
+      statusTimer = setTimeout(() => { showStatus.value = false }, 5000)
+    } else {
+      showStatus.value = false
+    }
+  },
+  { immediate: true },
+)
+
+onUnmounted(() => { if (statusTimer) clearTimeout(statusTimer) })
 
 // useForm provides .processing, .errors, .patch/.put/.delete helpers with Inertia integration
 const profileForm = useForm({

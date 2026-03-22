@@ -141,8 +141,16 @@ class TransactionController extends Controller
      */
     public function recent(Request $request): Response
     {
-        $user  = Auth::user();
-        $query = $this->applyTransactionFilters(Transaction::where('user_id', $user->id)->orderBy('entry_date', 'desc'), $request);
+        $user = Auth::user();
+
+        $allowedSorts = ['entry_date', 'description', 'category', 'amount', 'type'];
+        $sortBy  = in_array($request->input('sort_by'), $allowedSorts) ? $request->input('sort_by') : 'entry_date';
+        $sortDir = $request->input('sort_dir') === 'asc' ? 'asc' : 'desc';
+
+        $query = $this->applyTransactionFilters(
+            Transaction::where('user_id', $user->id)->orderBy($sortBy, $sortDir),
+            $request
+        );
 
         $transactions = $query->paginate(10)->withQueryString();
 
@@ -155,7 +163,7 @@ class TransactionController extends Controller
         return Inertia::render('RecentTransactions', [
             'auth'         => ['user' => $user],
             'transactions' => $transactions,
-            'filters'      => $request->only(['search', 'type', 'category', 'date_from', 'date_to']),
+            'filters'      => $request->only(['search', 'type', 'category', 'date_from', 'date_to', 'sort_by', 'sort_dir']),
             'categories'   => $categories,
         ]);
     }

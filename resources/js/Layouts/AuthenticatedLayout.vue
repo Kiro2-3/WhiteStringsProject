@@ -9,15 +9,27 @@
       leave-to-class="opacity-0 -translate-y-1 scale-95"
     >
       <div
-        v-if="flash.success && showFlash"
-        class="toast toast-top toast-end z-50"
+        v-if="currentToast"
+        :key="currentToast.id"
+        class="toast toast-top toast-end z-[9999]"
       >
-        <div class="alert alert-success flex items-center gap-2 bg-green-500 text-white">
-          <span class="text-white">{{ flash.success }}</span>
+        <div
+          :class="[
+            'alert flex items-center gap-2 text-white shadow-lg min-w-[260px]',
+            currentToast.type === 'success' ? 'bg-green-500' : 'bg-red-500',
+          ]"
+        >
+          <svg v-if="currentToast.type === 'success'" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+          <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v3.75m9-.75a9 9 0 11-18 0 9 9 0 0118 0zm-9 3.75h.008v.008H12v-.008z" />
+          </svg>
+          <span class="flex-1 text-sm font-medium">{{ currentToast.message }}</span>
           <button
             type="button"
-            class="btn btn-xs btn-ghost text-white/80 hover:text-white ml-2"
-            @click="showFlash = false"
+            class="btn btn-xs btn-ghost text-white/80 hover:text-white ml-1"
+            @click="currentToast = null"
           >
             ✕
           </button>
@@ -40,7 +52,7 @@
 </template>
 
 <script setup>
-import { computed, onUnmounted, ref, watch } from 'vue'
+import { computed, nextTick, onUnmounted, ref, watch } from 'vue'
 import { Link, router, usePage } from '@inertiajs/vue3'
 import ApplicationLogo from '@/Components/ApplicationLogo.vue'
 import Dropdown from '@/Components/Dropdown.vue'
@@ -59,28 +71,31 @@ const page   = usePage()
 const user   = computed(() => page.props.auth.user)
 const flash  = computed(() => page.props.flash || {})  // server flash messages (success, error, etc.)
 const showingNavigationDropdown = ref(false)
-const showFlash                 = ref(false)
-let flashTimeout = null  // holds the auto-hide timer so it can be cleared on component unmount
+
+// Unified toast state — a single active toast object or null when hidden
+let toastCounter = 0
+const currentToast = ref(null)
+let flashTimeout = null
 
 /**
- * Watches the flash prop for new success messages.
- * A brief delay before showing prevents the transition from skipping
- * when Inertia replaces props immediately after a redirect.
- * The toast auto-dismisses after 3 seconds.
+ * Watches the actual flash message strings (not the container object) so it
+ * fires reliably even when Inertia reuses the same flash object reference.
+ * Handles both success and error flash keys.
+ * Uses nextTick to reset the toast before showing the new one so that the
+ * enter-transition always replays, even for identical consecutive messages.
  */
 watch(
-  () => page.props.flash,
-  (flashObj) => {
-    if (flashObj?.success) {
-      showFlash.value = false
-      if (flashTimeout) clearTimeout(flashTimeout)
-      setTimeout(() => {
-        showFlash.value = true
-        flashTimeout = setTimeout(() => {
-          showFlash.value = false
-        }, 3000)
-      }, 10)
-    }
+  () => [page.props.flash?.success, page.props.flash?.error],
+  async ([success, error]) => {
+    const message = success || error
+    const type    = success ? 'success' : error ? 'error' : null
+    if (!message) return
+
+    if (flashTimeout) clearTimeout(flashTimeout)
+    currentToast.value = null       // clear first so transition re-enters
+    await nextTick()
+    currentToast.value = { id: ++toastCounter, type, message }
+    flashTimeout = setTimeout(() => { currentToast.value = null }, 4000)
   },
   { immediate: true },
 )

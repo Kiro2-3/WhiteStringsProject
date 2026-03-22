@@ -30,11 +30,6 @@
             </button>
           </div>
 
-          <!-- Flash success message -->
-          <div v-if="flash.success" class="m-4 alert alert-success text-sm font-medium">
-            {{ flash.success }}
-          </div>
-
           <!-- Table -->
           <div class="overflow-x-auto">
             <table class="table table-zebra w-full">
@@ -51,7 +46,7 @@
                   :key="cat.id"
                 >
                   <td class="text-base-content/50 text-sm">{{ index + 1 }}</td>
-                  <td class="font-medium text-base-content">{{ cat.name }}</td>
+                  <td :class="['font-medium', cat.name === 'Salary' ? 'text-green-600' : 'text-base-content']">{{ cat.name }}</td>
                   <td class="text-right">
                     <template v-if="cat.name !== 'Salary'">
                       <button
@@ -73,7 +68,7 @@
                         Delete
                       </button>
                     </template>
-                    <span v-else class="text-xs text-base-content/40">Default</span>
+                    <span v-else class="text-xs font-semibold text-green-600">Default</span>
                   </td>
                 </tr>
                 <tr v-if="localCategories.length === 0">
