@@ -63,6 +63,7 @@
           <label class="label py-0" for="type">
             <span class="label-text font-semibold">Type</span>
           </label>
+          <!-- Type is locked after creation; shown read-only with reduced opacity -->
           <select
             id="type"
             class="select select-bordered w-full opacity-60"
@@ -78,6 +79,7 @@
           <label class="label py-0" for="category">
             <span class="label-text font-semibold">Category</span>
           </label>
+          <!-- Category is fixed to "Salary" for income; expense types show the full category list -->
           <select
             id="category"
             class="select select-bordered w-full"
@@ -126,6 +128,11 @@ import { router } from '@inertiajs/vue3'
 import InputError from '@/Components/InputError.vue'
 import Modal from '@/Components/Modal.vue'
 
+/**
+ * Props:
+ * - transaction: the existing transaction record to edit
+ * - categories: list of expense categories; falls back to defaults if not provided by the server
+ */
 const props = defineProps({
   transaction: Object,
   categories: {
@@ -134,8 +141,10 @@ const props = defineProps({
   },
 })
 
+// Emits 'close' so the parent can hide this modal after a successful update or cancellation
 const emit = defineEmits(['close'])
 
+// Seed the form with the current transaction values so the user sees pre-filled fields
 const form = ref({
   description: props.transaction.description,
   amount:      props.transaction.amount,
@@ -144,9 +153,15 @@ const form = ref({
   entry_date:  props.transaction.entry_date,
 })
 
-const errors     = ref({})
-const processing = ref(false)
+const errors     = ref({})  // Holds server-side validation errors keyed by field name
+const processing = ref(false)  // Prevents duplicate submissions while the request is in-flight
 
+/**
+ * Submits the edited transaction via a PUT request.
+ * preserveScroll keeps the page position stable on success.
+ * On success, clears errors and closes the modal.
+ * On error, surfaces validation messages next to each field.
+ */
 function submit() {
   processing.value = true
 
@@ -164,6 +179,7 @@ function submit() {
   })
 }
 
+// Closes the modal without saving by emitting the 'close' event to the parent
 function closeModal() {
   emit('close')
 }
