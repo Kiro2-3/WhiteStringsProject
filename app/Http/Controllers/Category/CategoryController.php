@@ -23,7 +23,7 @@ class CategoryController extends Controller
         $categories = $user->categories()->orderBy('name')->get(['id', 'name']);
 
         return Inertia::render('Categories', [
-            'auth'       => ['user' => $user],
+            'auth' => ['user' => $user],
             'categories' => $categories,
         ]);
     }
@@ -37,11 +37,11 @@ class CategoryController extends Controller
 
         $category = Category::firstOrCreate([
             'user_id' => $user->id,
-            'name'    => $request->validated('name'),
+            'name' => $request->validated('name'),
         ]);
 
         return response()->json([
-            'id'   => $category->id,
+            'id' => $category->id,
             'name' => $category->name,
         ]);
     }
@@ -61,7 +61,7 @@ class CategoryController extends Controller
         $category->update(['name' => $request->validated('name')]);
 
         return response()->json([
-            'id'   => $category->id,
+            'id' => $category->id,
             'name' => $category->name,
         ]);
     }

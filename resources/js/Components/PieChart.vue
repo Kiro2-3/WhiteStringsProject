@@ -13,9 +13,11 @@ import {
   Legend,
   Filler
 } from 'chart.js';
+import { useCurrency } from '@/composables/useCurrency.js'
 
-// Manually register only the Chart.js modules needed (tree-shakeable approach)
 Chart.register(ArcElement, Tooltip, Legend, Filler);
+
+const { currencySymbol } = useCurrency()
 
 const props = defineProps({
   // data: array of { label, value } objects — one slice per entry
@@ -72,7 +74,7 @@ const chartOptions = {
             maximumFractionDigits: 2,
           });
 
-          return `${context.label}: ₱${value}`;
+          return `${context.label}: ${currencySymbol.value}${value}`;
         },
       },
     },

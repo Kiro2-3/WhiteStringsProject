@@ -7,7 +7,10 @@
 <script setup>
 import { Line } from 'vue-chartjs';
 import { computed } from 'vue';
-import 'chart.js/auto';  // auto-registers all Chart.js components so we don't need manual registration
+import 'chart.js/auto';
+import { useCurrency } from '@/composables/useCurrency.js'
+
+const { currencySymbol } = useCurrency()
 
 /**
  * Creates a vertical linear gradient for a dataset fill area.
@@ -115,7 +118,7 @@ const chartOptions = {
             maximumFractionDigits: 2,
           });
 
-          return `${context.dataset.label}: ₱${value}`;
+          return `${context.dataset.label}: ${currencySymbol.value}${value}`;
         },
       },
     },
@@ -142,7 +145,7 @@ const chartOptions = {
         color: '#94a3b8',
         // Prefixes each y-axis tick with the Philippine Peso symbol
         callback(value) {
-          return `₱${Number(value).toLocaleString('en-PH')}`;
+          return `${currencySymbol.value}${Number(value).toLocaleString('en-PH')}`;
         },
       },
     },

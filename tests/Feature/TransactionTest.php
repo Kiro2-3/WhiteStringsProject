@@ -60,7 +60,7 @@ test('user cannot update another user\'s transaction', function () {
     // Create two different users
     $user1 = User::factory()->create();
     $user2 = User::factory()->create();
-    
+
     // Create a transaction for user1
     $transaction = Transaction::factory()->create([
         'user_id' => $user1->id,
@@ -79,7 +79,7 @@ test('user cannot update another user\'s transaction', function () {
 
     // Assert we get a forbidden error
     $response->assertStatus(403);
-    
+
     // Verify the database was NOT changed
     $this->assertDatabaseHas('transactions', [
         'id' => $transaction->id,
@@ -113,7 +113,7 @@ test('user cannot delete another user\'s transaction', function () {
     // Create two different users
     $user1 = User::factory()->create();
     $user2 = User::factory()->create();
-    
+
     // Create a transaction for user1
     $transaction = Transaction::factory()->create([
         'user_id' => $user1->id,
@@ -126,7 +126,7 @@ test('user cannot delete another user\'s transaction', function () {
 
     // Assert we get a forbidden error
     $response->assertStatus(403);
-    
+
     // Verify the database still has the transaction
     $this->assertDatabaseHas('transactions', [
         'id' => $transaction->id,
@@ -168,7 +168,7 @@ test('dashboard returns correct summary and breakdown arrays', function () {
     $response = $this->actingAs($user)->get(route('dashboard'));
 
     $response->assertStatus(200);
-    $response->assertInertia(fn($page) =>
+    $response->assertInertia(fn ($page) =>
         $page->has('summary.income')
              ->where('summary.income', 100)
              ->has('summary.expense')

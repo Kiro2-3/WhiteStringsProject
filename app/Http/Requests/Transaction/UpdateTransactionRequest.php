@@ -23,10 +23,10 @@ class UpdateTransactionRequest extends FormRequest
     {
         return [
             'description' => ['required', 'string', 'max:255'],
-            'amount'      => ['required', 'numeric', 'min:0'],
-            'type'        => ['required', 'in:income,expense'],
-            'category'    => ['required', 'string'],
-            'entry_date'  => ['required', 'date'],
+            'amount' => ['required', 'numeric', 'min:0'],
+            'type' => ['required', 'in:income,expense'],
+            'category' => ['required', 'string'],
+            'entry_date' => ['required', 'date'],
         ];
     }
 }

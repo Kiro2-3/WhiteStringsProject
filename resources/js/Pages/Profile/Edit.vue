@@ -54,9 +54,8 @@
               <label class="form-control w-full gap-1">
                 <span class="label-text font-semibold">Currency</span>
                 <select
-                  v-model="profileForm.currency"
+                  v-model="localCurrency"
                   class="select select-bordered w-full bg-base-100"
-                  required
                 >
                   <option value="AED">🇦🇪 AED – UAE Dirham</option>
                   <option value="AUD">🇦🇺 AUD – Australian Dollar</option>
@@ -250,13 +249,18 @@ import { router, useForm, Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout.vue';
 import AppSidebar from '@/Components/AppSidebar.vue';
 import AddTransaction from '@/Pages/AddTransaction.vue';
+import { useCurrency } from '@/composables/useCurrency.js';
 
 const props = defineProps({
   auth: Object,
   mustVerifyEmail: Boolean,  // when true, shows an email-verification notice
   status: String,            // server feedback key: 'profile-updated' | 'password-updated'
-  userCurrency: String,
 });
+
+const { selectedCurrency, setCurrency } = useCurrency()
+
+// localCurrency is a separate ref so it doesn't get patched to the server
+const localCurrency = ref(selectedCurrency.value)
 
 // Auto-dismiss the inline status alert after 5 seconds so it never gets stuck
 const showStatus  = ref(false)
@@ -282,7 +286,6 @@ onUnmounted(() => { if (statusTimer) clearTimeout(statusTimer) })
 const profileForm = useForm({
   name: props.auth.user.name,
   email: props.auth.user.email,
-  currency: props.userCurrency ?? 'PHP',
 });
 
 // Separate form for account deletion (requires password for safety)
@@ -308,7 +311,9 @@ function submitPassword() {
 }
 
 // PATCH is used because only name/email change; not a full resource replacement
+// Currency is saved to localStorage only — no migration needed
 function submitProfile() {
+  setCurrency(localCurrency.value)
   profileForm.patch(route('profile.update'));
 }
 

@@ -26,7 +26,6 @@ class ProfileController extends Controller
         return Inertia::render('Profile/Edit', [
             'mustVerifyEmail' => $request->user() instanceof MustVerifyEmail,
             'status' => session('status'),
-            'userCurrency' => $request->user()->currency ?? 'PHP',
         ]);
     }
 

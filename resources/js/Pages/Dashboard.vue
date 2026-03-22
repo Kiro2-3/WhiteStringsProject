@@ -60,18 +60,18 @@
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full">
               <div class="card border border-base-200 bg-base-100 shadow-sm flex flex-col items-center p-6">
                 <div class="text-base-content/60 text-sm font-medium mb-1">Total Income</div>
-                <div class="text-success text-3xl font-bold tracking-tight">₱{{ formatCurrency(summaryForDisplay.income) }}</div>
+                <div class="text-success text-3xl font-bold tracking-tight">{{ currencySymbol }}{{ formatCurrency(summaryForDisplay.income) }}</div>
               </div>
               <div class="card border border-base-200 bg-base-100 shadow-sm flex flex-col items-center p-6">
                 <div class="text-base-content/60 text-sm font-medium mb-1">Total Expenses</div>
-                <div class="text-error text-3xl font-bold tracking-tight">₱{{ formatCurrency(summaryForDisplay.expense) }}</div>
+                <div class="text-error text-3xl font-bold tracking-tight">{{ currencySymbol }}{{ formatCurrency(summaryForDisplay.expense) }}</div>
               </div>
               <div class="card border border-base-200 bg-base-100 shadow-sm flex flex-col items-center p-6">
                 <div class="text-base-content/60 text-sm font-medium mb-1">Total Revenue</div>
                 <div
                   class="text-3xl font-bold tracking-tight"
                   :class="Number(summaryForDisplay.balance) < 0 ? 'text-red-600' : 'text-green-600'"
-                >₱{{ formatCurrency(summaryForDisplay.balance) }}</div>
+                >{{ currencySymbol }}{{ formatCurrency(summaryForDisplay.balance) }}</div>
               </div>
             </div>
 
@@ -125,7 +125,7 @@
                         class="shrink-0 text-sm font-semibold"
                         :class="t.type === 'income' ? 'text-green-600' : 'text-error'"
                       >
-                        {{ t.type === 'income' ? '+' : '-' }}₱{{ formatCurrency(t.amount) }}
+                        {{ t.type === 'income' ? '+' : '-' }}{{ currencySymbol }}{{ formatCurrency(t.amount) }}
                       </span>
                     </div>
                   </div>
@@ -156,7 +156,7 @@
                       <div class="flex-1 min-w-0">
                         <div class="flex items-center justify-between mb-1">
                           <span class="text-sm font-medium text-base-content truncate">{{ item.category }}</span>
-                          <span class="ml-3 shrink-0 text-sm font-semibold text-error">₱{{ formatCurrency(item.total) }}</span>
+                          <span class="ml-3 shrink-0 text-sm font-semibold text-error">{{ currencySymbol }}{{ formatCurrency(item.total) }}</span>
                         </div>
                         <div class="h-1.5 w-full rounded-full bg-base-200">
                           <div
@@ -237,11 +237,11 @@
                     <div class="grid grid-cols-2 gap-2">
                       <div class="rounded-xl border border-success/20 bg-success/5 px-3 py-2">
                         <p class="text-xs font-semibold uppercase tracking-widest text-success/80">Income Signal</p>
-                        <p class="mt-0.5 text-base font-semibold text-base-content">₱{{ formatCurrency(summaryForDisplay.income) }}</p>
+                        <p class="mt-0.5 text-base font-semibold text-base-content">{{ currencySymbol }}{{ formatCurrency(summaryForDisplay.income) }}</p>
                       </div>
                       <div class="rounded-xl border border-error/20 bg-error/5 px-3 py-2">
                         <p class="text-xs font-semibold uppercase tracking-widest text-error/80">Expense Signal</p>
-                        <p class="mt-0.5 text-base font-semibold text-base-content">₱{{ formatCurrency(summaryForDisplay.expense) }}</p>
+                        <p class="mt-0.5 text-base font-semibold text-base-content">{{ currencySymbol }}{{ formatCurrency(summaryForDisplay.expense) }}</p>
                       </div>
                     </div>
 
@@ -279,7 +279,7 @@
                             <span class="h-2.5 w-2.5 rounded-full shrink-0" :style="{ backgroundColor: pieChartColors[index] || '#94a3b8' }"></span>
                             <p class="text-sm font-medium text-base-content">{{ slice.label }}</p>
                           </div>
-                          <span class="text-sm font-semibold text-base-content">₱{{ formatCurrency(slice.value) }}</span>
+                          <span class="text-sm font-semibold text-base-content">{{ currencySymbol }}{{ formatCurrency(slice.value) }}</span>
                         </div>
                       </div>
                     </div>
@@ -315,6 +315,9 @@ import EditTransaction from '@/Pages/EditTransaction.vue'
 import AddTransaction from '@/Pages/AddTransaction.vue'
 import LineChart from '@/Components/LineChart.vue'
 import PieChart from '@/Components/PieChart.vue'
+import { useCurrency } from '@/composables/useCurrency.js'
+
+const { currencySymbol } = useCurrency()
 
 // Maps pie chart slice labels to fixed brand colours for consistency
 const PIE_CHART_COLOR_MAP = {

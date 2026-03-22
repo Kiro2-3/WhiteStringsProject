@@ -18,9 +18,6 @@ class TransactionController extends Controller
 {
     /**
      * Display the dashboard with transaction summary and charts.
-     *
-     * @param  Request $request the incoming HTTP request
-     * @return Response
      */
     public function index(Request $request): Response
     {
@@ -111,8 +108,6 @@ class TransactionController extends Controller
 
     /**
      * Display the add transaction page.
-     *
-     * @return Response
      */
     public function create(): Response
     {
@@ -135,9 +130,6 @@ class TransactionController extends Controller
 
     /**
      * Display the recent transactions page with filters.
-     *
-     * @param  Request $request the incoming HTTP request
-     * @return Response
      */
     public function recent(Request $request): Response
     {
@@ -170,9 +162,6 @@ class TransactionController extends Controller
 
     /**
      * Store a newly created transaction.
-     *
-     * @param  StoreTransactionRequest $request the validated request data
-     * @return RedirectResponse
      */
     public function store(StoreTransactionRequest $request): RedirectResponse
     {
@@ -191,10 +180,6 @@ class TransactionController extends Controller
 
     /**
      * Update an existing transaction.
-     *
-     * @param  UpdateTransactionRequest $request     the validated request data
-     * @param  Transaction              $transaction the transaction to update
-     * @return RedirectResponse
      */
     public function update(UpdateTransactionRequest $request, Transaction $transaction): RedirectResponse
     {
@@ -216,9 +201,6 @@ class TransactionController extends Controller
 
     /**
      * Delete an existing transaction.
-     *
-     * @param  Transaction $transaction the transaction to delete
-     * @return RedirectResponse
      */
     public function destroy(Transaction $transaction): RedirectResponse
     {
@@ -233,9 +215,6 @@ class TransactionController extends Controller
 
     /**
      * Export transactions as a CSV file, respecting the same filters as recent().
-     *
-     * @param  Request $request the incoming HTTP request
-     * @return \Symfony\Component\HttpFoundation\StreamedResponse
      */
     public function exportCsv(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse
     {
@@ -273,10 +252,6 @@ class TransactionController extends Controller
 
     /**
      * Apply search and field filters to a transaction query.
-     *
-     * @param  Builder $query   the base Eloquent query builder
-     * @param  Request $request the incoming HTTP request containing filter params
-     * @return Builder
      */
     private function applyTransactionFilters(Builder $query, Request $request): Builder
     {
@@ -315,9 +290,7 @@ class TransactionController extends Controller
     /**
      * Apply chart-specific filters to a transaction query.
      *
-     * @param  Builder              $query   the base Eloquent query builder
      * @param  array<string, mixed> $filters key-value pairs of chart filter values
-     * @return Builder
      */
     private function applyChartFilters(Builder $query, array $filters): Builder
     {
