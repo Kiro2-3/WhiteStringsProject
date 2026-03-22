@@ -70,51 +70,13 @@
                 <div class="text-base-content/60 text-sm font-medium mb-1">Total Revenue</div>
                 <div
                   class="text-3xl font-bold tracking-tight"
-                  :class="Number(summaryForDisplay.balance) < 0 ? 'text-error' : 'text-success'"
+                  :class="Number(summaryForDisplay.balance) < 0 ? 'text-red-600' : 'text-green-600'"
                 >₱{{ formatCurrency(summaryForDisplay.balance) }}</div>
               </div>
             </div>
 
-            <!-- Top Expense Categories + Recent Transactions row -->
+            <!-- Recent Transactions + Top Expense Categories row -->
             <div class="grid grid-cols-1 xl:grid-cols-2 gap-5 w-full">
-              <!-- Top Expense Categories Card -->
-              <div class="card border border-base-200 bg-base-100 shadow-sm">
-                <div class="card-body p-5 gap-4">
-                  <div class="flex flex-wrap items-center gap-2">
-                    <h3 class="text-lg font-semibold text-base-content">Top Expense Categories</h3>
-                    <span class="badge badge-error badge-outline badge-sm">All Time</span>
-                  </div>
-
-                  <div v-if="topExpenseCategories.length > 0" class="space-y-3">
-                    <div
-                      v-for="(item, index) in topExpenseCategories"
-                      :key="item.category"
-                      class="flex items-center gap-3"
-                    >
-                      <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-error/10 text-xs font-bold text-error">
-                        {{ index + 1 }}
-                      </div>
-                      <div class="flex-1 min-w-0">
-                        <div class="flex items-center justify-between mb-1">
-                          <span class="text-sm font-medium text-base-content truncate">{{ item.category }}</span>
-                          <span class="ml-3 shrink-0 text-sm font-semibold text-error">₱{{ formatCurrency(item.total) }}</span>
-                        </div>
-                        <div class="h-1.5 w-full rounded-full bg-base-200">
-                          <div
-                            class="h-1.5 rounded-full bg-error/70 transition-all duration-500"
-                            :style="{ width: (Number(item.total) / Number(topExpenseCategories[0].total) * 100).toFixed(1) + '%' }"
-                          ></div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-
-                  <div v-else class="flex min-h-[80px] items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/40 text-center">
-                    <p class="text-sm text-base-content/60">No expense transactions yet.</p>
-                  </div>
-                </div>
-              </div>
-
               <!-- Recent Transactions Card -->
               <div class="card border border-base-200 bg-base-100 shadow-sm">
                 <div class="card-body p-5 gap-4">
@@ -161,7 +123,7 @@
                       <!-- amount -->
                       <span
                         class="shrink-0 text-sm font-semibold"
-                        :class="t.type === 'income' ? 'text-success' : 'text-error'"
+                        :class="t.type === 'income' ? 'text-green-600' : 'text-error'"
                       >
                         {{ t.type === 'income' ? '+' : '-' }}₱{{ formatCurrency(t.amount) }}
                       </span>
@@ -170,6 +132,44 @@
 
                   <div v-else class="flex min-h-[80px] items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/40 text-center">
                     <p class="text-sm text-base-content/60">No transactions yet.</p>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Top Expense Categories Card -->
+              <div class="card border border-base-200 bg-base-100 shadow-sm">
+                <div class="card-body p-5 gap-4">
+                  <div class="flex flex-wrap items-center gap-2">
+                    <h3 class="text-lg font-semibold text-base-content">Top Expense Categories</h3>
+                    <span class="badge badge-error badge-outline badge-sm">All Time</span>
+                  </div>
+
+                  <div v-if="topExpenseCategories.length > 0" class="space-y-3">
+                    <div
+                      v-for="(item, index) in topExpenseCategories"
+                      :key="item.category"
+                      class="flex items-center gap-3"
+                    >
+                      <div class="flex h-6 w-6 shrink-0 items-center justify-center rounded-full bg-error/10 text-xs font-bold text-error">
+                        {{ index + 1 }}
+                      </div>
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center justify-between mb-1">
+                          <span class="text-sm font-medium text-base-content truncate">{{ item.category }}</span>
+                          <span class="ml-3 shrink-0 text-sm font-semibold text-error">₱{{ formatCurrency(item.total) }}</span>
+                        </div>
+                        <div class="h-1.5 w-full rounded-full bg-base-200">
+                          <div
+                            class="h-1.5 rounded-full bg-error/70 transition-all duration-500"
+                            :style="{ width: (Number(item.total) / Number(topExpenseCategories[0].total) * 100).toFixed(1) + '%' }"
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div v-else class="flex min-h-[80px] items-center justify-center rounded-2xl border border-dashed border-base-300 bg-base-200/40 text-center">
+                    <p class="text-sm text-base-content/60">No expense transactions yet.</p>
                   </div>
                 </div>
               </div>
