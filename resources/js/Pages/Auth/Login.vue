@@ -338,11 +338,6 @@
                 <Checkbox id="remember" name="remember" v-model="form.remember" class="checkbox checkbox-primary checkbox-sm" />
                 <span class="label-text">Remember me</span>
               </label>
-              <Link
-                v-if="canResetPassword"
-                :href="route('password.request')"
-                class="link link-primary text-sm font-medium"
-              >Forgot Password?</Link>
             </div>
 
             <!-- Inline credential error -->

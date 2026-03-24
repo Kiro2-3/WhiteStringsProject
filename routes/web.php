@@ -19,6 +19,12 @@ Route::get('/dashboard', [TransactionController::class, 'index'])
     ->name('dashboard');
 
 Route::middleware('auth')->group(function () {
+
+    // Bank Accounts page
+    Route::get('/bank-accounts', [\App\Http\Controllers\BankAccount\BankAccountController::class, 'index'])
+        ->name('bank-accounts.index');
+    Route::post('/bank-accounts', [\App\Http\Controllers\BankAccount\BankAccountController::class, 'store'])
+        ->name('bank-accounts.store');
     Route::get('/transactions/recent', [TransactionController::class, 'recent'])
         ->name('transactions.recent');
 

@@ -56,6 +56,51 @@
           </div>
 
           <div v-else class="space-y-5">
+            <!-- Chart Filters (moved to top) -->
+            <div class="card border border-base-200 bg-base-100 shadow-sm w-full">
+              <div class="card-body p-6">
+                <div class="flex flex-wrap items-center gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
+                  <label class="form-control w-full gap-1.5">
+                    <span class="label-text text-sm font-semibold text-base-content">Type</span>
+                    <select id="chart-type" v-model="chartFilters.type" class="select select-bordered w-full bg-base-100 text-base-content">
+                      <option value="">All</option>
+                      <option value="income">Income</option>
+                      <option value="expense">Expense</option>
+                    </select>
+                  </label>
+
+                  <label class="form-control w-full gap-1.5">
+                    <span class="label-text text-sm font-semibold text-base-content">Category</span>
+                    <select
+                      id="chart-category"
+                      v-model="chartFilters.category"
+                      :disabled="chartFilters.type === 'income'"
+                      :class="[
+                        'select select-bordered w-full bg-base-100 text-base-content',
+                        chartFilters.type === 'income' ? 'select-disabled opacity-60' : ''
+                      ]"
+                    >
+                      <option value="">All</option>
+                      <option v-for="cat in chartCategoryOptions" :key="cat" :value="cat">{{ cat }}</option>
+                    </select>
+                  </label>
+
+                  <label class="form-control w-full gap-1.5">
+                    <span class="label-text text-sm font-semibold text-base-content">From</span>
+                    <input id="chart-date-from" v-model="chartFilters.date_from" type="date" class="input input-bordered w-full bg-base-100 text-base-content" />
+                  </label>
+
+                  <label class="form-control w-full gap-1.5">
+                    <span class="label-text text-sm font-semibold text-base-content">To</span>
+                    <input id="chart-date-to" v-model="chartFilters.date_to" type="date" class="input input-bordered w-full bg-base-100 text-base-content" />
+                  </label>
+                </div>
+                <div class="flex justify-end mt-3">
+                  <button type="button" class="btn btn-ghost btn-sm" @click="clearChartFilters">Clear All</button>
+                </div>
+              </div>
+            </div>
+
             <!-- Summary Cards -->
             <div class="grid grid-cols-1 sm:grid-cols-3 gap-5 w-full">
               <div class="card border border-base-200 bg-base-100 shadow-sm flex flex-col items-center p-6">
@@ -175,50 +220,7 @@
               </div>
             </div>
 
-            <!-- Chart Filters -->
-            <div class="card border border-base-200 bg-base-100 shadow-sm w-full">
-              <div class="card-body p-6">
-                <div class="flex flex-wrap items-center gap-4 md:grid md:grid-cols-2 xl:grid-cols-4">
-                  <label class="form-control w-full gap-1.5">
-                    <span class="label-text text-sm font-semibold text-base-content">Type</span>
-                    <select id="chart-type" v-model="chartFilters.type" class="select select-bordered w-full bg-base-100 text-base-content">
-                      <option value="">All</option>
-                      <option value="income">Income</option>
-                      <option value="expense">Expense</option>
-                    </select>
-                  </label>
-
-                  <label class="form-control w-full gap-1.5">
-                    <span class="label-text text-sm font-semibold text-base-content">Category</span>
-                    <select
-                      id="chart-category"
-                      v-model="chartFilters.category"
-                      :disabled="chartFilters.type === 'income'"
-                      :class="[
-                        'select select-bordered w-full bg-base-100 text-base-content',
-                        chartFilters.type === 'income' ? 'select-disabled opacity-60' : ''
-                      ]"
-                    >
-                      <option value="">All</option>
-                      <option v-for="cat in chartCategoryOptions" :key="cat" :value="cat">{{ cat }}</option>
-                    </select>
-                  </label>
-
-                  <label class="form-control w-full gap-1.5">
-                    <span class="label-text text-sm font-semibold text-base-content">From</span>
-                    <input id="chart-date-from" v-model="chartFilters.date_from" type="date" class="input input-bordered w-full bg-base-100 text-base-content" />
-                  </label>
-
-                  <label class="form-control w-full gap-1.5">
-                    <span class="label-text text-sm font-semibold text-base-content">To</span>
-                    <input id="chart-date-to" v-model="chartFilters.date_to" type="date" class="input input-bordered w-full bg-base-100 text-base-content" />
-                  </label>
-                </div>
-                <div class="flex justify-end mt-3">
-                  <button type="button" class="btn btn-ghost btn-sm" @click="clearChartFilters">Clear All</button>
-                </div>
-              </div>
-            </div>
+            <!-- Charts -->
 
             <!-- Charts -->
             <div class="grid grid-cols-1 gap-4 xl:grid-cols-5 w-full">

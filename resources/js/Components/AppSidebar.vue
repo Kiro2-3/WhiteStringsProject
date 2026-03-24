@@ -8,7 +8,7 @@
       <span class="font-bold text-base tracking-tight text-base-content">Stracker</span>
     </div>
     <div class="flex items-center gap-2">
-      <NotificationPopover />
+      <!-- NotificationPopover removed for mobile view -->
       <!-- Hamburger / close toggle -->
       <button type="button" class="btn btn-ghost btn-sm p-1" @click="mobileOpen = !mobileOpen" aria-label="Toggle menu">
         <svg v-if="!mobileOpen" xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -268,6 +268,30 @@
           </transition>
         </button>
       </li>
+
+      <!-- Bank Accounts -->
+      <li>
+        <button
+          :class="['w-full justify-start gap-3 font-medium rounded-xl !px-2', activePage === 'bank-accounts' ? 'active' : '']"
+          :title="!desktopOpen ? 'Bank Accounts' : undefined"
+          @click="router.get(route('bank-accounts.index'))"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" class="h-5 w-5 shrink-0">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 10l9-7 9 7v7a2 2 0 01-2 2H5a2 2 0 01-2-2v-7z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M9 21V9h6v12" />
+          </svg>
+          <transition
+            enter-active-class="transition-all duration-200 ease-out"
+            enter-from-class="opacity-0"
+            enter-to-class="opacity-100"
+            leave-active-class="transition-all duration-100 ease-in"
+            leave-from-class="opacity-100"
+            leave-to-class="opacity-0"
+          >
+            <span v-if="desktopOpen" class="whitespace-nowrap overflow-hidden">Bank Accounts</span>
+          </transition>
+        </button>
+      </li>
     </ul>
 
     <div class="divider my-0 mx-2 h-px shrink-0"></div>
@@ -308,7 +332,7 @@
 <script setup>
 import { ref } from 'vue';
 import { router } from '@inertiajs/vue3';
-import NotificationPopover from '@/Components/NotificationPopover.vue';
+// import NotificationPopover from '@/Components/NotificationPopover.vue';
 
 defineProps({
   user: { type: Object, required: true },
