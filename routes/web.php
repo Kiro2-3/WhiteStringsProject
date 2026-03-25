@@ -40,6 +40,8 @@ Route::middleware('auth')->group(function () {
 
     Route::post('/transactions', [TransactionController::class, 'store'])
         ->name('transactions.store');
+    Route::post('/transactions/bulk-delete', [TransactionController::class, 'bulkDestroy'])
+        ->name('transactions.bulk-delete');
 
     Route::get('/transactions/{transaction}/edit', [TransactionController::class, 'show'])
         ->name('transactions.edit');

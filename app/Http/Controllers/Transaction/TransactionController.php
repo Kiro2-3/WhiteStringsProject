@@ -214,6 +214,29 @@ class TransactionController extends Controller
     }
 
     /**
+     * Bulk delete transactions by ids for the authenticated user.
+     */
+    public function bulkDestroy(Request $request): RedirectResponse
+    {
+        $user = Auth::user();
+
+        $data = $request->validate([
+            'ids' => 'required|array|min:1',
+            'ids.*' => 'integer|distinct',
+        ]);
+
+        $ids = $data['ids'];
+
+        // Only delete transactions that belong to the user
+        $query = Transaction::whereIn('id', $ids)->where('user_id', $user->id);
+
+        $count = $query->count();
+        $query->delete();
+
+        return redirect()->back(302, [], route('dashboard'))->with('success', "Successfully deleted {$count} transaction(s)");
+    }
+
+    /**
      * Export transactions as a CSV file, respecting the same filters as recent().
      */
     public function exportCsv(Request $request): \Symfony\Component\HttpFoundation\StreamedResponse

@@ -91,6 +91,12 @@
                   Export CSV
                 </button>
               </div>
+              <div class="flex w-full flex-col gap-1 md:w-auto">
+                <span class="invisible label-text">a</span>
+                <button type="button" class="btn btn-error" :disabled="selectedIds.length === 0" @click="bulkDelete">
+                  Delete Selected ({{ selectedIds.length }})
+                </button>
+              </div>
             </div>
           </div>
 
@@ -99,6 +105,9 @@
             <table class="table table-zebra w-full">
               <thead>
                 <tr>
+                  <th class="w-12">
+                    <input type="checkbox" class="checkbox" :checked="allSelected" @change="toggleSelectAll" />
+                  </th>
                   <th
                     v-for="col in sortableColumns"
                     :key="col.key"
@@ -129,6 +138,9 @@
               </thead>
               <tbody>
                 <tr v-for="t in transactions.data" :key="t.id">
+                  <td class="w-12">
+                    <input type="checkbox" class="checkbox" :value="t.id" v-model="selectedIds" />
+                  </td>
                   <td class="whitespace-nowrap">{{ t.entry_date }}</td>
                   <td>{{ t.description }}</td>
                   <td class="whitespace-nowrap" :class="t.category === 'Salary' ? 'text-green-600 font-semibold' : ''">{{ t.category }}</td>
@@ -243,7 +255,7 @@
 </template>
 
 <script setup>
-import { ref, watch } from 'vue'
+import { ref, watch, computed } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import AppSidebar from '@/Components/AppSidebar.vue'
@@ -256,6 +268,9 @@ const props = defineProps({
   categories:   Array,
   filters:      Object,   // active filter values sent back from the server after a Search
 })
+
+// expose a local `transactions` binding for template/script convenience
+const transactions = props.transactions
 
 // Local filter state mirrors the server-side filters so inputs stay reactive
 const filters = ref({
@@ -287,6 +302,37 @@ watch(
 
 const editTransaction    = ref(null)   // holds the transaction object being edited; null hides the modal
 const showAddTransaction = ref(false)
+
+// Bulk selection state
+const selectedIds = ref([])
+
+const allSelected = computed(() => {
+  const idsOnPage = (transactions?.data || []).map(t => t.id)
+  return idsOnPage.length > 0 && idsOnPage.every(id => selectedIds.value.includes(id))
+})
+
+function toggleSelectAll() {
+  const idsOnPage = (transactions?.data || []).map(t => t.id)
+  if (allSelected.value) {
+    // remove page ids from selection
+    selectedIds.value = selectedIds.value.filter(id => !idsOnPage.includes(id))
+  } else {
+    // add any missing ids from page
+    selectedIds.value = Array.from(new Set([...selectedIds.value, ...idsOnPage]))
+  }
+}
+
+function bulkDelete() {
+  if (selectedIds.value.length === 0) return
+  if (!confirm(`Delete ${selectedIds.value.length} selected transaction(s)? This cannot be undone.`)) return
+
+  router.post(route('transactions.bulk-delete'), { ids: selectedIds.value }, {
+    preserveScroll: true,
+    onSuccess: () => {
+      selectedIds.value = []
+    },
+  })
+}
 
 const sortableColumns = [
   { key: 'entry_date',  label: 'Date' },
