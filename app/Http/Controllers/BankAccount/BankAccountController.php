@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
+use App\Models\BankAccount;
 
 
 class BankAccountController
@@ -22,9 +23,15 @@ class BankAccountController
             'account_name' => 'required|string|max:255',
             'branch' => 'nullable|string|max:255',
             'notes' => 'nullable|string',
+            'balance' => 'nullable|numeric',
         ]);
 
         $user = $request->user();
+        // ensure balance exists
+        if (!isset($validated['balance'])) {
+            $validated['balance'] = 0;
+        }
+
         $user->bankAccounts()->create($validated);
 
         return redirect()->route('bank-accounts.index');
@@ -40,5 +47,30 @@ class BankAccountController
             'auth' => ['user' => $user],
             'bankAccounts' => $bankAccounts,
         ]);
+    }
+
+    /**
+     * Update a bank account for the authenticated user.
+     */
+    public function update(Request $request, BankAccount $bankAccount)
+    {
+        $user = $request->user();
+
+        if ($bankAccount->user_id !== $user->id) {
+            abort(403);
+        }
+
+        $validated = $request->validate([
+            'bank_name' => 'required|string|max:255',
+            'account_number' => 'required|string|max:255',
+            'account_name' => 'required|string|max:255',
+            'branch' => 'nullable|string|max:255',
+            'notes' => 'nullable|string',
+            'balance' => 'nullable|numeric',
+        ]);
+
+        $bankAccount->update($validated);
+
+        return redirect()->route('bank-accounts.index');
     }
 }

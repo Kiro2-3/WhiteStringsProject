@@ -25,6 +25,8 @@ Route::middleware('auth')->group(function () {
         ->name('bank-accounts.index');
     Route::post('/bank-accounts', [\App\Http\Controllers\BankAccount\BankAccountController::class, 'store'])
         ->name('bank-accounts.store');
+    Route::put('/bank-accounts/{bankAccount}', [\App\Http\Controllers\BankAccount\BankAccountController::class, 'update'])
+        ->name('bank-accounts.update');
     Route::get('/transactions/recent', [TransactionController::class, 'recent'])
         ->name('transactions.recent');
 

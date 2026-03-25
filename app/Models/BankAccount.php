@@ -16,6 +16,7 @@ class BankAccount extends Model
         'account_name',
         'branch',
         'notes',
+        'balance',
     ];
 
     public function user()

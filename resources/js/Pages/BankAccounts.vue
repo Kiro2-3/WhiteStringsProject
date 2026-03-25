@@ -40,6 +40,12 @@
                     <textarea v-model="form.notes" class="textarea textarea-bordered w-full bg-base-100 text-base-content" rows="2"></textarea>
                   </label>
                 </div>
+                <div class="mb-4">
+                  <label class="form-control w-full gap-2">
+                    <span class="label-text font-semibold text-base-content">Current Saving</span>
+                    <input v-model.number="form.balance" type="number" step="0.01" class="input input-bordered w-full bg-base-100 text-base-content" />
+                  </label>
+                </div>
                 <button type="submit" class="btn btn-primary w-full">Save Bank Account</button>
               </form>
             </div>
@@ -127,6 +133,7 @@ const form = ref({
   account_name: '',
   branch: '',
   notes: '',
+  balance: 0,
 })
 
 // Modal state
@@ -139,6 +146,15 @@ function handleAccountClick(account) {
   // Deep copy to avoid mutating the list directly
   editAccount.value = { ...account }
   showModal.value = true
+}
+
+function formatCurrency(amount) {
+  const currency = (props.auth && props.auth.user && props.auth.user.currency) ? props.auth.user.currency : 'USD'
+  try {
+    return new Intl.NumberFormat(undefined, { style: 'currency', currency }).format(Number(amount || 0))
+  } catch (e) {
+    return Number(amount || 0).toFixed(2)
+  }
 }
 
 function saveEdit() {
