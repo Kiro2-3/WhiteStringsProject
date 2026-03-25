@@ -43,6 +43,18 @@
     </header>
 
     <main><slot /></main>
+    <!-- Floating mascot helper -->
+    <div class="mascot-wrapper" v-cloak>
+      <div class="mascot-badge" @click="toggleMascot" role="button" aria-label="Open help">Do you need help?</div>
+      <div class="mascot-button" @click="toggleMascot" role="button" aria-label="Open help">
+        <img src="/public/images/mascot1.png" alt="Mascot" class="mascot-img" />
+      </div>
+      <transition name="fade">
+        <div v-if="showMascot" class="mascot-bubble">
+          <div class="mascot-bubble-text">How can I help you today?</div>
+        </div>
+      </transition>
+    </div>
   </div>
 </template>
 
@@ -55,6 +67,7 @@ import DropdownLink from '@/Components/DropdownLink.vue'
 import NavLink from '@/Components/NavLink.vue'
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink.vue'
 import ThemeToggle from '@/Components/ThemeToggle.vue'
+import { onBeforeUnmount } from 'vue'
 
 const props = defineProps({
   header: String
@@ -127,7 +140,84 @@ onMounted(() => {
     // ignore
   }
 })
+
+// Mascot helper state and handlers
+const showMascot = ref(false)
+function toggleMascot() {
+  showMascot.value = !showMascot.value
+}
+
+function onKeydown(e) {
+  if (e.key === 'Escape') showMascot.value = false
+}
+
+window.addEventListener('keydown', onKeydown)
+onBeforeUnmount(() => {
+  window.removeEventListener('keydown', onKeydown)
+})
 </script>
 
 <style scoped>
+/* Mascot floating helper styles */
+.mascot-wrapper {
+  position: fixed;
+  right: 1rem;
+  bottom: 1.25rem;
+  z-index: 60;
+}
+.mascot-button {
+  width: 56px;
+  height: 56px;
+  border-radius: 9999px;
+  overflow: hidden;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+  cursor: pointer;
+}
+.mascot-img { width: 100%; height: 100%; object-fit: cover; display: block }
+.mascot-bubble {
+  margin-bottom: 0.5rem;
+  transform: translateY(-8px);
+  background: linear-gradient(90deg,#7c3aed,#f59e0b);
+  color: white;
+  padding: 0.5rem 0.75rem;
+  border-radius: 9999px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  white-space: nowrap;
+  font-weight: 600;
+  font-size: 0.95rem;
+  display: inline-block;
+}
+.fade-enter-active, .fade-leave-active { transition: opacity 0.15s ease, transform 0.15s ease }
+.fade-enter-from { opacity: 0; transform: translateY(6px) }
+.fade-enter-to { opacity: 1; transform: translateY(0) }
+.fade-leave-from { opacity: 1; transform: translateY(0) }
+.fade-leave-to { opacity: 0; transform: translateY(6px) }
+
+/* Persistent badge next to mascot */
+.mascot-badge {
+  position: absolute;
+  right: 74px;
+  bottom: 10px;
+  background: linear-gradient(90deg,#7c3aed,#f59e0b);
+  color: #fff;
+  padding: 0.32rem 0.6rem;
+  border-radius: 9999px;
+  font-weight: 600;
+  font-size: 0.82rem;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  cursor: pointer;
+  white-space: nowrap;
+  transform-origin: right center;
+}
+.mascot-badge:hover { transform: translateY(-2px) }
+
+@media (max-width: 480px) {
+  .mascot-badge { right: 64px; font-size: 0.72rem; padding: 0.26rem 0.5rem }
+}
+
+@media (min-width: 768px) {
+  .mascot-wrapper { right: 1.5rem; bottom: 1.5rem }
+}
+
 </style>
+ 
