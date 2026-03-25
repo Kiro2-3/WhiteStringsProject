@@ -146,7 +146,7 @@
     - Uses CSS transition on width + opacity for smooth animation
   -->
   <aside
-    class="hidden md:flex md:flex-col md:min-h-screen bg-base-100 border-r border-base-200 sticky top-0 z-20 shadow-md overflow-hidden transition-all duration-300 ease-in-out"
+    class="hidden md:flex md:flex-col md:min-h-screen bg-base-100 border-r border-base-200 sticky top-0 z-20 shadow-md overflow-hidden transition-all duration-300 ease-in-out h-screen overflow-y-auto"
     :style="{ width: desktopOpen ? '16rem' : '4rem' }"
     @mouseenter="desktopOpen = true"
     @mouseleave="desktopOpen = false"
