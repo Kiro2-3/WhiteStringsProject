@@ -42,7 +42,8 @@ class BankAccountController
     public function index(Request $request): Response
     {
         $user = Auth::user();
-        $bankAccounts = $user->bankAccounts()->latest()->get();
+        // paginate bank accounts for the user (5 per page)
+        $bankAccounts = $user->bankAccounts()->latest()->paginate(5);
         return Inertia::render('BankAccounts', [
             'auth' => ['user' => $user],
             'bankAccounts' => $bankAccounts,

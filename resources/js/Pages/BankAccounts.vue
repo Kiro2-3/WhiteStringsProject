@@ -53,10 +53,10 @@
 
           <!-- Saved Bank Accounts Card -->
           <div class="w-full md:w-1/2 flex flex-col">
-            <div v-if="props.bankAccounts && props.bankAccounts.length" class="card bg-base-100 border border-base-200 shadow p-6 h-full">
+            <div v-if="accounts && accounts.length" class="card bg-base-100 border border-base-200 shadow p-6 h-full">
               <h3 class="text-xl font-semibold mb-4">Saved Bank Accounts</h3>
               <ul class="divide-y divide-base-200">
-                <li v-for="account in props.bankAccounts" :key="account.id" class="py-3 cursor-pointer hover:bg-base-200 rounded transition"
+                <li v-for="account in accounts" :key="account.id" class="py-3 cursor-pointer hover:bg-base-200 rounded transition"
                     @click="handleAccountClick(account)">
                   <div class="flex flex-col gap-1">
                     <div class="flex items-center justify-between">
@@ -65,10 +65,24 @@
                     </div>
                     <div class="text-sm text-base-content/80">Acct #: {{ account.account_number }}</div>
                     <div class="text-sm text-base-content/80">Name: {{ account.account_name }}</div>
+                    <div class="text-sm text-base-content/80">Balance: {{ formatCurrency(account.balance) }}</div>
                     <div v-if="account.notes" class="text-xs text-base-content/50 mt-1">{{ account.notes }}</div>
                   </div>
                 </li>
               </ul>
+              <nav v-if="props.bankAccounts && props.bankAccounts.links" class="mt-4 flex justify-center">
+                <ul class="inline-flex items-center -space-x-px">
+                  <li v-for="link in props.bankAccounts.links" :key="link.label">
+                    <button
+                      class="px-3 py-1 border rounded-l-md bg-base-100 hover:bg-base-200"
+                      :class="{ 'bg-primary text-white': link.active, 'opacity-50 cursor-not-allowed': !link.url }"
+                      @click="goToPage(link.url)"
+                      v-html="link.label"
+                      :disabled="!link.url"
+                    ></button>
+                  </li>
+                </ul>
+              </nav>
             </div>
             <div v-else class="card bg-base-100 border border-base-200 shadow p-6 text-center text-base-content/60 h-full flex items-center justify-center">
               <span>No bank accounts saved yet.</span>
@@ -102,6 +116,10 @@
                     <label class="font-semibold">Notes:</label>
                     <textarea v-model="editAccount.notes" class="textarea textarea-bordered w-full"></textarea>
                   </div>
+                  <div class="mb-2">
+                    <label class="font-semibold">Current Saving:</label>
+                    <input v-model.number="editAccount.balance" type="number" step="0.01" class="input input-bordered w-full" />
+                  </div>
                   <div class="mt-6 flex justify-end gap-2">
                     <button type="button" @click="closeModal" class="btn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
@@ -117,14 +135,14 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from 'vue'
 import { Head, router } from '@inertiajs/vue3'
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import AppSidebar from '@/Components/AppSidebar.vue'
 
 const props = defineProps({
   auth: Object,
-  bankAccounts: Array,
+  bankAccounts: Object,
 })
 
 const form = ref({
@@ -135,6 +153,16 @@ const form = ref({
   notes: '',
   balance: 0,
 })
+
+const accounts = computed(() => {
+  if (!props.bankAccounts) return []
+  return Array.isArray(props.bankAccounts) ? props.bankAccounts : (props.bankAccounts.data || [])
+})
+
+function goToPage(url) {
+  if (!url) return
+  router.get(url, {}, { preserveState: true, preserveScroll: true })
+}
 
 // Modal state
 const showModal = ref(false)
@@ -181,7 +209,7 @@ function submitBankAccount() {
   router.post(route('bank-accounts.store'), form.value, {
     preserveScroll: true,
     onSuccess: () => {
-      form.value = { bank_name: '', account_number: '', account_name: '', branch: '', notes: '' }
+      form.value = { bank_name: '', account_number: '', account_name: '', branch: '', notes: '', balance: 0 }
     },
   })
 }
