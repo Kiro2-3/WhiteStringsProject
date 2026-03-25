@@ -27,6 +27,8 @@ Route::middleware('auth')->group(function () {
         ->name('bank-accounts.store');
     Route::put('/bank-accounts/{bankAccount}', [\App\Http\Controllers\BankAccount\BankAccountController::class, 'update'])
         ->name('bank-accounts.update');
+    Route::delete('/bank-accounts/{bankAccount}', [\App\Http\Controllers\BankAccount\BankAccountController::class, 'destroy'])
+        ->name('bank-accounts.destroy');
     Route::get('/transactions/recent', [TransactionController::class, 'recent'])
         ->name('transactions.recent');
 

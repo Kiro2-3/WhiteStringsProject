@@ -42,11 +42,14 @@ class BankAccountController
     public function index(Request $request): Response
     {
         $user = Auth::user();
-        // paginate bank accounts for the user (5 per page)
-        $bankAccounts = $user->bankAccounts()->latest()->paginate(5);
+        // paginate bank accounts for the user (3 per page)
+        $bankAccounts = $user->bankAccounts()->latest()->paginate(3);
+        $totalBalance = (float) $user->bankAccounts()->sum('balance');
+
         return Inertia::render('BankAccounts', [
             'auth' => ['user' => $user],
             'bankAccounts' => $bankAccounts,
+            'totalBalance' => $totalBalance,
         ]);
     }
 
@@ -73,5 +76,21 @@ class BankAccountController
         $bankAccount->update($validated);
 
         return redirect()->route('bank-accounts.index');
+    }
+
+    /**
+     * Delete a bank account for the authenticated user.
+     */
+    public function destroy(Request $request, BankAccount $bankAccount)
+    {
+        $user = $request->user();
+
+        if ($bankAccount->user_id !== $user->id) {
+            abort(403);
+        }
+
+        $bankAccount->delete();
+
+        return redirect()->route('bank-accounts.index')->with('success', 'Bank account deleted successfully.');
     }
 }

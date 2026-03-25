@@ -53,6 +53,21 @@
 
           <!-- Saved Bank Accounts Card -->
           <div class="w-full md:w-1/2 flex flex-col">
+            <!-- Analytics Card -->
+            <div class="card bg-base-100 border border-base-200 shadow p-6 mb-6">
+              <h3 class="text-lg font-semibold mb-2">Wallet Summary</h3>
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-sm text-base-content/70">Total Balance</div>
+                  <div class="text-2xl font-bold">{{ formatCurrency(props.totalBalance) }}</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-sm text-base-content/70">Accounts</div>
+                  <div class="text-lg font-medium">{{ props.bankAccounts && props.bankAccounts.total ? props.bankAccounts.total : (accounts.length || 0) }}</div>
+                </div>
+              </div>
+            </div>
+
             <div v-if="accounts && accounts.length" class="card bg-base-100 border border-base-200 shadow p-6 h-full">
               <h3 class="text-xl font-semibold mb-4">Saved Bank Accounts</h3>
               <ul class="divide-y divide-base-200">
@@ -121,6 +136,8 @@
                     <input v-model.number="editAccount.balance" type="number" step="0.01" class="input input-bordered w-full" />
                   </div>
                   <div class="mt-6 flex justify-end gap-2">
+                    <button type="button" @click="confirmDelete" class="btn btn-error">Delete</button>
+                    <div class="flex-1"></div>
                     <button type="button" @click="closeModal" class="btn">Cancel</button>
                     <button type="submit" class="btn btn-primary">Save</button>
                   </div>
@@ -143,6 +160,7 @@ import AppSidebar from '@/Components/AppSidebar.vue'
 const props = defineProps({
   auth: Object,
   bankAccounts: Object,
+  totalBalance: Number,
 })
 
 const form = ref({
@@ -196,6 +214,21 @@ function saveEdit() {
     onError: (errors) => {
       // optionally surface validation errors later
       console.error('Validation errors updating bank account:', errors)
+    },
+  })
+}
+
+function confirmDelete() {
+  if (!editAccount.value || !editAccount.value.id) return
+  if (!confirm('Are you sure you want to delete this bank account? This action cannot be undone.')) return
+
+  router.delete(route('bank-accounts.destroy', editAccount.value.id), {}, {
+    preserveScroll: true,
+    onSuccess: () => {
+      closeModal()
+    },
+    onError: (errors) => {
+      console.error('Error deleting bank account:', errors)
     },
   })
 }
