@@ -68,6 +68,42 @@
               <span>No bank accounts saved yet.</span>
             </div>
           </div>
+
+          <!-- Popup Modal for Bank Account Details (Editable) -->
+          <transition name="fade">
+            <div v-if="showModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-40" @click.self="closeModal">
+              <div class="bg-base-100 rounded-lg shadow-2xl p-8 w-full max-w-md relative animate-popup">
+                <button @click="closeModal" class="absolute top-2 right-2 text-base-content/60 hover:text-base-content text-xl">&times;</button>
+                <h2 class="text-2xl font-bold mb-4">Edit Bank Account</h2>
+                <form @submit.prevent="saveEdit" v-if="editAccount">
+                  <div class="mb-2">
+                    <label class="font-semibold">Bank Name:</label>
+                    <input v-model="editAccount.bank_name" class="input input-bordered w-full" required />
+                  </div>
+                  <div class="mb-2">
+                    <label class="font-semibold">Account Number:</label>
+                    <input v-model="editAccount.account_number" class="input input-bordered w-full" required />
+                  </div>
+                  <div class="mb-2">
+                    <label class="font-semibold">Account Name:</label>
+                    <input v-model="editAccount.account_name" class="input input-bordered w-full" required />
+                  </div>
+                  <div class="mb-2">
+                    <label class="font-semibold">Branch:</label>
+                    <input v-model="editAccount.branch" class="input input-bordered w-full" />
+                  </div>
+                  <div class="mb-2">
+                    <label class="font-semibold">Notes:</label>
+                    <textarea v-model="editAccount.notes" class="textarea textarea-bordered w-full"></textarea>
+                  </div>
+                  <div class="mt-6 flex justify-end gap-2">
+                    <button type="button" @click="closeModal" class="btn">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                  </div>
+                </form>
+              </div>
+            </div>
+          </transition>
         </div>
       </main>
     </div>
@@ -93,6 +129,38 @@ const form = ref({
   notes: '',
 })
 
+// Modal state
+const showModal = ref(false)
+const selectedAccount = ref(null)
+const editAccount = ref(null)
+
+function handleAccountClick(account) {
+  selectedAccount.value = account
+  // Deep copy to avoid mutating the list directly
+  editAccount.value = { ...account }
+  showModal.value = true
+}
+
+function saveEdit() {
+  if (!editAccount.value || !editAccount.value.id) return
+
+  router.put(route('bank-accounts.update', editAccount.value.id), editAccount.value, {
+    preserveScroll: true,
+    onSuccess: () => {
+      closeModal()
+    },
+    onError: (errors) => {
+      // optionally surface validation errors later
+      console.error('Validation errors updating bank account:', errors)
+    },
+  })
+}
+function closeModal() {
+  showModal.value = false
+  selectedAccount.value = null
+  editAccount.value = null
+}
+
 function submitBankAccount() {
   router.post(route('bank-accounts.store'), form.value, {
     preserveScroll: true,
@@ -101,12 +169,20 @@ function submitBankAccount() {
     },
   })
 }
-
-function handleAccountClick(account) {
-  // For now, just show an alert. Replace with modal or navigation as needed.
-  alert(`Bank: ${account.bank_name}\nAccount #: ${account.account_number}\nName: ${account.account_name}`)
-}
 </script>
 
 <style scoped>
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.2s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+@keyframes popup {
+  0% { transform: scale(0.95); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+.animate-popup {
+  animation: popup 0.2s cubic-bezier(0.4,0,0.2,1);
+}
 </style>
