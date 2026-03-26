@@ -166,7 +166,7 @@ onMounted(() => {
     // ignore
   }
   // nothing else to do here for mount
-
+})
 // Mascot helper state and handlers
 const isMascotHidden = ref(initialHide)
 const showMascot = ref(false)
