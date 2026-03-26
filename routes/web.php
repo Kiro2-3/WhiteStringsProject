@@ -76,6 +76,8 @@ Route::middleware('auth')->group(function () {
     // AI chat endpoint (auth required). If OPENAI_API_KEY is set, requests will be proxied to OpenAI.
     Route::post('/ai-chat', [\App\Http\Controllers\AiChatController::class, 'chat'])
         ->name('ai.chat');
+
+    // Recurring payments (removed)
 });
 
 require __DIR__.'/auth.php';

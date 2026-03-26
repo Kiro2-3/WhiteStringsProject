@@ -7,6 +7,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Support\Facades\Auth;
 use App\Models\BankAccount;
+// recurring payments removed
 
 
 class BankAccountController
@@ -46,12 +47,13 @@ class BankAccountController
         $bankAccounts = $user->bankAccounts()->latest()->paginate(3);
         $totalBalance = (float) $user->bankAccounts()->sum('balance');
 
+        // recurring payments removed from index
+
         return Inertia::render('BankAccounts', [
             'auth' => ['user' => $user],
             'bankAccounts' => $bankAccounts,
             'totalBalance' => $totalBalance,
-            // Upcoming recurring payments placeholder - populated by backend when feature implemented
-            'upcomingRecurring' => [],
+                // 'upcomingRecurring' => $upcoming,
         ]);
     }
 

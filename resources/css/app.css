@@ -23,3 +23,16 @@ body {
 	box-shadow: 0 12px 30px rgba(0,0,0,0.6), 0 4px 12px rgba(0,0,0,0.4);
 }
 
+/* Stronger global text color for dark theme to improve readability */
+.dark body {
+	/* high-contrast off-white for general text in dark mode */
+	color: #CBD5E1;
+}
+
+/* Slightly brighter muted text variant used across components (no !important)
+	 Use the `text-muted-strong` class where a softer emphasis is needed. */
+.dark .text-muted-strong {
+	color: rgba(203,213,225,0.78);
+}
+
+

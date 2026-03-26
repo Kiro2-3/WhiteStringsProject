@@ -182,7 +182,7 @@
                       </button>
                       <button
                         type="button"
-                        @click="deleteTransaction(t.id)"
+                        @click="openDeleteModal(t)"
                         class="btn btn-ghost btn-xs text-error px-2"
                       >
                         <svg
@@ -249,6 +249,23 @@
           :categories="categories"
           @close="showAddTransaction = false"
         />
+        <!-- Delete Confirmation Modal -->
+        <teleport to="body">
+          <transition name="fade">
+            <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" @click.self="closeDeleteModal">
+              <div class="bg-base-100 rounded-lg shadow-2xl p-6 w-full max-w-sm relative animate-popup text-center">
+                <button @click="closeDeleteModal" class="absolute top-3 right-3 text-base-content/60 hover:text-base-content text-xl">&times;</button>
+                <img :src="mascotUrl" alt="Mascot" class="mx-auto mb-4 h-48 w-48 md:h-56 md:w-56" />
+                <h2 class="text-xl font-semibold mb-2">Do you want to delete this transaction?</h2>
+                <p class="text-sm text-base-content/70 mb-4">This action cannot be undone.</p>
+                <div class="flex justify-center gap-3">
+                  <button @click="closeDeleteModal" class="btn">Cancel</button>
+                  <button @click="confirmDelete" class="btn btn-error">Delete</button>
+                </div>
+              </div>
+            </div>
+          </transition>
+        </teleport>
       </main>
     </div>
   </AuthenticatedLayout>
@@ -261,6 +278,9 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue'
 import AppSidebar from '@/Components/AppSidebar.vue'
 import EditTransaction from '@/Pages/EditTransaction.vue'
 import AddTransaction from '@/Pages/AddTransaction.vue'
+
+// runtime URL for mascot image (avoids Vite import-analysis trying to pre-bundle)
+const mascotUrl = import.meta.env.BASE_URL + 'images/mascotworkdone.png'
 
 const props = defineProps({
   auth:         Object,
@@ -415,20 +435,35 @@ function applyFilters() {
   })
 }
 
-// Confirms before deleting; uses preserveScroll to keep the user's scroll position
-function deleteTransaction(id) {
-  if (confirm('Are you sure you want to delete this transaction?')) {
-    // optimistic remove
-    visibleTransactions.value = visibleTransactions.value.filter(t => t.id !== id)
+// Delete flow: open a confirmation modal before deleting
+const showDeleteModal = ref(false)
+const deleteTarget = ref(null)
 
-    router.delete(route('transactions.destroy', id), {
-      preserveScroll: true,
-      onError: () => {
-        // restore from server if delete failed
-        router.reload()
-      },
-    })
-  }
+function openDeleteModal(transaction) {
+  deleteTarget.value = transaction
+  showDeleteModal.value = true
+}
+
+function closeDeleteModal() {
+  deleteTarget.value = null
+  showDeleteModal.value = false
+}
+
+function confirmDelete() {
+  if (!deleteTarget.value || !deleteTarget.value.id) return closeDeleteModal()
+  const id = deleteTarget.value.id
+
+  // optimistic remove from UI
+  visibleTransactions.value = visibleTransactions.value.filter(t => t.id !== id)
+  closeDeleteModal()
+
+  router.delete(route('transactions.destroy', id), {
+    preserveScroll: true,
+    onError: () => {
+      // restore from server if delete failed
+      router.reload()
+    },
+  })
 }
 
 /**

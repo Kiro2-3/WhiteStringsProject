@@ -21,7 +21,22 @@
             <div class="card bg-base-100 border border-base-200 shadow p-4 mb-6 h-[520px] flex flex-col">
               <div class="flex items-center justify-between mb-3">
                 <h3 class="text-lg font-semibold">Account Balances</h3>
-                <div class="text-sm text-base-content/70">Total: {{ formatCurrency(props.totalBalance) }}</div>
+                <div class="text-sm text-base-content/70">
+                  Total:
+                  <span class="text-green-600 font-semibold">
+                    {{ showTotals ? formatCurrency(props.totalBalance) : '••••' }}
+                  </span>
+                  <button @click="toggleTotals" type="button" class="btn btn-ghost btn-xs p-1 ml-2" :aria-pressed="showTotals" aria-label="Toggle totals visibility">
+                    <svg v-if="showTotals" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                    </svg>
+                    <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.542-7a9.956 9.956 0 012.223-3.363" />
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+                    </svg>
+                  </button>
+                </div>
               </div>
               <div class="flex-1 min-h-0">
                 <canvas ref="balanceChart" class="w-full h-full block"></canvas>
@@ -37,7 +52,19 @@
               <div class="flex items-center justify-between">
                 <div>
                   <div class="text-sm text-base-content/70">Total Balance</div>
-                  <div class="text-2xl font-bold">{{ formatCurrency(props.totalBalance) }}</div>
+                  <div class="text-2xl font-bold text-green-600 flex items-center gap-2">
+                    <span>{{ showTotals ? formatCurrency(props.totalBalance) : '••••' }}</span>
+                    <button @click="toggleTotals" type="button" class="btn btn-ghost btn-xs p-1" :aria-pressed="showTotals" aria-label="Toggle totals visibility">
+                      <svg v-if="showTotals" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                      </svg>
+                      <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.88 9.88A3 3 0 0112 9c1.1 0 2.08.58 2.62 1.44" />
+                      </svg>
+                    </button>
+                  </div>
                 </div>
                 <div class="text-right">
                   <div class="text-sm text-base-content/70">Accounts</div>
@@ -46,25 +73,7 @@
               </div>
             </div>
 
-            <!-- Upcoming Recurring Payments Timeline Card -->
-            <div class="card bg-base-100 border border-base-200 shadow p-4 mb-6">
-              <h3 class="text-lg font-semibold mb-3">Upcoming Recurring Payments</h3>
-              <div v-if="upcomingItems && upcomingItems.length" class="flex flex-col gap-3">
-                <ul class="overflow-y-auto">
-                  <li v-for="item in upcomingItems" :key="item.id" class="flex items-start gap-3 py-2">
-                    <div class="w-16 text-xs text-base-content/60">{{ formatDate(item.date) }}</div>
-                    <div class="flex-1">
-                      <div class="flex items-center justify-between">
-                        <div class="text-sm font-medium">{{ item.description || 'Subscription' }}</div>
-                        <div class="text-sm font-semibold">{{ formatCurrency(item.amount) }}</div>
-                      </div>
-                      <div class="text-xs text-base-content/60">From: {{ item.account_name || getAccountName(item.account_id) || '—' }}</div>
-                    </div>
-                  </li>
-                </ul>
-              </div>
-              <div v-else class="text-sm text-base-content/60">No recurring payments due in the next 7 days.</div>
-            </div>
+            <!-- Upcoming Recurring Payments removed -->
 
             <div v-if="accounts && accounts.length" class="card bg-base-100 border border-base-200 shadow p-4 h-[440px] flex flex-col">
               <h3 class="text-xl font-semibold mb-3">Saved Bank Accounts</h3>
@@ -79,7 +88,20 @@
                       </div>
                       <div class="text-sm text-base-content/80">Acct #: {{ account.account_number }}</div>
                       <div class="text-sm text-base-content/80">Name: {{ account.account_name }}</div>
-                      <div class="text-sm text-base-content/80">Balance: {{ formatCurrency(account.balance) }}</div>
+                      <div class="text-sm text-base-content/80 flex items-center gap-2">Balance:
+                        <span class="text-green-600 font-medium">
+                          {{ isAccountHidden(account.id) ? '••••' : formatCurrency(account.balance) }}
+                        </span>
+                        <button @click="toggleAccountVisibility(account.id)" type="button" class="btn btn-ghost btn-xs p-1" :aria-pressed="isAccountHidden(account.id)" :aria-label="isAccountHidden(account.id) ? 'Show amount' : 'Hide amount'">
+                          <svg v-if="!isAccountHidden(account.id)" xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                          </svg>
+                          <svg v-else xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 3l18 18" />
+                          </svg>
+                        </button>
+                      </div>
                       <div v-if="account.notes" class="text-xs text-base-content/50 mt-1">{{ account.notes }}</div>
                     </div>
                   </li>
@@ -187,6 +209,8 @@
               </div>
             </div>
           </transition>
+
+          <!-- Create Recurring Payment modal removed -->
         </div>
       </main>
     </div>
@@ -204,10 +228,7 @@ const props = defineProps({
   auth: Object,
   bankAccounts: Object,
   totalBalance: Number,
-  upcomingRecurring: {
-    type: Array,
-    default: () => [],
-  },
+  // upcomingRecurring removed
 })
 
 const form = ref({
@@ -218,6 +239,25 @@ const form = ref({
   notes: '',
   balance: 0,
 })
+
+// Visibility controls: toggle totals and per-account amounts
+const showTotals = ref(true)
+const hiddenAccounts = ref([])
+
+function toggleTotals() {
+  showTotals.value = !showTotals.value
+}
+
+function toggleAccountVisibility(id) {
+  if (id === undefined || id === null) return
+  const idx = hiddenAccounts.value.indexOf(id)
+  if (idx === -1) hiddenAccounts.value.push(id)
+  else hiddenAccounts.value.splice(idx, 1)
+}
+
+function isAccountHidden(id) {
+  return hiddenAccounts.value.includes(id)
+}
 
 // Modal state for adding a bank account
 const showAddModal = ref(false)
@@ -232,15 +272,13 @@ function closeAddModal() {
   showAddModal.value = false
 }
 
+
 const accounts = computed(() => {
   if (!props.bankAccounts) return []
   return Array.isArray(props.bankAccounts) ? props.bankAccounts : (props.bankAccounts.data || [])
 })
 
-// Upcoming recurring items passed from backend (or empty)
-const upcomingItems = computed(() => {
-  return props.upcomingRecurring || []
-})
+// Recurring payments removed: UI and functionality deleted
 
 function formatDate(d) {
   if (!d) return ''
@@ -344,6 +382,23 @@ function updateChart() {
 
 onMounted(() => {
   initChart()
+
+  // Auto-hide amounts on the first visit in this browser session.
+  // If the user hasn't visited the bank accounts page this session, hide totals
+  // and mask per-account balances, then mark the session as visited so this
+  // only happens once per session.
+  try {
+    const key = 'stracker_bank_accounts_visited'
+    if (!sessionStorage.getItem(key)) {
+      showTotals.value = false
+      // hide all accounts initially
+      hiddenAccounts.value = accounts.value.map(a => a.id)
+      sessionStorage.setItem(key, '1')
+    }
+  } catch (e) {
+    // sessionStorage may be unavailable in some contexts; silently ignore
+    // and keep default visibility.
+  }
 })
 
 watch([accountLabels, accountBalances], () => {
