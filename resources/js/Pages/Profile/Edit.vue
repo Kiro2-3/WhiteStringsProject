@@ -179,9 +179,16 @@
             </div>
 
             <div class="flex items-center justify-between">
-              <p class="text-sm text-base-content/80">Theme</p>
-              <ThemeToggle />
-            </div>
+                  <p class="text-sm text-base-content/80">Theme</p>
+                  <ThemeToggle />
+                </div>
+
+                <div class="flex items-center justify-between mt-4">
+                  <p class="text-sm text-base-content/80">Hide Stracky</p>
+                  <label class="flex items-center gap-3">
+                    <input type="checkbox" class="toggle toggle-primary" v-model="hideStracky" @change="onHideStrackyChange" />
+                  </label>
+                </div>
           </div>
         </div>
 
@@ -259,7 +266,7 @@
 </template>
 
 <script setup>
-import { onUnmounted, ref, watch } from 'vue';
+import { onUnmounted, ref, watch, onMounted } from 'vue';
 import { router, useForm, Head } from '@inertiajs/vue3';
 import AuthenticatedLayout from '../../Layouts/AuthenticatedLayout.vue';
 import AppSidebar from '@/Components/AppSidebar.vue';
@@ -281,6 +288,21 @@ const localCurrency = ref(selectedCurrency.value)
 // Auto-dismiss the inline status alert after 5 seconds so it never gets stuck
 const showStatus  = ref(false)
 let statusTimer   = null
+
+// Hide Stracky (floating mascot) preference persisted in localStorage
+const hideStracky = ref(false)
+function onHideStrackyChange() {
+  try {
+    if (hideStracky.value) localStorage.setItem('hide_stracky', '1')
+    else localStorage.removeItem('hide_stracky')
+    // notify layout in same tab
+    window.dispatchEvent(new Event('stracky-visibility-changed'))
+  } catch (e) {}
+}
+
+onMounted(() => {
+  try { hideStracky.value = localStorage.getItem('hide_stracky') === '1' } catch (e) {}
+})
 
 watch(
   () => props.status,

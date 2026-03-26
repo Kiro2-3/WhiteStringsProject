@@ -44,7 +44,7 @@
 
     <main><slot /></main>
     <!-- Floating mascot helper -->
-    <div class="mascot-wrapper" v-cloak>
+    <div class="mascot-wrapper" v-cloak v-if="!isMascotHidden">
       <div class="mascot-badge" @click="toggleMascot" role="button" aria-label="Open help">
         <div class="whitespace-nowrap">Hi do you need help?</div>
       </div>
@@ -134,6 +134,10 @@ onUnmounted(() => {
   if (flashTimeout) clearTimeout(flashTimeout)
 })
 
+// read persisted "Hide Stracky" preference synchronously to avoid UI flash
+let initialHide = false
+try { initialHide = localStorage.getItem('hide_stracky') === '1' } catch (e) {}
+
 // Initialize theme early on layout mount to avoid FOUC between light/dark
 onMounted(() => {
   try {
@@ -161,9 +165,10 @@ onMounted(() => {
   } catch (e) {
     // ignore
   }
-})
+  // nothing else to do here for mount
 
 // Mascot helper state and handlers
+const isMascotHidden = ref(initialHide)
 const showMascot = ref(false)
 const pendingLogout = ref(false)
 function toggleMascot() {
@@ -198,6 +203,32 @@ window.addEventListener('request-logout-confirm', requestLogout)
 onBeforeUnmount(() => {
   window.removeEventListener('keydown', onKeydown)
   window.removeEventListener('request-logout-confirm', requestLogout)
+})
+
+// keep layout in sync when other tabs or settings change the preference
+function updateMascotVisibilityFromStorage() {
+  try {
+    isMascotHidden.value = localStorage.getItem('hide_stracky') === '1'
+    if (isMascotHidden.value) showMascot.value = false
+  } catch (e) {}
+}
+
+function onStrackyStorageEvent(e) {
+  if (!e) return
+  if (e.key === 'hide_stracky') updateMascotVisibilityFromStorage()
+}
+
+function onStrackyCustomEvent() {
+  updateMascotVisibilityFromStorage()
+}
+
+// listen for cross-tab changes and in-app events
+window.addEventListener('storage', onStrackyStorageEvent)
+window.addEventListener('stracky-visibility-changed', onStrackyCustomEvent)
+
+onBeforeUnmount(() => {
+  window.removeEventListener('storage', onStrackyStorageEvent)
+  window.removeEventListener('stracky-visibility-changed', onStrackyCustomEvent)
 })
 </script>
 
