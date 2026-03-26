@@ -253,9 +253,9 @@
         <teleport to="body">
           <transition name="fade">
             <div v-if="showDeleteModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm" @click.self="closeDeleteModal">
-              <div class="bg-base-100 rounded-lg shadow-2xl p-6 w-full max-w-sm relative animate-popup text-center">
+              <div class="bg-base-100 rounded-lg shadow-2xl p-6 w-full max-w-sm relative animate-popup flex flex-col items-center text-center">
                 <button @click="closeDeleteModal" class="absolute top-3 right-3 text-base-content/60 hover:text-base-content text-xl">&times;</button>
-                <img :src="mascotUrl" alt="Mascot" class="mx-auto mb-4 h-48 w-48 md:h-56 md:w-56" />
+                <img :src="mascotUrl" alt="Mascot" class="mb-4 h-48 w-48 md:h-56 md:w-56 block" />
                 <h2 class="text-xl font-semibold mb-2">Do you want to delete this transaction?</h2>
                 <p class="text-sm text-base-content/70 mb-4">This action cannot be undone.</p>
                 <div class="flex justify-center gap-3">
